@@ -1,91 +1,268 @@
-export default function CapitalHomeWebsite() { const categories = ["شقق", "فلل", "أراضي", "محلات"];
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Home</title>
 
-const featuredApartment = { title: "شقة مميزة للبيع – التنظيم والإدارة", location: "أمام أبراج الأطباء – المنيا", size: "140 متر صافي", price: "1,800,000 جنيه", details: [ "4 غرف + صالة كبيرة", "2 حمام", "مطبخ أمريكاني", "الدور السابع علوي – أسانسير", "تشطيب على الطوب", "دبل فيس على شارعين", "عداد كهرباء ومياه", "خالصة الواجهة والأسانسير والتصالح" ] };
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-return ( <div className="min-h-screen bg-slate-50 text-slate-800 font-sans"> <section className="bg-black text-white px-6 py-20 md:px-16 text-center"> <p className="text-sm tracking-[0.3em] uppercase mb-3">Capital Home</p> <h1 className="text-5xl md:text-6xl font-bold mb-4">Your Property Starts Here</h1> <p className="max-w-3xl mx-auto text-lg leading-8 opacity-90"> منصة عقارية احترافية لعرض أفضل الشقق والفلل والأراضي والمحلات في المنيا مع تواصل مباشر وسريع عبر واتساب والهاتف. </p>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    direction: rtl;
+    color: #222;
+}
 
-<a
-      href="https://wa.me/201555086599"
-      target="_blank"
-      rel="noreferrer"
-      className="inline-block mt-8 rounded-2xl bg-white text-black px-8 py-4 font-semibold shadow-lg"
-    >
-      تواصل الآن عبر واتساب
-    </a>
-  </section>
+header {
+    background: linear-gradient(to left, #111, #000);
+    color: white;
+    text-align: center;
+    padding: 70px 20px;
+}
 
-  <section className="px-6 py-16 md:px-16">
-    <h2 className="text-3xl font-bold text-center mb-10">اختر نوع العقار</h2>
+header h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+}
 
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {categories.map((item) => (
-        <div
-          key={item}
-          className="rounded-3xl bg-white p-6 text-center shadow-sm border hover:shadow-md transition"
-        >
-          <h3 className="text-xl font-semibold">{item}</h3>
+header p {
+    font-size: 20px;
+    opacity: 0.95;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.section {
+    padding: 70px 0;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 34px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.category-box {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: 0.3s;
+}
+
+.category-box:hover {
+    transform: translateY(-5px);
+}
+
+.property-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.property-image {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+}
+
+.property-content {
+    padding: 35px;
+}
+
+.property-content h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.property-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.detail {
+    background: #fafafa;
+    padding: 18px;
+    border-radius: 14px;
+    font-size: 17px;
+    border: 1px solid #eee;
+}
+
+.price {
+    font-size: 30px;
+    color: #0a8f2f;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+.whatsapp-btn {
+    display: inline-block;
+    background: #16a34a;
+    color: white;
+    text-decoration: none;
+    padding: 16px 35px;
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 25px;
+    margin-top: 60px;
+}
+
+.feature-box {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.feature-box h3 {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    margin-top: 80px;
+}
+
+footer h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+footer p {
+    font-size: 20px;
+    margin: 10px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Capital Home</h1>
+    <p>Your Property Starts Here</p>
+    <p>أفضل العقارات في المنيا — شقق، فلل، أراضي، ومحلات</p>
+</header>
+
+<section class="section">
+    <div class="container">
+
+        <h2 class="section-title">أنواع العقارات</h2>
+
+        <div class="categories">
+            <div class="category-box">شقق</div>
+            <div class="category-box">فلل</div>
+            <div class="category-box">أراضي</div>
+            <div class="category-box">محلات</div>
         </div>
-      ))}
-    </div>
-  </section>
 
-  <section className="px-6 py-16 md:px-16">
-    <div className="rounded-3xl bg-white border shadow-sm p-8 md:p-10 max-w-5xl mx-auto">
-      <p className="text-sm font-semibold mb-2">قسم الشقق</p>
-      <h2 className="text-3xl font-bold mb-4">{featuredApartment.title}</h2>
+        <div class="property-card">
 
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
-          <p className="mb-3 text-lg">📍 {featuredApartment.location}</p>
-          <p className="mb-3 text-lg">📐 {featuredApartment.size}</p>
-          <p className="mb-6 text-xl font-bold">💰 {featuredApartment.price}</p>
+            <img
+                class="property-image"
+                src="https://images.unsplash.com/photo-1494526585095-c41746248156"
+                alt="Apartment"
+            >
 
-          <a
-            href="https://wa.me/201555086599"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-block rounded-2xl border px-7 py-4 font-semibold shadow-sm"
-          >
-            تواصل عبر واتساب
-          </a>
+            <div class="property-content">
+
+                <h2>شقة مميزة للبيع – التنظيم والإدارة</h2>
+
+                <p>
+                    📍 أمام أبراج الأطباء – منطقة راقية وحيوية
+                </p>
+
+                <div class="property-details">
+
+                    <div class="detail">📐 140 متر صافي</div>
+                    <div class="detail">🛏️ 4 غرف + صالة كبيرة</div>
+                    <div class="detail">🛁 2 حمام</div>
+                    <div class="detail">🍽️ مطبخ أمريكاني</div>
+                    <div class="detail">🏢 الدور السابع علوي – أسانسير</div>
+                    <div class="detail">✨ الشقة على الطوب</div>
+                    <div class="detail">🌞 جميع الغرف تطل على الشارع</div>
+                    <div class="detail">🏙️ دبل فيس على شارعين</div>
+                    <div class="detail">⚡ عداد كهرباء ومياه</div>
+                    <div class="detail">✔ خالصة الواجهة والتصالح</div>
+
+                </div>
+
+                <div class="price">
+                    💰 السعر: 1,800,000 جنيه فقط
+                </div>
+
+                <a
+                    class="whatsapp-btn"
+                    href="https://wa.me/201555086599"
+                    target="_blank"
+                >
+                    تواصل عبر واتساب
+                </a>
+
+            </div>
         </div>
 
-        <div>
-          <h3 className="text-xl font-semibold mb-4">تفاصيل العقار</h3>
-          <div className="space-y-3">
-            {featuredApartment.details.map((detail) => (
-              <p key={detail}>✔ {detail}</p>
-            ))}
-          </div>
+        <div class="features">
+
+            <div class="feature-box">
+                <h3>مصداقية كاملة</h3>
+                <p>عرض واضح وصادق لكل عقار بكل التفاصيل الحقيقية</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>أفضل الأسعار</h3>
+                <p>نوفر أفضل الفرص العقارية المناسبة للسكن والاستثمار</p>
+            </div>
+
+            <div class="feature-box">
+                <h3>تواصل سريع</h3>
+                <p>رد مباشر عبر الهاتف والواتساب طوال الوقت</p>
+            </div>
+
         </div>
-      </div>
+
     </div>
-  </section>
+</section>
 
-  <section className="px-6 py-16 md:px-16">
-    <div className="grid md:grid-cols-3 gap-6">
-      <div className="rounded-3xl bg-white p-6 border shadow-sm">
-        <h3 className="font-bold text-xl mb-2">مصداقية كاملة</h3>
-        <p>عرض واضح وصادق لكل عقار مع جميع التفاصيل الحقيقية.</p>
-      </div>
+<footer>
+    <h2>تواصل معنا</h2>
+    <p>📞 01555086599</p>
+    <p>💬 واتساب متاح</p>
+</footer>
 
-      <div className="rounded-3xl bg-white p-6 border shadow-sm">
-        <h3 className="font-bold text-xl mb-2">أفضل الأسعار</h3>
-        <p>نوفر أفضل الفرص العقارية المناسبة للسكن والاستثمار.</p>
-      </div>
-
-      <div className="rounded-3xl bg-white p-6 border shadow-sm">
-        <h3 className="font-bold text-xl mb-2">تواصل سريع</h3>
-        <p>رد مباشر عبر الهاتف والواتساب طوال الوقت.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer className="bg-black text-white px-6 py-14 text-center">
-    <h2 className="text-3xl font-bold mb-4">تواصل معنا</h2>
-    <p className="text-lg mb-2">📞 01555086599</p>
-    <p className="text-lg">💬 واتساب متاح</p>
-  </footer>
-</div>
-
-); }
+</body>
+</html>

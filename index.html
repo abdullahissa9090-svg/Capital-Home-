@@ -25,7 +25,7 @@ header{
     url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6');
     background-size:cover;
     background-position:center;
-    min-height:85vh;
+    min-height:80vh;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -65,15 +65,6 @@ header{
     text-decoration:none;
     font-size:18px;
     font-weight:700;
-    transition:.3s;
-}
-
-.btn:hover{
-    transform:scale(1.05);
-}
-
-section{
-    padding:70px 20px;
 }
 
 .container{
@@ -82,10 +73,14 @@ section{
     margin:auto;
 }
 
+section{
+    padding:70px 20px;
+}
+
 .section-title{
     text-align:center;
     font-size:36px;
-    margin-bottom:50px;
+    margin-bottom:40px;
     font-weight:800;
 }
 
@@ -95,60 +90,48 @@ section{
     gap:20px;
 }
 
-.cat{
+.cat-btn{
     background:white;
-    padding:30px;
+    padding:25px;
+    border:none;
     border-radius:18px;
-    text-align:center;
     box-shadow:0 10px 30px rgba(0,0,0,.06);
     font-size:22px;
     font-weight:700;
+    cursor:pointer;
 }
 
-.properties{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:30px;
+.content-box{
+    display:none;
+    margin-top:40px;
+}
+
+.active{
+    display:block;
 }
 
 .card{
     background:white;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 12px 30px rgba(0,0,0,.08);
-}
-
-.card img{
-    width:100%;
-    height:230px;
-    object-fit:cover;
-}
-
-.card-content{
     padding:25px;
+    border-radius:20px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    margin-bottom:25px;
 }
 
 .card h3{
-    font-size:24px;
     margin-bottom:15px;
-}
-
-.location{
-    color:#777;
-    margin-bottom:10px;
+    font-size:24px;
 }
 
 .price{
-    color:#111;
     font-size:24px;
     font-weight:800;
-    margin-bottom:15px;
+    margin:15px 0;
 }
 
 .details{
     line-height:2;
     color:#444;
-    margin-bottom:20px;
 }
 
 footer{
@@ -156,10 +139,7 @@ footer{
     color:white;
     text-align:center;
     padding:50px 20px;
-}
-
-footer h2{
-    margin-bottom:15px;
+    margin-top:50px;
 }
 
 .phone{
@@ -177,10 +157,10 @@ footer h2{
         <h1>أفضل العقارات في المنيا الجديدة</h1>
         <p>
             شقق • فلل • أراضي • محلات  
-            أفضل فرص السكن والاستثمار العقاري بأسعار قوية ومواقع مميزة
+            أفضل فرص السكن والاستثمار العقاري
         </p>
 
-        <a class="btn" href="https://wa.me/201555086599" target="_blank">
+        <a class="btn" href="https://wa.me/201555086599">
             تواصل عبر واتساب
         </a>
     </div>
@@ -188,66 +168,97 @@ footer h2{
 
 <section>
     <div class="container">
+
         <h2 class="section-title">أقسام العقارات</h2>
 
         <div class="categories">
-            <div class="cat">🏢 شقق</div>
-            <div class="cat">🏡 فلل</div>
-            <div class="cat">🌍 أراضي</div>
-            <div class="cat">🏪 محلات</div>
+            <button class="cat-btn" onclick="showSection('apartments')">🏢 الشقق</button>
+            <button class="cat-btn" onclick="showSection('villas')">🏡 الفلل</button>
+            <button class="cat-btn" onclick="showSection('lands')">🌍 الأراضي</button>
+            <button class="cat-btn" onclick="showSection('shops')">🏪 المحلات</button>
         </div>
-    </div>
-</section>
 
-<section>
-    <div class="container">
-        <h2 class="section-title">العقارات المميزة</h2>
-
-        <div class="properties">
+        <!-- الشقق -->
+        <div id="apartments" class="content-box active">
 
             <div class="card">
-                <img src="https://images.unsplash.com/photo-1494526585095-c41746248156" alt="">
-                <div class="card-content">
-                    <h3>شقة مميزة للبيع</h3>
-                    <div class="location">📍 التنظيم والإدارة – أمام أبراج الأطباء</div>
-                    <div class="price">1,800,000 جنيه</div>
-                    <div class="details">
-                        140 متر • 4 غرف • 2 حمام • مطبخ أمريكاني  
-                        الدور السابع • أسانسير • دبل فيس
-                    </div>
-                    <a class="btn" href="https://wa.me/201555086599">استفسار الآن</a>
-                </div>
+                <h3>شقة التنظيم والإدارة</h3>
+                <div class="price">1,800,000 جنيه</div>
+                <div class="details">140م • 4 غرف • 2 حمام • أسانسير • دبل فيس</div>
             </div>
 
             <div class="card">
-                <img src="https://images.unsplash.com/photo-1460317442991-0ec209397118" alt="">
-                <div class="card-content">
-                    <h3>شقة للبيع – ميدان الساعة</h3>
-                    <div class="location">📍 برج مرخص بالكامل</div>
-                    <div class="price">4,700,000 جنيه</div>
-                    <div class="details">
-                        200 متر • 8 بلكونات • 3 غرف  
-                        ريسبشن 3 قطع • على العظم
-                    </div>
-                    <a class="btn" href="https://wa.me/201555086599">استفسار الآن</a>
-                </div>
+                <h3>شقة 77 عمارة كمين الصفا</h3>
+                <div class="price">750,000 جنيه</div>
+                <div class="details">90م • الدور الخامس • تشطيب جهاز • واجهة أمامية</div>
             </div>
 
             <div class="card">
-                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750" alt="">
-                <div class="card-content">
-                    <h3>فيلا للبيع – ابني بيتك</h3>
-                    <div class="location">📍 المنيا الجديدة – مرحلة 3</div>
-                    <div class="price">3,000,000 جنيه</div>
-                    <div class="details">
-                        150 متر أرض • 135 متر للدور  
-                        نصف تشطيب • واجهة بحرية
-                    </div>
-                    <a class="btn" href="https://wa.me/201555086599">استفسار الآن</a>
+                <h3>شقة ميدان الساعة</h3>
+                <div class="price">4,700,000 جنيه</div>
+                <div class="details">200م • 8 بلكونات • 3 غرف • ريسبشن 3 قطع</div>
+            </div>
+
+            <div class="card">
+                <h3>شقة عبير سيتي</h3>
+                <div class="price">4,500,000 جنيه</div>
+                <div class="details">170م • أول علوي • Ultra Super Lux</div>
+            </div>
+
+            <div class="card">
+                <h3>شقة أبو فليو</h3>
+                <div class="price">1,015,000 جنيه</div>
+                <div class="details">145م • الدور السادس • ناصية • على الطوب</div>
+            </div>
+
+            <div class="card">
+                <h3>شقة الحي السابع</h3>
+                <div class="price">2,400,000 جنيه</div>
+                <div class="details">115م + 30م جاردن • أرضي • 3 غرف</div>
+            </div>
+
+            <div class="card">
+                <h3>شقة أبراج الري</h3>
+                <div class="price">2,700,000 جنيه</div>
+                <div class="details">135م • ألترا لوكس • 3 غرف • 2 أسانسير</div>
+            </div>
+
+            <div class="card">
+                <h3>شقة ديماريس</h3>
+                <div class="price">2,000,000 جنيه</div>
+                <div class="details">125م • 4 غرف • مؤجرة بـ 8,000 شهريًا</div>
+            </div>
+
+        </div>
+
+        <!-- الفلل -->
+        <div id="villas" class="content-box">
+
+            <div class="card">
+                <h3>فيلا ابني بيتك</h3>
+                <div class="price">3,000,000 جنيه</div>
+                <div class="details">
+                    المنيا الجديدة • مرحلة 3 • قطاع B  
+                    150م أرض • 135م للدور • نصف تشطيب
                 </div>
             </div>
 
         </div>
+
+        <!-- الأراضي -->
+        <div id="lands" class="content-box">
+            <div class="card">
+                <h3>لا توجد أراضي مضافة حاليًا</h3>
+            </div>
+        </div>
+
+        <!-- المحلات -->
+        <div id="shops" class="content-box">
+            <div class="card">
+                <h3>لا توجد محلات مضافة حاليًا</h3>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -256,6 +267,18 @@ footer h2{
     <p class="phone">01555086599</p>
     <p>واتساب متاح طوال اليوم</p>
 </footer>
+
+<script>
+function showSection(sectionId){
+    let sections = document.querySelectorAll('.content-box');
+
+    sections.forEach(function(section){
+        section.classList.remove('active');
+    });
+
+    document.getElementById(sectionId).classList.add('active');
+}
+</script>
 
 </body>
 </html>

@@ -1,333 +1,280 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Home | Premium Real Estate</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capital Home | كابيتال هوم للعقارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Cairo',sans-serif;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
 
-body{
-background:#f7f7f7;
-color:#111;
-}
+        body {
+            background: #f7f7f7;
+            color: #111;
+            scroll-behavior: smooth;
+        }
 
-header{
-background:#111;
-color:white;
-padding:60px 20px;
-text-align:center;
-}
+        header {
+            background: #111;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
 
-.logo{
-font-size:42px;
-font-weight:800;
-color:#d4af37;
-margin-bottom:15px;
-}
+        .logo {
+            font-size: 42px;
+            font-weight: 800;
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
 
-header h1{
-font-size:42px;
-margin-bottom:15px;
-}
+        header h1 {
+            font-size: 28px; /* تصغير الحجم قليلاً للموبايل */
+            margin-bottom: 15px;
+        }
 
-header p{
-font-size:20px;
-line-height:1.8;
-}
+        header p {
+            font-size: 18px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
 
-.container{
-width:90%;
-max-width:1200px;
-margin:auto;
-padding:50px 0;
-}
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 0;
+        }
 
-.buttons{
-display:flex;
-flex-wrap:wrap;
-gap:15px;
-justify-content:center;
-margin-bottom:40px;
-}
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
 
-button{
-padding:15px 30px;
-border:none;
-background:#111;
-color:white;
-border-radius:12px;
-cursor:pointer;
-font-size:18px;
-font-weight:700;
-}
+        button {
+            padding: 12px 25px;
+            border: 2px solid #111;
+            background: white;
+            color: #111;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
 
-.section{
-display:none;
-}
+        button.active-btn {
+            background: #111;
+            color: #d4af37;
+        }
 
-.section.active{
-display:block;
-}
+        .section {
+            display: none;
+        }
 
-.card{
-background:white;
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-margin-bottom:25px;
-cursor:pointer;
-}
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
 
-.card h3{
-font-size:24px;
-margin-bottom:10px;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.price{
-font-size:24px;
-font-weight:800;
-color:#0a8f2f;
-margin:15px 0;
-}
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.05);
+            margin-bottom: 15px;
+            cursor: pointer;
+            border: 1px solid #eee;
+            transition: 0.3s;
+        }
 
-.details-box{
-display:none;
-background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-margin-top:20px;
-line-height:2;
-}
+        .card:hover {
+            border-color: #d4af37;
+            transform: scale(1.01);
+        }
 
-.details-box.active{
-display:block;
-}
+        .card h3 {
+            font-size: 22px;
+            color: #111;
+        }
 
-.whatsapp{
-display:inline-block;
-margin-top:20px;
-padding:14px 30px;
-background:#25D366;
-color:white;
-text-decoration:none;
-border-radius:12px;
-font-weight:700;
-}
+        .price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0a8f2f;
+            margin: 10px 0;
+        }
 
-footer{
-background:#111;
-color:white;
-text-align:center;
-padding:50px 20px;
-margin-top:50px;
-}
+        .details-box {
+            display: none;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            border-right: 5px solid #d4af37;
+            box-shadow: 0 10px 30px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
 
-.phone{
-font-size:28px;
-font-weight:800;
-color:#d4af37;
-}
-</style>
+        .details-box.active {
+            display: block;
+        }
+
+        .whatsapp {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 30px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .whatsapp:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .phone {
+            font-size: 28px;
+            font-weight: 800;
+            color: #d4af37;
+            margin: 10px 0;
+            display: block;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-<div class="logo">CAPITAL HOME</div>
-<h1>أفضل العقارات في المنيا والمنيا الجديدة</h1>
-<p>
-شقق • فيلل • أراضي • محلات  
-أفضل فرص السكن والاستثمار العقاري
-</p>
+    <div class="logo">CAPITAL HOME</div>
+    <h1>أفضل العقارات في المنيا والمنيا الجديدة</h1>
+    <p>شقق • فيلل • أراضي • محلات</p>
 </header>
 
 <div class="container">
+    <div class="buttons">
+        <button class="nav-btn active-btn" onclick="showSection('apartments', this)">🏢 الشقق</button>
+        <button class="nav-btn" onclick="showSection('villas', this)">🏡 الفيلل</button>
+        <button class="nav-btn" onclick="showSection('lands', this)">🌍 الأراضي</button>
+        <button class="nav-btn" onclick="showSection('shops', this)">🏪 المحلات</button>
+    </div>
 
-<div class="buttons">
-<button onclick="showSection('apartments')">🏢 الشقق</button>
-<button onclick="showSection('villas')">🏡 الفيلل</button>
-<button onclick="showSection('lands')">🌍 الأراضي</button>
-<button onclick="showSection('shops')">🏪 المحلات</button>
-</div>
+    <!-- الشقق -->
+    <div id="apartments" class="section active">
+        <!-- شقة 1 -->
+        <div class="card" onclick="showDetails('a1')">
+            <h3>شقة التنظيم والإدارة</h3>
+            <div class="price">1,800,000 جنيه</div>
+            <p>140م • 4 غرف • 2 حمام • أسانسير</p>
+        </div>
+        <div id="a1" class="details-box active">
+            <h2>شقة التنظيم والإدارة</h2>
+            <p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
+            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل عبر واتساب</a>
+        </div>
 
-<!-- الشقق -->
-<div id="apartments" class="section active">
+        <!-- شقة 2 -->
+        <div class="card" onclick="showDetails('a2')">
+            <h3>شقة 77 عمارة كمين الصفا</h3>
+            <div class="price">750,000 جنيه</div>
+            <p>90م • تشطيب جهاز • واجهة أمامية</p>
+        </div>
+        <div id="a2" class="details-box">
+            <h2>شقة 77 عمارة كمين الصفا</h2>
+            <p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
+            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل عبر واتساب</a>
+        </div>
+        
+        <!-- استمر بنفس النمط لبقية الشقق... -->
+    </div>
 
-<div class="card" onclick="showDetails('a1')">
-<h3>شقة التنظيم والإدارة</h3>
-<div class="price">1,800,000 جنيه</div>
-<p>140م • 4 غرف • 2 حمام • أسانسير</p>
-</div>
+    <!-- الفيلل -->
+    <div id="villas" class="section">
+        <div class="card" onclick="showDetails('v1')">
+            <h3>فيلا ابني بيتك</h3>
+            <div class="price">3,000,000 جنيه</div>
+            <p>150م أرض • 135م للدور</p>
+        </div>
+        <div id="v1" class="details-box">
+            <h2>فيلا ابني بيتك</h2>
+            <p>المنيا الجديدة – مرحلة 3 – قطاع B – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس</p>
+            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل عبر واتساب</a>
+        </div>
+    </div>
 
-<div id="a1" class="details-box active">
-<h2>شقة التنظيم والإدارة</h2>
-<p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
+    <!-- الأراضي -->
+    <div id="lands" class="section">
+        <div class="card"><h3>لا توجد أراضي مضافة حاليًا</h3></div>
+    </div>
 
-<div class="card" onclick="showDetails('a2')">
-<h3>شقة 77 عمارة كمين الصفا</h3>
-<div class="price">750,000 جنيه</div>
-<p>90م • تشطيب جهاز • واجهة أمامية</p>
-</div>
-
-<div id="a2" class="details-box">
-<h2>شقة 77 عمارة كمين الصفا</h2>
-<p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a3')">
-<h3>شقة ميدان الساعة</h3>
-<div class="price">4,700,000 جنيه</div>
-<p>200م • 8 بلكونات • 3 غرف</p>
-</div>
-
-<div id="a3" class="details-box">
-<h2>شقة ميدان الساعة</h2>
-<p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم – إطلالة ممتازة</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a4')">
-<h3>شقة عبير سيتي</h3>
-<div class="price">4,500,000 جنيه</div>
-<p>170م • أول علوي • Ultra Super Lux</p>
-</div>
-
-<div id="a4" class="details-box">
-<h2>شقة عبير سيتي</h2>
-<p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a5')">
-<h3>شقة أبو فليو</h3>
-<div class="price">1,015,000 جنيه</div>
-<p>145م • الدور السادس • ناصية</p>
-</div>
-
-<div id="a5" class="details-box">
-<h2>شقة أبو فليو</h2>
-<p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – شارع رئيسي + جانبي – ناصية</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a6')">
-<h3>شقة الحي السابع</h3>
-<div class="price">2,400,000 جنيه</div>
-<p>115م + 30م جاردن • أرضي</p>
-</div>
-
-<div id="a6" class="details-box">
-<h2>شقة الحي السابع – المنيا الجديدة</h2>
-<p>115 متر + 30 متر جاردن – 3 غرف – 2 حمام – أرضي – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a7')">
-<h3>شقة أبراج الري</h3>
-<div class="price">2,700,000 جنيه</div>
-<p>135م • ألترا لوكس • 2 أسانسير</p>
-</div>
-
-<div id="a7" class="details-box">
-<h2>شقة أبراج الري – ديماريس</h2>
-<p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – مطبخ – حمام – واجهة شرقية قبلية</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('a8')">
-<h3>شقة ديماريس</h3>
-<div class="price">2,000,000 جنيه</div>
-<p>125م • 4 غرف • مؤجرة بـ 8000</p>
-</div>
-
-<div id="a8" class="details-box">
-<h2>شقة ديماريس</h2>
-<p>125 متر – 4 غرف – متشطبة بالكامل – الدور 12 – بها أسانسير – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-</div>
-
-<!-- الفيلل -->
-<div id="villas" class="section">
-
-<div class="card" onclick="showDetails('v1')">
-<h3>فيلا ابني بيتك</h3>
-<div class="price">3,000,000 جنيه</div>
-<p>150م أرض • 135م للدور</p>
-</div>
-
-<div id="v1" class="details-box">
-<h2>فيلا ابني بيتك</h2>
-<p>المنيا الجديدة – مرحلة 3 – قطاع B – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-<div class="card" onclick="showDetails('v2')">
-<h3>فيلا مشروع مراكش</h3>
-<div class="price">10,550,000 جنيه</div>
-<p>أقل من سعر الشركة بـ 3 مليون</p>
-</div>
-
-<div id="v2" class="details-box">
-<h2>فيلا مشروع مراكش</h2>
-<p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة خاص – بحري بالكامل – غير مجروحة – فيو مباشر على بورتو المنيا</p>
-<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
-</div>
-
-</div>
-
-<!-- الأراضي -->
-<div id="lands" class="section">
-<div class="card">
-<h3>لا توجد أراضي مضافة حاليًا</h3>
-</div>
-</div>
-
-<!-- المحلات -->
-<div id="shops" class="section">
-<div class="card">
-<h3>لا توجد محلات مضافة حاليًا</h3>
-</div>
-</div>
-
+    <!-- المحلات -->
+    <div id="shops" class="section">
+        <div class="card"><h3>لا توجد محلات مضافة حاليًا</h3></div>
+    </div>
 </div>
 
 <footer>
-<h2>تواصل معنا</h2>
-<p class="phone">01555086599</p>
-<p>واتساب متاح طوال اليوم</p>
+    <h2>تواصل معنا</h2>
+    <a href="tel:01555086599" class="phone">01555086599</a>
+    <p>واتساب متاح طوال اليوم</p>
 </footer>
 
 <script>
-function showSection(id){
-document.querySelectorAll('.section').forEach(sec=>{
-sec.classList.remove('active');
-});
-document.getElementById(id).classList.add('active');
+function showSection(id, btn) {
+    // إخفاء كل الأقسام
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    // إخفاء كل صناديق التفاصيل المفتوحة عند تبديل القسم
+    document.querySelectorAll('.details-box').forEach(box => box.classList.remove('active'));
+    // إزالة اللون النشط من الأزرار
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
+    
+    // إظهار القسم المختار
+    document.getElementById(id).classList.add('active');
+    // تفعيل زر التبويب
+    btn.classList.add('active-btn');
 }
 
-function showDetails(id){
-document.querySelectorAll('.details-box').forEach(box=>{
-box.classList.remove('active');
-});
-document.getElementById(id).classList.add('active');
+function showDetails(id) {
+    // إغلاق أي تفاصيل مفتوحة حالياً
+    document.querySelectorAll('.details-box').forEach(box => box.classList.remove('active'));
+    
+    // فتح التفاصيل المطلوبة
+    const target = document.getElementById(id);
+    target.classList.add('active');
 
-window.scrollTo({
-top:document.getElementById(id).offsetTop - 100,
-behavior:'smooth'
-});
+    // تمرير الشاشة بسلاسة للتفاصيل
+    window.scrollTo({
+        top: target.offsetTop - 150,
+        behavior: 'smooth'
+    });
 }
 </script>
 

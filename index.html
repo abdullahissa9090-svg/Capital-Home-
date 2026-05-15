@@ -15,7 +15,22 @@
 
         .container { width: 95%; max-width: 1000px; margin: auto; padding: 40px 0; }
         
-        .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 30px; position: sticky; top: 10px; z-index: 100; background: rgba(253, 253, 253, 0.95); padding: 10px 0; border-radius: 15px; }
+        /* تعديل رقم 2: إضافة تأثير الزجاج الضبابي الـ Blur لشريط الأزرار */
+        .buttons { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            justify-content: center; 
+            margin-bottom: 30px; 
+            position: sticky; 
+            top: 10px; 
+            z-index: 100; 
+            background: rgba(253, 253, 253, 0.85); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 0; 
+            border-radius: 15px; 
+        }
         .nav-btn { padding: 10px 20px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 100px; max-width: 150px; }
         .active-btn { background: #111; color: #d4af37; }
 
@@ -25,6 +40,10 @@
 
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border-right: 6px solid #111; transition: 0.3s; }
         .card:hover { border-right-color: #d4af37; transform: translateY(-3px); }
+        
+        /* تعديل رقم 3: تحسين الخطوط لعناوين الكروت الداخلية بعد تحويلها لـ h3 */
+        .card h3 { font-size: 20px; font-weight: 700; color: #111; }
+        
         .price { font-size: 24px; font-weight: 800; color: #1a73e8; margin: 5px 0; }
         
         .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,.05); margin-bottom: 30px; border-top: 4px solid #d4af37; }
@@ -34,7 +53,6 @@
 
         .whatsapp { display: block; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 20px; transition: 0.3s; }
 
-        /* أيقونة واتساب العائمة */
         .floating-whatsapp {
             position: fixed;
             bottom: 25px;
@@ -87,39 +105,39 @@
     </nav>
 
     <main>
-        <!-- قسم الشقق (8 شقق) -->
+        <!-- قسم الشقق (تعديل رقم 3: تحويل h2 لـ h3 لخدمة الـ SEO) -->
         <section id="apartments" class="section active">
-            <div class="card" onclick="showDetails('a1')"><h2>شقة التنظيم والإدارة</h2><div class="price">1,800,000 ج.م</div><p>140م • أمام أبراج الأطباء</p></div>
+            <div class="card" onclick="showDetails('a1')"><h3>شقة التنظيم والإدارة</h3><div class="price">1,800,000 ج.م</div><p>140م • أمام أبراج الأطباء</p></div>
             <div id="a1" class="details-box"><div class="placeholder-img"><span>🏠</span><p>CAPITAL HOME</p></div><p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة التنظيم والإدارة" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a2')"><h2>شقة عمارة كمين الصفا</h2><div class="price">750,000 ج.م</div><p>90م • تشطيب جهاز</p></div>
+            <div class="card" onclick="showDetails('a2')"><h3>شقة عمارة كمين الصفا</h3><div class="price">750,000 ج.م</div><p>90م • تشطيب جهاز</p></div>
             <div id="a2" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة كمين الصفا" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a3')"><h2>شقة بميدان الساعة</h2><div class="price">4,700,000 ج.م</div><p>200م • 8 بلكونات</p></div>
+            <div class="card" onclick="showDetails('a3')"><h3>شقة بميدان الساعة</h3><div class="price">4,700,000 ج.م</div><p>200م • 8 بلكونات</p></div>
             <div id="a3" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ميدان الساعة" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a4')"><h2>شقة عبير سيتي</h2><div class="price">4,500,000 ج.م</div><p>170م • ألترا سوبر لوكس</p></div>
+            <div class="card" onclick="showDetails('a4')"><h3>شقة عبير سيتي</h3><div class="price">4,500,000 ج.م</div><p>170م • ألترا سوبر لوكس</p></div>
             <div id="a4" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة عبير سيتي" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a5')"><h2>شقة بمنطقة أبو فليو</h2><div class="price">1,015,000 ج.م</div><p>145م • ناصية</p></div>
+            <div class="card" onclick="showDetails('a5')"><h3>شقة بمنطقة أبو فليو</h3><div class="price">1,015,000 ج.م</div><p>145م • ناصية</p></div>
             <div id="a5" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – ناصية</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبو فليو" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a6')"><h2>شقة الحي السابع</h2><div class="price">2,400,000 ج.م</div><p>115م • أرضي بجاردن</p></div>
+            <div class="card" onclick="showDetails('a6')"><h3>شقة الحي السابع</h3><div class="price">2,400,000 ج.م</div><p>115م • أرضي بجاردن</p></div>
             <div id="a6" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>115 متر + 30 متر جاردن – 3 غرف – أمام مكافحة المخدرات – قريب من جامعة دراية</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة الحي السابع" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a7')"><h2>شقة أبراج الري</h2><div class="price">2,700,000 ج.م</div><p>135م • واجهة شرقية</p></div>
+            <div class="card" onclick="showDetails('a7')"><h3>شقة أبراج الري</h3><div class="price">2,700,000 ج.م</div><p>135م • واجهة شرقية</p></div>
             <div id="a7" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – واجهة شرقية قبلية - برج به 2 أسانسير</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبراج الري" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a8')"><h2>شقة ديماريس</h2><div class="price">2,000,000 ج.م</div><p>125م • استثمار عقاري</p></div>
+            <div class="card" onclick="showDetails('a8')"><h3>شقة ديماريس</h3><div class="price">2,000,000 ج.م</div><p>125م • استثمار عقاري</p></div>
             <div id="a8" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>125 متر – 4 غرف – متشطبة بالكامل – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ديماريس" target="_blank">حجز موعد معاينة</a></div>
         </section>
 
         <!-- قسم الفيلل -->
         <section id="villas" class="section">
-            <div class="card" onclick="showDetails('v1')"><h2>فيلا ابني بيتك</h2><div class="price">3,000,000 ج.م</div><p>150م أرض</p></div>
+            <div class="card" onclick="showDetails('v1')"><h3>فيلا ابني بيتك</h3><div class="price">3,000,000 ج.م</div><p>150م أرض</p></div>
             <div id="v1" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>المنيا الجديدة – مرحلة 3 – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس.</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا ابني بيتك" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('v2')"><h2>فيلا مشروع مراكش</h2><div class="price">10,550,000 ج.م</div><p>بورتو المنيا</p></div>
+            <div class="card" onclick="showDetails('v2')"><h3>فيلا مشروع مراكش</h3><div class="price">10,550,000 ج.م</div><p>بورتو المنيا</p></div>
             <div id="v2" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة – فيو مباشر على بورتو المنيا.</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا مراكش" target="_blank">حجز موعد معاينة</a></div>
         </section>
 
@@ -167,11 +185,23 @@ function showSection(id, btn){
     document.getElementById(id).classList.add('active');
     btn.classList.add('active-btn');
 }
+
+/* تعديل رقم 1: جعل الصندوق ينغلق ويفتح (Toggle) مع حساب إزاحة الـ Sticky Menu بشكل أفضل */
 function showDetails(id){
-    document.querySelectorAll('.details-box').forEach(box => box.classList.remove('active'));
     const target = document.getElementById(id);
-    target.classList.add('active');
-    window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+    const isActive = target.classList.contains('active');
+    
+    document.querySelectorAll('.details-box').forEach(box => {
+        if(box.id !== id) box.classList.remove('active');
+    });
+    
+    if (isActive) {
+        target.classList.remove('active');
+    } else {
+        target.classList.add('active');
+        // إزاحة بمقدار 140px لضمان عدم تغطية القائمة المثبتة على العنوان
+        window.scrollTo({ top: target.offsetTop - 140, behavior: 'smooth' });
+    }
 }
 </script>
 

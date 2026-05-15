@@ -3,280 +3,331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Home | Real Estate</title>
-
+<title>Capital Home | Premium Real Estate</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Cairo', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo',sans-serif;
 }
 
 body{
-    background:#f7f7f7;
-    color:#111;
+background:#f7f7f7;
+color:#111;
 }
 
 header{
-    background:linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
-    url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6');
-    background-size:cover;
-    background-position:center;
-    min-height:80vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-    padding:30px;
-}
-
-.hero{
-    max-width:900px;
+background:#111;
+color:white;
+padding:60px 20px;
+text-align:center;
 }
 
 .logo{
-    font-size:42px;
-    font-weight:800;
-    color:#d4af37;
-    margin-bottom:15px;
+font-size:42px;
+font-weight:800;
+color:#d4af37;
+margin-bottom:15px;
 }
 
-.hero h1{
-    font-size:48px;
-    margin-bottom:20px;
+header h1{
+font-size:42px;
+margin-bottom:15px;
 }
 
-.hero p{
-    font-size:20px;
-    line-height:1.9;
-    margin-bottom:30px;
-}
-
-.btn{
-    display:inline-block;
-    background:#25D366;
-    color:white;
-    padding:15px 35px;
-    border-radius:12px;
-    text-decoration:none;
-    font-size:18px;
-    font-weight:700;
+header p{
+font-size:20px;
+line-height:1.8;
 }
 
 .container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
+width:90%;
+max-width:1200px;
+margin:auto;
+padding:50px 0;
 }
 
-section{
-    padding:70px 20px;
+.buttons{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+justify-content:center;
+margin-bottom:40px;
 }
 
-.section-title{
-    text-align:center;
-    font-size:36px;
-    margin-bottom:40px;
-    font-weight:800;
+button{
+padding:15px 30px;
+border:none;
+background:#111;
+color:white;
+border-radius:12px;
+cursor:pointer;
+font-size:18px;
+font-weight:700;
 }
 
-.categories{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
+.section{
+display:none;
 }
 
-.cat-btn{
-    background:white;
-    padding:25px;
-    border:none;
-    border-radius:18px;
-    box-shadow:0 10px 30px rgba(0,0,0,.06);
-    font-size:22px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.content-box{
-    display:none;
-    margin-top:40px;
-}
-
-.active{
-    display:block;
+.section.active{
+display:block;
 }
 
 .card{
-    background:white;
-    padding:25px;
-    border-radius:20px;
-    box-shadow:0 12px 30px rgba(0,0,0,.08);
-    margin-bottom:25px;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+margin-bottom:25px;
+cursor:pointer;
 }
 
 .card h3{
-    margin-bottom:15px;
-    font-size:24px;
+font-size:24px;
+margin-bottom:10px;
 }
 
 .price{
-    font-size:24px;
-    font-weight:800;
-    margin:15px 0;
+font-size:24px;
+font-weight:800;
+color:#0a8f2f;
+margin:15px 0;
 }
 
-.details{
-    line-height:2;
-    color:#444;
+.details-box{
+display:none;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+margin-top:20px;
+line-height:2;
+}
+
+.details-box.active{
+display:block;
+}
+
+.whatsapp{
+display:inline-block;
+margin-top:20px;
+padding:14px 30px;
+background:#25D366;
+color:white;
+text-decoration:none;
+border-radius:12px;
+font-weight:700;
 }
 
 footer{
-    background:#111;
-    color:white;
-    text-align:center;
-    padding:50px 20px;
-    margin-top:50px;
+background:#111;
+color:white;
+text-align:center;
+padding:50px 20px;
+margin-top:50px;
 }
 
 .phone{
-    font-size:28px;
-    color:#d4af37;
-    font-weight:800;
+font-size:28px;
+font-weight:800;
+color:#d4af37;
 }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="hero">
-        <div class="logo">CAPITAL HOME</div>
-        <h1>أفضل العقارات في المنيا والمنيا الجديدة</h1>
-        <p>
-            شقق • فلل • أراضي • محلات  
-            أفضل فرص السكن والاستثمار العقاري
-        </p>
-
-        <a class="btn" href="https://wa.me/201555086599">
-            تواصل عبر واتساب
-        </a>
-    </div>
+<div class="logo">CAPITAL HOME</div>
+<h1>أفضل العقارات في المنيا والمنيا الجديدة</h1>
+<p>
+شقق • فيلل • أراضي • محلات  
+أفضل فرص السكن والاستثمار العقاري
+</p>
 </header>
 
-<section>
-    <div class="container">
+<div class="container">
 
-        <h2 class="section-title">أقسام العقارات</h2>
+<div class="buttons">
+<button onclick="showSection('apartments')">🏢 الشقق</button>
+<button onclick="showSection('villas')">🏡 الفيلل</button>
+<button onclick="showSection('lands')">🌍 الأراضي</button>
+<button onclick="showSection('shops')">🏪 المحلات</button>
+</div>
 
-        <div class="categories">
-            <button class="cat-btn" onclick="showSection('apartments')">🏢 الشقق</button>
-            <button class="cat-btn" onclick="showSection('villas')">🏡 الفلل</button>
-            <button class="cat-btn" onclick="showSection('lands')">🌍 الأراضي</button>
-            <button class="cat-btn" onclick="showSection('shops')">🏪 المحلات</button>
-        </div>
+<!-- الشقق -->
+<div id="apartments" class="section active">
 
-        <!-- الشقق -->
-        <div id="apartments" class="content-box active">
+<div class="card" onclick="showDetails('a1')">
+<h3>شقة التنظيم والإدارة</h3>
+<div class="price">1,800,000 جنيه</div>
+<p>140م • 4 غرف • 2 حمام • أسانسير</p>
+</div>
 
-            <div class="card">
-                <h3>شقة التنظيم والإدارة</h3>
-                <div class="price">1,800,000 جنيه</div>
-                <div class="details">140م • 4 غرف • 2 حمام • أسانسير • دبل فيس</div>
-            </div>
+<div id="a1" class="details-box active">
+<h2>شقة التنظيم والإدارة</h2>
+<p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-            <div class="card">
-                <h3>شقة 77 عمارة كمين الصفا</h3>
-                <div class="price">750,000 جنيه</div>
-                <div class="details">90م • الدور الخامس • تشطيب جهاز • واجهة أمامية</div>
-            </div>
+<div class="card" onclick="showDetails('a2')">
+<h3>شقة 77 عمارة كمين الصفا</h3>
+<div class="price">750,000 جنيه</div>
+<p>90م • تشطيب جهاز • واجهة أمامية</p>
+</div>
 
-            <div class="card">
-                <h3>شقة ميدان الساعة</h3>
-                <div class="price">4,700,000 جنيه</div>
-                <div class="details">200م • 8 بلكونات • 3 غرف • ريسبشن 3 قطع</div>
-            </div>
+<div id="a2" class="details-box">
+<h2>شقة 77 عمارة كمين الصفا</h2>
+<p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-            <div class="card">
-                <h3>شقة عبير سيتي</h3>
-                <div class="price">4,500,000 جنيه</div>
-                <div class="details">170م • أول علوي • Ultra Super Lux</div>
-            </div>
+<div class="card" onclick="showDetails('a3')">
+<h3>شقة ميدان الساعة</h3>
+<div class="price">4,700,000 جنيه</div>
+<p>200م • 8 بلكونات • 3 غرف</p>
+</div>
 
-            <div class="card">
-                <h3>شقة أبو فليو</h3>
-                <div class="price">1,015,000 جنيه</div>
-                <div class="details">145م • الدور السادس • ناصية • على الطوب</div>
-            </div>
+<div id="a3" class="details-box">
+<h2>شقة ميدان الساعة</h2>
+<p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم – إطلالة ممتازة</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-            <div class="card">
-                <h3>شقة الحي السابع</h3>
-                <div class="price">2,400,000 جنيه</div>
-                <div class="details">115م + 30م جاردن • أرضي • 3 غرف</div>
-            </div>
+<div class="card" onclick="showDetails('a4')">
+<h3>شقة عبير سيتي</h3>
+<div class="price">4,500,000 جنيه</div>
+<p>170م • أول علوي • Ultra Super Lux</p>
+</div>
 
-            <div class="card">
-                <h3>شقة أبراج الري</h3>
-                <div class="price">2,700,000 جنيه</div>
-                <div class="details">135م • ألترا لوكس • 3 غرف • 2 أسانسير</div>
-            </div>
+<div id="a4" class="details-box">
+<h2>شقة عبير سيتي</h2>
+<p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-            <div class="card">
-                <h3>شقة ديماريس</h3>
-                <div class="price">2,000,000 جنيه</div>
-                <div class="details">125م • 4 غرف • مؤجرة بـ 8,000 شهريًا</div>
-            </div>
+<div class="card" onclick="showDetails('a5')">
+<h3>شقة أبو فليو</h3>
+<div class="price">1,015,000 جنيه</div>
+<p>145م • الدور السادس • ناصية</p>
+</div>
 
-        </div>
+<div id="a5" class="details-box">
+<h2>شقة أبو فليو</h2>
+<p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – شارع رئيسي + جانبي – ناصية</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-        <!-- الفلل -->
-        <div id="villas" class="content-box">
+<div class="card" onclick="showDetails('a6')">
+<h3>شقة الحي السابع</h3>
+<div class="price">2,400,000 جنيه</div>
+<p>115م + 30م جاردن • أرضي</p>
+</div>
 
-            <div class="card">
-                <h3>فيلا ابني بيتك</h3>
-                <div class="price">3,000,000 جنيه</div>
-                <div class="details">
-                    المنيا الجديدة • مرحلة 3 • قطاع B  
-                    150م أرض • 135م للدور • نصف تشطيب
-                </div>
-            </div>
+<div id="a6" class="details-box">
+<h2>شقة الحي السابع – المنيا الجديدة</h2>
+<p>115 متر + 30 متر جاردن – 3 غرف – 2 حمام – أرضي – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-        </div>
+<div class="card" onclick="showDetails('a7')">
+<h3>شقة أبراج الري</h3>
+<div class="price">2,700,000 جنيه</div>
+<p>135م • ألترا لوكس • 2 أسانسير</p>
+</div>
 
-        <!-- الأراضي -->
-        <div id="lands" class="content-box">
-            <div class="card">
-                <h3>لا توجد أراضي مضافة حاليًا</h3>
-            </div>
-        </div>
+<div id="a7" class="details-box">
+<h2>شقة أبراج الري – ديماريس</h2>
+<p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – مطبخ – حمام – واجهة شرقية قبلية</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
 
-        <!-- المحلات -->
-        <div id="shops" class="content-box">
-            <div class="card">
-                <h3>لا توجد محلات مضافة حاليًا</h3>
-            </div>
-        </div>
+<div class="card" onclick="showDetails('a8')">
+<h3>شقة ديماريس</h3>
+<div class="price">2,000,000 جنيه</div>
+<p>125م • 4 غرف • مؤجرة بـ 8000</p>
+</div>
 
-    </div>
-</section>
+<div id="a8" class="details-box">
+<h2>شقة ديماريس</h2>
+<p>125 متر – 4 غرف – متشطبة بالكامل – الدور 12 – بها أسانسير – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
+
+</div>
+
+<!-- الفيلل -->
+<div id="villas" class="section">
+
+<div class="card" onclick="showDetails('v1')">
+<h3>فيلا ابني بيتك</h3>
+<div class="price">3,000,000 جنيه</div>
+<p>150م أرض • 135م للدور</p>
+</div>
+
+<div id="v1" class="details-box">
+<h2>فيلا ابني بيتك</h2>
+<p>المنيا الجديدة – مرحلة 3 – قطاع B – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
+
+<div class="card" onclick="showDetails('v2')">
+<h3>فيلا مشروع مراكش</h3>
+<div class="price">10,550,000 جنيه</div>
+<p>أقل من سعر الشركة بـ 3 مليون</p>
+</div>
+
+<div id="v2" class="details-box">
+<h2>فيلا مشروع مراكش</h2>
+<p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة خاص – بحري بالكامل – غير مجروحة – فيو مباشر على بورتو المنيا</p>
+<a class="whatsapp" href="https://wa.me/201555086599">تواصل واتساب</a>
+</div>
+
+</div>
+
+<!-- الأراضي -->
+<div id="lands" class="section">
+<div class="card">
+<h3>لا توجد أراضي مضافة حاليًا</h3>
+</div>
+</div>
+
+<!-- المحلات -->
+<div id="shops" class="section">
+<div class="card">
+<h3>لا توجد محلات مضافة حاليًا</h3>
+</div>
+</div>
+
+</div>
 
 <footer>
-    <h2>تواصل معنا</h2>
-    <p class="phone">01555086599</p>
-    <p>واتساب متاح طوال اليوم</p>
+<h2>تواصل معنا</h2>
+<p class="phone">01555086599</p>
+<p>واتساب متاح طوال اليوم</p>
 </footer>
 
 <script>
-function showSection(sectionId){
-    let sections = document.querySelectorAll('.content-box');
+function showSection(id){
+document.querySelectorAll('.section').forEach(sec=>{
+sec.classList.remove('active');
+});
+document.getElementById(id).classList.add('active');
+}
 
-    sections.forEach(function(section){
-        section.classList.remove('active');
-    });
+function showDetails(id){
+document.querySelectorAll('.details-box').forEach(box=>{
+box.classList.remove('active');
+});
+document.getElementById(id).classList.add('active');
 
-    document.getElementById(sectionId).classList.add('active');
+window.scrollTo({
+top:document.getElementById(id).offsetTop - 100,
+behavior:'smooth'
+});
 }
 </script>
 

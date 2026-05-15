@@ -15,7 +15,7 @@
 
         .container { width: 95%; max-width: 1000px; margin: auto; padding: 40px 0; }
         
-        /* تعديل رقم 2: إضافة تأثير الزجاج الضبابي الـ Blur لشريط الأزرار */
+        /* شريط أزرار ثابت ومطور بتأثير ضبابي ممتاز */
         .buttons { 
             display: flex; 
             flex-wrap: wrap; 
@@ -28,30 +28,37 @@
             background: rgba(253, 253, 253, 0.85); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 10px 0; 
+            padding: 10px; 
             border-radius: 15px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
-        .nav-btn { padding: 10px 20px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 100px; max-width: 150px; }
+        .nav-btn { padding: 10px 15px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 80px; max-width: 150px; }
         .active-btn { background: #111; color: #d4af37; }
+        
+        /* زر اعرض عقارك معنا بلون مميز وجذاب */
+        .sell-btn { background: #d4af37; border-color: #d4af37; color: #111; }
+        .sell-btn:hover { background: #111; color: #d4af37; border-color: #111; }
 
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border-right: 6px solid #111; transition: 0.3s; }
-        .card:hover { border-right-color: #d4af37; transform: translateY(-3px); }
+        .card:hover { border-right-color: #d4af37; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.08); }
         
-        /* تعديل رقم 3: تحسين الخطوط لعناوين الكروت الداخلية بعد تحويلها لـ h3 */
         .card h3 { font-size: 20px; font-weight: 700; color: #111; }
-        
         .price { font-size: 24px; font-weight: 800; color: #1a73e8; margin: 5px 0; }
         
+        /* تحسين صندوق التفاصيل وحركته */
         .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,.05); margin-bottom: 30px; border-top: 4px solid #d4af37; }
-        .details-box.active { display: block; }
+        .details-box.active { display: block; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         
-        .placeholder-img { width: 100%; height: 150px; background: #f9f9f9; border: 1px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; }
+        .placeholder-img { width: 100%; height: 160px; background: #fdfbf7; border: 2px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; transition: 0.3s; }
+        .placeholder-img span { font-size: 35px; margin-bottom: 5px; }
 
-        .whatsapp { display: block; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 20px; transition: 0.3s; }
+        .whatsapp { display: block; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 20px; transition: 0.3s; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
+        .whatsapp:hover { background: #1ebd58; transform: translateY(-2px); }
 
         .floating-whatsapp {
             position: fixed;
@@ -64,7 +71,7 @@
             border-radius: 50px;
             text-align: center;
             font-size: 35px;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.25);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -72,22 +79,31 @@
             text-decoration: none;
             transition: 0.3s;
         }
-        .floating-whatsapp:hover { transform: scale(1.1); background-color: #128c7e; }
+        .floating-whatsapp:hover { transform: scale(1.1) rotate(5deg); background-color: #128c7e; }
 
         .special-request { background: #111; color: #d4af37; padding: 40px 20px; border-radius: 20px; margin: 40px 0; text-align: center; border: 2px solid #d4af37; }
         .request-btn { display: inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
+        .request-btn:hover { background: #fff; color: #111; transform: translateY(-2px); }
+
+        /* ستايل جديد لقسم من نحن وقسم اعرض عقارك الجديد */
+        .about-section { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.03); border: 1px solid #eee; margin: 40px 0; }
+        .about-section h2 { color: #111; font-size: 26px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
+        .about-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 50px; height: 3px; background: #d4af37; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px; }
+        .feature-item { background: #fdfbf7; padding: 20px; border-radius: 15px; border-right: 4px solid #d4af37; }
+        .feature-item h4 { font-weight: 700; margin-bottom: 5px; color: #111; }
 
         .empty-state { text-align: center; padding: 50px 20px; background: #fff; border-radius: 20px; border: 1px dashed #ccc; }
 
         footer { background: #111; color: white; text-align: center; padding: 60px 20px; margin-top: 50px; border-top: 5px solid #d4af37; }
         .admin-note { background: rgba(212, 175, 55, 0.1); padding: 10px 20px; border-radius: 10px; display: inline-block; margin: 15px 0; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .phone { font-size: 28px; font-weight: 800; color: #d4af37; text-decoration: none; display: block; margin: 15px 0; }
+        .phone { font-size: 28px; font-weight: 800; color: #d4af37; text-decoration: none; display: block; margin: 15px 0; transition: 0.3s; }
+        .phone:hover { color: white; }
     </style>
 </head>
 <body>
 
-<!-- أيقونة الواتساب العائمة -->
-<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن أحد العقارات المتاحة" class="floating-whatsapp" target="_blank">
+<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن أحد العقارات المتاحة" class="floating-whatsapp" target="_blank" aria-label="Contact on WhatsApp">
     <svg width="35" height="35" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -102,10 +118,12 @@
         <button class="nav-btn" onclick="showSection('villas', this)">🏡 الفيلل</button>
         <button class="nav-btn" onclick="showSection('lands', this)">🌍 الأراضي</button>
         <button class="nav-btn" onclick="showSection('shops', this)">🏪 المحلات</button>
+        <!-- الزر الجديد: اعرض عقارك معنا -->
+        <button class="nav-btn sell-btn" onclick="showSection('sell-property', this)">✨ اعرض عقارك</button>
     </nav>
 
     <main>
-        <!-- قسم الشقق (تعديل رقم 3: تحويل h2 لـ h3 لخدمة الـ SEO) -->
+        <!-- قسم الشقق -->
         <section id="apartments" class="section active">
             <div class="card" onclick="showDetails('a1')"><h3>شقة التنظيم والإدارة</h3><div class="price">1,800,000 ج.م</div><p>140م • أمام أبراج الأطباء</p></div>
             <div id="a1" class="details-box"><div class="placeholder-img"><span>🏠</span><p>CAPITAL HOME</p></div><p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة التنظيم والإدارة" target="_blank">حجز موعد معاينة</a></div>
@@ -159,6 +177,36 @@
             </div>
         </section>
 
+        <!-- القسم الجديد: اعرض عقارك معنا -->
+        <section id="sell-property" class="section">
+            <div class="empty-state" style="border-color: #d4af37; background: #fff;">
+                <h2 style="color: #111; margin-bottom: 15px; font-weight: 800;">✨ سوّق لعقارك مع كابيتال هوم</h2>
+                <p style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">هل تمتلك شقة، فيلا، أرض، أو محل تجاري في المنيا أو المنيا الجديدة وتريد بيعه أو إيجاره بأفضل سعر وفي أسرع وقت؟ نحن نتولى المهمة بالكامل.</p>
+                <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد عرض عقاري للبيع/الإيجار معكم. تفاصيل العقار هي: " class="whatsapp" style="background: #d4af37; color: #111; display: inline-block; padding: 12px 40px;">اضغط هنا لإرسال تفاصيل عقارك</a>
+            </div>
+        </section>
+
+        <!-- القسم الجديد: من نحن (مضاف بشكل يعزز الموثوقية) -->
+        <section class="about-section">
+            <h2>من نحن؟</h2>
+            <p><strong>كابيتال هوم (CAPITAL HOME)</strong> هي المنصة العقارية الرائدة والأولى المتخصصة في تسويق وإدارة العقارات بمحافظة المنيا ومدينة المنيا الجديدة. نحن لسنا مجرد وسيط عقاري، بل مستشارك الموثوق الذي يضمن لك استثماراً آمناً واختيارات مدروسة تلبي تطلعات عائلتك ومستقبلك.</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🤝 مصداقية وأمان</h4>
+                    <p>نراجع كافة الأوراق القانونية والتعاقدات لضمان حقك كاملاً.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📍 خبرة محلية</h4>
+                    <p>فهم عميق ودقيق لأسعار السوق العقاري في المنيا والمنيا الجديدة.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🔍 شفافية تامة</h4>
+                    <p>نوفر لك أدق التفاصيل والمواصفات الحقيقية للعقارات بدون مبالغة.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- طلب خاص -->
         <section class="special-request">
             <h2>لم تجد ما تبحث عنه؟</h2>
@@ -186,7 +234,6 @@ function showSection(id, btn){
     btn.classList.add('active-btn');
 }
 
-/* تعديل رقم 1: جعل الصندوق ينغلق ويفتح (Toggle) مع حساب إزاحة الـ Sticky Menu بشكل أفضل */
 function showDetails(id){
     const target = document.getElementById(id);
     const isActive = target.classList.contains('active');
@@ -199,8 +246,10 @@ function showDetails(id){
         target.classList.remove('active');
     } else {
         target.classList.add('active');
-        // إزاحة بمقدار 140px لضمان عدم تغطية القائمة المثبتة على العنوان
-        window.scrollTo({ top: target.offsetTop - 140, behavior: 'smooth' });
+        
+        setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
     }
 }
 </script>

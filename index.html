@@ -1,368 +1,166 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Capital Home</title>
+export default function CapitalHomeWebsite() {
+  const featuredProperties = [
+  {
+    title: "شقة مميزة للبيع – التنظيم والإدارة",
+    location: "أمام أبراج الأطباء – المنيا",
+    price: "1,800,000 جنيه",
+    details: "140 متر • 4 غرف • 2 حمام • مطبخ أمريكاني • الدور السابع • أسانسير • دبل فيس",
+  },
+  {
+    title: "شقة للبيع – 77 عمارة كمين الصفا",
+    location: "خلف مصنع الكولا وأمام كمبوند القضاء",
+    price: "750,000 جنيه",
+    details: "90 متر • الدور الخامس • تشطيب جهاز • واجهة أمامية",
+  },
+  {
+    title: "شقة مميزة للبيع – ميدان الساعة",
+    location: "ميدان الساعة – برج مرخص بالكامل",
+    price: "4,700,000 جنيه",
+    details: "200 متر • الدور التاسع • 8 بلكونات • 3 غرف • ليفنج • ريسبشن 3 قطع • على العظم",
+  },
+  {
+    title: "شقة فاخرة للبيع – عبير سيتي",
+    location: "واجهة بحرية على الجاردن وحمام السباحة",
+    price: "4,500,000 جنيه",
+    details: "170 متر • أول علوي • Ultra Super Lux • تشطيب شخصي فاخر",
+  },
+  {
+    title: "شقة للبيع – أبو فليو",
+    location: "قريب من مدرسة سمارت",
+    price: "1,015,000 جنيه",
+    details: "145 متر • الدور السادس • ناصية • على الطوب • عداد مياه",
+  },
+  {
+    title: "شقة للبيع – الحي السابع",
+    location: "المنيا الجديدة – شارع أنيس منصور",
+    price: "2,400,000 جنيه",
+    details: "115 متر + 30 متر جاردن • أرضي • 3 غرف • 2 حمام",
+  },
+  {
+    title: "شقة للبيع – أبراج الري",
+    location: "ديماريس",
+    price: "2,700,000 جنيه",
+    details: "135 متر • ألترا لوكس • 3 غرف • ريسبشن كبير • 2 أسانسير",
+  },
+  {
+    title: "شقة للبيع – ديماريس",
+    location: "خلف أبراج الري",
+    price: "2,000,000 جنيه",
+    details: "125 متر • 4 غرف • متشطبة • الدور 12 • مؤجرة بـ 8,000 شهريًا",
+  },
+  {
+    title: "فيلا للبيع – ابني بيتك",
+    location: "المنيا الجديدة – مرحلة 3 قطاع B",
+    price: "3,000,000 جنيه",
+    details: "150 متر أرض • 135 متر للدور • أرضي نصف تشطيب • واجهة بحرية",
+  }
+];
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, sans-serif;
-    direction:rtl;
-    background:#f7f7f7;
-    color:#222;
-}
-
-/* Header */
-
-header{
-    background:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url("https://images.unsplash.com/photo-1560518883-ce09059eeffa");
-    background-size:cover;
-    background-position:center;
-    min-height:85vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-    padding:30px;
-}
-
-.hero h1{
-    font-size:60px;
-    margin-bottom:15px;
-    font-weight:bold;
-}
-
-.hero p{
-    font-size:22px;
-    margin-bottom:15px;
-}
-
-.hero .sub{
-    font-size:18px;
-    opacity:0.95;
-    max-width:800px;
-    margin:auto;
-    line-height:1.8;
-}
-
-.hero-btn{
-    display:inline-block;
-    margin-top:30px;
-    background:#16a34a;
-    color:white;
-    text-decoration:none;
-    padding:16px 38px;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:bold;
-}
-
-/* Main */
-
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
-}
-
-.section{
-    padding:80px 0;
-}
-
-.title{
-    text-align:center;
-    font-size:36px;
-    margin-bottom:40px;
-    font-weight:bold;
-}
-
-/* Buttons */
-
-.categories{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-}
-
-.category-btn{
-    background:white;
-    border:none;
-    padding:28px;
-    border-radius:18px;
-    font-size:22px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    transition:0.3s;
-}
-
-.category-btn:hover{
-    transform:translateY(-5px);
-}
-
-/* Content */
-
-.content-box{
-    display:none;
-    margin-top:50px;
-    background:white;
-    border-radius:22px;
-    overflow:hidden;
-    box-shadow:0 15px 35px rgba(0,0,0,0.08);
-}
-
-.active{
-    display:block;
-}
-
-.property-image{
-    width:100%;
-    height:450px;
-    object-fit:cover;
-}
-
-.content{
-    padding:35px;
-}
-
-.content h2{
-    font-size:34px;
-    margin-bottom:20px;
-}
-
-.location{
-    font-size:20px;
-    margin-bottom:25px;
-}
-
-.details{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:15px;
-}
-
-.detail{
-    background:#fafafa;
-    border:1px solid #eee;
-    padding:16px;
-    border-radius:14px;
-    font-size:17px;
-}
-
-.price{
-    margin-top:30px;
-    font-size:32px;
-    color:#0a8f2f;
-    font-weight:bold;
-}
-
-.whatsapp-btn{
-    display:inline-block;
-    margin-top:25px;
-    background:#16a34a;
-    color:white;
-    text-decoration:none;
-    padding:16px 35px;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:bold;
-}
-
-.empty-box{
-    padding:80px 30px;
-    text-align:center;
-    font-size:24px;
-}
-
-/* Features */
-
-.features{
-    margin-top:70px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
-
-.feature{
-    background:white;
-    padding:30px;
-    border-radius:18px;
-    text-align:center;
-    box-shadow:0 10px 20px rgba(0,0,0,0.05);
-}
-
-.feature h3{
-    margin-bottom:15px;
-    font-size:24px;
-}
-
-/* Footer */
-
-footer{
-    background:#111;
-    color:white;
-    text-align:center;
-    padding:70px 20px;
-    margin-top:80px;
-}
-
-footer h2{
-    font-size:34px;
-    margin-bottom:20px;
-}
-
-footer p{
-    font-size:20px;
-    margin:10px 0;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <div class="hero">
-        <h1>Capital Home</h1>
-        <p>Your Property Starts Here</p>
-        <p class="sub">
-            أفضل منصة عقارية في المنيا لعرض الشقق والفلل والأراضي والمحلات
-            بأفضل الأسعار وأقوى فرص الاستثمار والسكن الراقي
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
+      {/* Hero Section */}
+      <section className="bg-black text-white px-6 py-24 md:px-16 text-center">
+        <p className="uppercase tracking-[0.35em] text-sm mb-4">Capital Home</p>
+        <h1 className="text-5xl md:text-7xl font-bold mb-6">
+          Modern Premium Real Estate Platform
+        </h1>
+        <p className="max-w-3xl mx-auto text-lg leading-8 opacity-90">
+          أفضل منصة عقارية حديثة في المنيا لعرض الشقق والفلل والأراضي والمحلات مع تواصل مباشر سريع وفرص استثمار قوية وتصميم احترافي يعكس ثقة العملاء من أول زيارة.
         </p>
 
         <a
-            class="hero-btn"
-            href="https://wa.me/201555086599"
-            target="_blank">
-            تواصل الآن عبر واتساب
+          href="https://wa.me/201555086599"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-block mt-8 rounded-2xl bg-white text-black px-8 py-4 font-semibold shadow-lg"
+        >
+          تواصل الآن عبر واتساب
         </a>
-    </div>
-</header>
+      </section>
 
-<section class="section">
-    <div class="container">
-
-        <h2 class="title">اختر نوع العقار</h2>
-
-        <div class="categories">
-            <button class="category-btn" onclick="showSection('apartments')">شقق</button>
-            <button class="category-btn" onclick="showSection('villas')">فلل</button>
-            <button class="category-btn" onclick="showSection('lands')">أراضي</button>
-            <button class="category-btn" onclick="showSection('shops')">محلات</button>
+      {/* Search Section */}
+      <section className="px-6 py-14 md:px-16 -mt-10">
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-lg border p-6 grid md:grid-cols-4 gap-4">
+          <input placeholder="ابحث عن عقار..." className="border rounded-2xl p-4" />
+          <select className="border rounded-2xl p-4">
+            <option>نوع العقار</option>
+            <option>شقق</option>
+            <option>فلل</option>
+            <option>أراضي</option>
+            <option>محلات</option>
+          </select>
+          <select className="border rounded-2xl p-4">
+            <option>المنطقة</option>
+            <option>المنيا</option>
+            <option>المنيا الجديدة</option>
+          </select>
+          <button className="rounded-2xl border p-4 font-semibold shadow-sm">
+            بحث
+          </button>
         </div>
+      </section>
 
-        <!-- شقق -->
-        <div id="apartments" class="content-box active">
+      {/* Categories */}
+      <section className="px-6 py-16 md:px-16">
+        <h2 className="text-3xl font-bold text-center mb-10">الأقسام الرئيسية</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {["شقق", "فلل", "أراضي", "محلات"].map((item) => (
+            <div key={item} className="rounded-3xl bg-white p-8 text-center border shadow-sm hover:shadow-md transition">
+              <h3 className="text-xl font-semibold">{item}</h3>
+            </div>
+          ))}
+        </div>
+      </section>
 
-            <img
-                class="property-image"
-                src="https://images.unsplash.com/photo-1494526585095-c41746248156"
-                alt="Apartment">
-
-            <div class="content">
-
-                <h2>شقة مميزة للبيع – التنظيم والإدارة</h2>
-
-                <div class="location">
-                    📍 أمام أبراج الأطباء – منطقة راقية وحيوية
-                </div>
-
-                <div class="details">
-                    <div class="detail">📐 140 متر صافي</div>
-                    <div class="detail">🛏️ 4 غرف + صالة كبيرة</div>
-                    <div class="detail">🛁 2 حمام</div>
-                    <div class="detail">🍽️ مطبخ أمريكاني</div>
-                    <div class="detail">🏢 الدور السابع علوي – أسانسير</div>
-                    <div class="detail">✨ الشقة على الطوب</div>
-                    <div class="detail">🌞 جميع الغرف تطل على الشارع</div>
-                    <div class="detail">🏙️ دبل فيس على شارعين</div>
-                    <div class="detail">⚡ عداد كهرباء ومياه</div>
-                    <div class="detail">✔ خالصة الواجهة والتصالح</div>
-                </div>
-
-                <div class="price">
-                    💰 السعر: 1,800,000 جنيه فقط
-                </div>
-
+      {/* Featured Properties */}
+      <section className="px-6 py-16 md:px-16 bg-white">
+        <h2 className="text-3xl font-bold text-center mb-10">العقارات المميزة الأكثر طلبًا</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {featuredProperties.map((property) => (
+            <div key={property.title} className="rounded-3xl border shadow-sm overflow-hidden bg-white">
+              <div className="h-52 bg-slate-100" />
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-3">{property.title}</h3>
+                <p className="mb-2">📍 {property.location}</p>
+                <p className="mb-2">💰 {property.price}</p>
+                <p className="text-slate-600 mb-5">{property.details}</p>
                 <a
-                    class="whatsapp-btn"
-                    href="https://wa.me/201555086599"
-                    target="_blank">
-                    تواصل عبر واتساب
+                  href="https://wa.me/201555086599"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-block rounded-2xl border px-6 py-3 font-semibold"
+                >
+                  تواصل مباشر عبر واتساب
                 </a>
-
+              </div>
             </div>
+          ))}
         </div>
+      </section>
 
-        <!-- فلل -->
-        <div id="villas" class="content-box">
-            <div class="empty-box">
-                لا توجد فلل مضافة حاليًا
+      {/* Why Choose Us */}
+      <section className="px-6 py-16 md:px-16">
+        <h2 className="text-3xl font-bold text-center mb-10">لماذا يختار العملاء Capital Home؟</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            ["مصداقية كاملة", "عرض واضح وصادق لكل عقار"],
+            ["أفضل الأسعار", "فرص قوية للسكن والاستثمار"],
+            ["تواصل سريع", "رد مباشر عبر الهاتف والواتساب"],
+          ].map(([title, desc]) => (
+            <div key={title} className="rounded-3xl bg-white border p-8 shadow-sm text-center">
+              <h3 className="text-xl font-bold mb-3">{title}</h3>
+              <p>{desc}</p>
             </div>
+          ))}
         </div>
+      </section>
 
-        <!-- أراضي -->
-        <div id="lands" class="content-box">
-            <div class="empty-box">
-                لا توجد أراضي مضافة حاليًا
-            </div>
-        </div>
-
-        <!-- محلات -->
-        <div id="shops" class="content-box">
-            <div class="empty-box">
-                لا توجد محلات مضافة حاليًا
-            </div>
-        </div>
-
-        <div class="features">
-
-            <div class="feature">
-                <h3>مصداقية كاملة</h3>
-                <p>كل عقار يتم عرضه بتفاصيل حقيقية وواضحة</p>
-            </div>
-
-            <div class="feature">
-                <h3>أفضل الأسعار</h3>
-                <p>نوفر أفضل فرص السكن والاستثمار العقاري</p>
-            </div>
-
-            <div class="feature">
-                <h3>تواصل سريع</h3>
-                <p>رد مباشر عبر الهاتف والواتساب طوال الوقت</p>
-            </div>
-
-        </div>
-
+      {/* Footer */}
+      <footer className="bg-black text-white px-6 py-16 text-center">
+        <h2 className="text-3xl font-bold mb-4">تواصل معنا</h2>
+        <p className="text-lg mb-2">📞 01555086599</p>
+        <p className="text-lg">💬 واتساب متاح</p>
+      </footer>
     </div>
-</section>
-
-<footer>
-    <h2>تواصل معنا</h2>
-    <p>📞 01555086599</p>
-    <p>💬 واتساب متاح</p>
-</footer>
-
-<script>
-function showSection(sectionId){
-    let sections = document.querySelectorAll('.content-box');
-
-    sections.forEach(function(section){
-        section.classList.remove('active');
-    });
-
-    document.getElementById(sectionId).classList.add('active');
+  );
 }
-</script>
-
-</body>
-</html>

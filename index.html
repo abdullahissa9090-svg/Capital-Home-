@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capital Home | كابيتال هوم للعقارات</title>
+    
+    <!-- تحسينات SEO احترافية لشركة كابيتال هوم -->
+    <title>كابيتال هوم | شقق وعقارات للبيع في المنيا والمنيا الجديدة</title>
+    <meta name="description" content="تصفح أفضل عروض العقارات في المنيا مع كابيتال هوم. شقق فاخرة، فيلل بمواقع متميزة، أراضي استثمارية، ومحلات تجارية. تواصل معنا لأفضل سعر وموقع.">
+    <meta name="keywords" content="عقارات المنيا، شقق للبيع المنيا الجديدة، شقق للبيع المنيا، فيلل المنيا الجديدة، كابيتال هوم للعقارات">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: #f7f7f7; color: #111; scroll-behavior: smooth; }
+        body { background: #f7f7f7; color: #111; scroll-behavior: smooth; line-height: 1.6; }
         header { background: #111; color: white; padding: 60px 20px; text-align: center; }
         .logo { font-size: 42px; font-weight: 800; color: #d4af37; margin-bottom: 15px; }
-        header h1 { font-size: 28px; margin-bottom: 15px; }
+        header h1 { font-size: 28px; margin-bottom: 15px; color: #fff; }
         header p { font-size: 18px; opacity: 0.9; }
         .container { width: 90%; max-width: 1200px; margin: auto; padding: 40px 0; }
         .buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; position: sticky; top: 10px; z-index: 100; }
@@ -21,9 +26,9 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border: 1px solid #eee; transition: 0.3s; }
         .card:hover { border-color: #d4af37; transform: translateY(-3px); }
-        .card h3 { font-size: 22px; color: #111; }
+        .card h2 { font-size: 22px; color: #111; margin-bottom: 5px; }
         .price { font-size: 24px; font-weight: 800; color: #0a8f2f; margin: 10px 0; }
-        .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border-right: 5px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,.1); margin-bottom: 30px; line-height: 1.8; }
+        .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border-right: 5px solid #d4af37; box-shadow: 0 10px 30px rgba(0,0,0,.1); margin-bottom: 30px; }
         .details-box.active { display: block; }
         .whatsapp { display: inline-block; margin-top: 20px; padding: 14px 30px; background: #25D366; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; }
         footer { background: #111; color: white; text-align: center; padding: 50px 20px; margin-top: 50px; }
@@ -35,159 +40,161 @@
 <header>
     <div class="logo">CAPITAL HOME</div>
     <h1>أفضل العقارات في المنيا والمنيا الجديدة</h1>
-    <p>شقق • فيلل • أراضي • محلات</p>
+    <p>شقق سكنية • فيلل فاخرة • أراضي • محلات تجارية</p>
 </header>
 
 <div class="container">
-    <div class="buttons">
+    <nav class="buttons">
         <button class="nav-btn active-btn" onclick="showSection('apartments', this)">🏢 الشقق</button>
         <button class="nav-btn" onclick="showSection('villas', this)">🏡 الفيلل</button>
         <button class="nav-btn" onclick="showSection('lands', this)">🌍 الأراضي</button>
         <button class="nav-btn" onclick="showSection('shops', this)">🏪 المحلات</button>
-    </div>
+    </nav>
 
-    <!-- قسم الشقق (الآن يحتوي على الـ 8 شقق كاملة) -->
-    <div id="apartments" class="section active">
-        
-        <!-- شقة 1 -->
-        <div class="card" onclick="showDetails('a1')">
-            <h3>شقة التنظيم والإدارة</h3>
-            <div class="price">1,800,000 جنيه</div>
-            <p>140م • 4 غرف • 2 حمام • أسانسير</p>
-        </div>
-        <div id="a1" class="details-box active">
-            <h2>شقة التنظيم والإدارة</h2>
-            <p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+    <main>
+        <!-- قسم الشقق كامل (8 شقق) -->
+        <section id="apartments" class="section active">
+            
+            <!-- شقة 1 -->
+            <div class="card" onclick="showDetails('a1')">
+                <h2>شقة التنظيم والإدارة</h2>
+                <div class="price">1,800,000 جنيه</div>
+                <p>140م • 4 غرف • أمام أبراج الأطباء</p>
+            </div>
+            <div id="a1" class="details-box active">
+                <h3>تفاصيل شقة التنظيم والإدارة</h3>
+                <p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة التنظيم والإدارة" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 2 -->
-        <div class="card" onclick="showDetails('a2')">
-            <h3>شقة 77 عمارة كمين الصفا</h3>
-            <div class="price">750,000 جنيه</div>
-            <p>90م • تشطيب جهاز • واجهة أمامية</p>
-        </div>
-        <div id="a2" class="details-box">
-            <h2>شقة 77 عمارة كمين الصفا</h2>
-            <p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 2 -->
+            <div class="card" onclick="showDetails('a2')">
+                <h2>شقة عمارة كمين الصفا</h2>
+                <div class="price">750,000 جنيه</div>
+                <p>90م • تشطيب جهاز • واجهة أمامية</p>
+            </div>
+            <div id="a2" class="details-box">
+                <h3>تفاصيل شقة 77 عمارة كمين الصفا</h3>
+                <p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة كمين الصفا" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 3 -->
-        <div class="card" onclick="showDetails('a3')">
-            <h3>شقة ميدان الساعة</h3>
-            <div class="price">4,700,000 جنيه</div>
-            <p>200م • 8 بلكونات • 3 غرف</p>
-        </div>
-        <div id="a3" class="details-box">
-            <h2>شقة ميدان الساعة</h2>
-            <p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم – إطلالة ممتازة</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 3 -->
+            <div class="card" onclick="showDetails('a3')">
+                <h2>شقة بميدان الساعة</h2>
+                <div class="price">4,700,000 جنيه</div>
+                <p>200م • 8 بلكونات • برج مرخص</p>
+            </div>
+            <div id="a3" class="details-box">
+                <h3>تفاصيل شقة ميدان الساعة</h3>
+                <p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم – إطلالة ممتازة</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة ميدان الساعة" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 4 -->
-        <div class="card" onclick="showDetails('a4')">
-            <h3>شقة عبير سيتي</h3>
-            <div class="price">4,500,000 جنيه</div>
-            <p>170م • أول علوي • Ultra Super Lux</p>
-        </div>
-        <div id="a4" class="details-box">
-            <h2>شقة عبير سيتي</h2>
-            <p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 4 -->
+            <div class="card" onclick="showDetails('a4')">
+                <h2>شقة عبير سيتي</h2>
+                <div class="price">4,500,000 جنيه</div>
+                <p>170م • تشطيب ألترا سوبر لوكس</p>
+            </div>
+            <div id="a4" class="details-box">
+                <h3>تفاصيل شقة عبير سيتي</h3>
+                <p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة عبير سيتي" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 5 -->
-        <div class="card" onclick="showDetails('a5')">
-            <h3>شقة أبو فليو</h3>
-            <div class="price">1,015,000 جنيه</div>
-            <p>145م • الدور السادس • ناصية</p>
-        </div>
-        <div id="a5" class="details-box">
-            <h2>شقة أبو فليو</h2>
-            <p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – شارع رئيسي + جانبي – ناصية</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 5 -->
+            <div class="card" onclick="showDetails('a5')">
+                <h2>شقة بمنطقة أبو فليو</h2>
+                <div class="price">1,015,000 جنيه</div>
+                <p>145م • ناصية • قريب من مدرسة سمارت</p>
+            </div>
+            <div id="a5" class="details-box">
+                <h3>تفاصيل شقة أبو فليو</h3>
+                <p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – شارع رئيسي + جانبي – ناصية</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة أبو فليو" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 6 -->
-        <div class="card" onclick="showDetails('a6')">
-            <h3>شقة الحي السابع</h3>
-            <div class="price">2,400,000 جنيه</div>
-            <p>115م + 30م جاردن • أرضي</p>
-        </div>
-        <div id="a6" class="details-box">
-            <h2>شقة الحي السابع – المنيا الجديدة</h2>
-            <p>115 متر + 30 متر جاردن – 3 غرف – 2 حمام – أرضي – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 6 -->
+            <div class="card" onclick="showDetails('a6')">
+                <h2>شقة الحي السابع - المنيا الجديدة</h2>
+                <div class="price">2,400,000 جنيه</div>
+                <p>115م • أرضي بجاردن • قرب جامعة دراية</p>
+            </div>
+            <div id="a6" class="details-box">
+                <h3>تفاصيل شقة الحي السابع</h3>
+                <p>115 متر + 30 متر جاردن – 3 غرف – 2 حمام – أرضي – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة الحي السابع" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 7 -->
-        <div class="card" onclick="showDetails('a7')">
-            <h3>شقة أبراج الري</h3>
-            <div class="price">2,700,000 جنيه</div>
-            <p>135م • ألترا لوكس • 2 أسانسير</p>
-        </div>
-        <div id="a7" class="details-box">
-            <h2>شقة أبراج الري – ديماريس</h2>
-            <p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – مطبخ – حمام – واجهة شرقية قبلية</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 7 -->
+            <div class="card" onclick="showDetails('a7')">
+                <h2>شقة أبراج الري - ديماريس</h2>
+                <div class="price">2,700,000 جنيه</div>
+                <p>135م • ألترا لوكس • واجهة شرقية</p>
+            </div>
+            <div id="a7" class="details-box">
+                <h3>تفاصيل شقة أبراج الري</h3>
+                <p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – مطبخ – حمام – واجهة شرقية قبلية - برج به 2 أسانسير</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة أبراج الري" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <!-- شقة 8 -->
-        <div class="card" onclick="showDetails('a8')">
-            <h3>شقة ديماريس</h3>
-            <div class="price">2,000,000 جنيه</div>
-            <p>125م • 4 غرف • مؤجرة بـ 8000</p>
-        </div>
-        <div id="a8" class="details-box">
-            <h2>شقة ديماريس</h2>
-            <p>125 متر – 4 غرف – متشطبة بالكامل – الدور 12 – بها أسانسير – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+            <!-- شقة 8 -->
+            <div class="card" onclick="showDetails('a8')">
+                <h2>شقة استثمارية في ديماريس</h2>
+                <div class="price">2,000,000 جنيه</div>
+                <p>125م • 4 غرف • عائد إيجاري مرتفع</p>
+            </div>
+            <div id="a8" class="details-box">
+                <h3>تفاصيل شقة ديماريس الاستثمارية</h3>
+                <p>125 متر – 4 غرف – متشطبة بالكامل – الدور 12 – بها أسانسير – مؤجرة حاليًا بـ 8,000 جنيه شهريًا (فرصة استثمارية ممتازة)</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن شقة ديماريس 125م" target="_blank">تواصل واتساب</a>
+            </div>
 
-    </div>
+        </section>
 
-    <!-- قسم الفيلل -->
-    <div id="villas" class="section">
-        <div class="card" onclick="showDetails('v1')">
-            <h3>فيلا ابني بيتك</h3>
-            <div class="price">3,000,000 جنيه</div>
-            <p>150م أرض • 135م للدور</p>
-        </div>
-        <div id="v1" class="details-box">
-            <h2>فيلا ابني بيتك</h2>
-            <p>المنيا الجديدة – مرحلة 3 – قطاع B – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
+        <!-- قسم الفيلل -->
+        <section id="villas" class="section">
+            <div class="card" onclick="showDetails('v1')">
+                <h2>فيلا ابني بيتك - المنيا الجديدة</h2>
+                <div class="price">3,000,000 جنيه</div>
+                <p>150م أرض • واجهة بحرية • أمام جامعة اللوتس</p>
+            </div>
+            <div id="v1" class="details-box">
+                <h3>تفاصيل فيلا ابني بيتك</h3>
+                <p>المنيا الجديدة – مرحلة 3 – قطاع B – 150 متر أرض – نصف تشطيب – واجهة بحرية – موقع متميز جداً أمام جامعة اللوتس.</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن فيلا ابني بيتك" target="_blank">تواصل واتساب</a>
+            </div>
 
-        <div class="card" onclick="showDetails('v2')">
-            <h3>فيلا مشروع مراكش</h3>
-            <div class="price">10,550,000 جنيه</div>
-            <p>أقل من سعر الشركة بـ 3 مليون</p>
-        </div>
-        <div id="v2" class="details-box">
-            <h2>فيلا مشروع مراكش</h2>
-            <p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة خاص – بحري بالكامل – غير مجروحة – فيو مباشر على بورتو المنيا</p>
-            <a class="whatsapp" href="https://wa.me/201555086599" target="_blank">تواصل واتساب</a>
-        </div>
-    </div>
+            <div class="card" onclick="showDetails('v2')">
+                <h2>فيلا مشروع مراكش الفاخرة</h2>
+                <div class="price">10,550,000 جنيه</div>
+                <p>حمام سباحة خاص • فيو بورتو المنيا</p>
+            </div>
+            <div id="v2" class="details-box">
+                <h3>تفاصيل فيلا مراكش</h3>
+                <p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة خاص – بحري بالكامل – غير مجروحة – فيو مباشر على بورتو المنيا.</p>
+                <a class="whatsapp" href="https://wa.me/201555086599?text=استفسار عن فيلا مراكش" target="_blank">تواصل واتساب</a>
+            </div>
+        </section>
 
-    <!-- الأراضي -->
-    <div id="lands" class="section">
-        <div class="card"><h3>لا توجد أراضي مضافة حاليًا</h3></div>
-    </div>
+        <!-- الأراضي -->
+        <section id="lands" class="section">
+            <div class="card"><h2>قريباً.. أفضل عروض الأراضي في المنيا</h2></div>
+        </section>
 
-    <!-- المحلات -->
-    <div id="shops" class="section">
-        <div class="card"><h3>لا توجد محلات مضافة حاليًا</h3></div>
-    </div>
-
+        <!-- المحلات -->
+        <section id="shops" class="section">
+            <div class="card"><h2>قريباً.. فرص تجارية ومحلات للبيع</h2></div>
+        </section>
+    </main>
 </div>
 
 <footer>
-    <h2>تواصل معنا</h2>
+    <h2>تواصل مع كابيتال هوم (Capital Home)</h2>
+    <p>خيارك الأول للعقارات في محافظة المنيا</p>
     <a href="tel:01555086599" class="phone">01555086599</a>
-    <p>واتساب متاح طوال اليوم</p>
+    <p>متاحون لخدمتكم طوال أيام الأسبوع عبر الواتساب</p>
 </footer>
 
 <script>

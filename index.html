@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>كابيتال هوم | عقارات المنيا والمنيا الجديدة</title>
-    <meta name="description" content="أفضل عروض العقارات في المنيا بإدارة أ/ عبد الله. شقق فاخرة وفيلل بمواقع متميزة.">
-    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -18,8 +15,7 @@
 
         .container { width: 95%; max-width: 1000px; margin: auto; padding: 40px 0; }
         
-        /* شريط الأزرار - ثابت عند التمرير */
-        .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 30px; position: sticky; top: 10px; z-index: 100; background: rgba(253, 253, 253, 0.9); padding: 10px 0; border-radius: 15px; }
+        .buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 30px; position: sticky; top: 10px; z-index: 100; background: rgba(253, 253, 253, 0.95); padding: 10px 0; border-radius: 15px; }
         .nav-btn { padding: 10px 20px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 100px; max-width: 150px; }
         .active-btn { background: #111; color: #d4af37; }
 
@@ -37,7 +33,28 @@
         .placeholder-img { width: 100%; height: 150px; background: #f9f9f9; border: 1px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; }
 
         .whatsapp { display: block; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 20px; transition: 0.3s; }
-        .whatsapp:hover { opacity: 0.9; transform: scale(1.02); }
+
+        /* أيقونة واتساب العائمة */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: #fff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 35px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .floating-whatsapp:hover { transform: scale(1.1); background-color: #128c7e; }
 
         .special-request { background: #111; color: #d4af37; padding: 40px 20px; border-radius: 20px; margin: 40px 0; text-align: center; border: 2px solid #d4af37; }
         .request-btn { display: inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
@@ -51,9 +68,14 @@
 </head>
 <body>
 
+<!-- أيقونة الواتساب العائمة -->
+<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن أحد العقارات المتاحة" class="floating-whatsapp" target="_blank">
+    <svg width="35" height="35" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
 <header>
     <div class="logo">CAPITAL HOME</div>
-    <p>دليلك العقاري الأول في المنيا بإشراف أ/ عبد الله</p>
+    <p>دليلك العقاري الأول في محافظة المنيا</p>
 </header>
 
 <div class="container">
@@ -88,7 +110,7 @@
             <div class="card" onclick="showDetails('a7')"><h2>شقة أبراج الري</h2><div class="price">2,700,000 ج.م</div><p>135م • واجهة شرقية</p></div>
             <div id="a7" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – واجهة شرقية قبلية - برج به 2 أسانسير</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبراج الري" target="_blank">حجز موعد معاينة</a></div>
 
-            <div class="card" onclick="showDetails('a8')"><h2>شقة ديماريس</h2><div class="price">2,000,000 ج.م</div><p>125م • فرصة استثمارية</p></div>
+            <div class="card" onclick="showDetails('a8')"><h2>شقة ديماريس</h2><div class="price">2,000,000 ج.م</div><p>125م • استثمار عقاري</p></div>
             <div id="a8" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>125 متر – 4 غرف – متشطبة بالكامل – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ديماريس" target="_blank">حجز موعد معاينة</a></div>
         </section>
 
@@ -105,8 +127,8 @@
         <section id="lands" class="section">
             <div class="empty-state">
                 <h2 style="color: #d4af37; margin-bottom: 10px;">🌍 عروض الأراضي</h2>
-                <p>يتم تحديث قائمة الأراضي حالياً.. تواصل مع أ/ عبد الله لطلبات خاصة.</p>
-                <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أبحث عن قطعة أرض في المنيا" class="whatsapp">استفسار سريع</a>
+                <p>يتم تحديث قائمة العروض حالياً.. تواصل معنا لطلبات خاصة.</p>
+                <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أبحث عن قطعة أرض في المنيا" class="whatsapp">استفسار سريع عبر واتساب</a>
             </div>
         </section>
 
@@ -115,24 +137,24 @@
             <div class="empty-state">
                 <h2 style="color: #d4af37; margin-bottom: 10px;">🏪 عروض المحلات</h2>
                 <p>قريباً.. أفضل الفرص التجارية في المنيا الجديدة.</p>
-                <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أبحث عن محل تجاري" class="whatsapp">استفسار سريع</a>
+                <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أبحث عن محل تجاري في المنيا" class="whatsapp">استفسار سريع عبر واتساب</a>
             </div>
         </section>
 
-        <!-- قسم طلب خاص -->
+        <!-- طلب خاص -->
         <section class="special-request">
             <h2>لم تجد ما تبحث عنه؟</h2>
-            <p>أخبرنا بمواصفات عقارك وسنوفرها لك فوراً عبر شبكة علاقاتنا في المنيا.</p>
+            <p>أخبرنا بمواصفات العقار الذي تحلم به وسنوفر لك أفضل الخيارات المتاحة.</p>
             <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد طلب عقار بمواصفات خاصة" class="request-btn">إرسال طلبك الآن</a>
         </section>
     </main>
 </div>
 
 <footer>
-    <div class="footer-logo" style="font-size: 30px; font-weight: 800; color: #d4af37; margin-bottom: 10px;">CAPITAL HOME</div>
+    <div class="footer-logo">CAPITAL HOME</div>
     <p>"نحن لا نبيع مجرد جدران، نحن نختار لك مستقبلك."</p>
     <div class="admin-note">إدارة وإشراف: <strong>أ/ عبد الله</strong></div>
-    <p>للتواصل المباشر:</p>
+    <p>للتواصل المباشر والاستشارات العقارية:</p>
     <a href="tel:01555086599" class="phone">01555086599</a>
     <p style="font-size: 13px; opacity: 0.5; margin-top: 30px;">جميع الحقوق محفوظة لشركة كابيتال هوم © 2026</p>
 </footer>

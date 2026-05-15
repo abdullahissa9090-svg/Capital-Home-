@@ -9,13 +9,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background: #fdfdfd; color: #111; scroll-behavior: smooth; line-height: 1.8; }
         
-        header { background: #111; color: white; padding: 60px 20px; text-align: center; border-bottom: 5px solid #d4af37; }
+        header { background: #111; color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #d4af37; }
         .logo { font-size: 42px; font-weight: 800; color: #d4af37; margin-bottom: 10px; letter-spacing: 2px; }
         header p { font-size: 18px; opacity: 0.9; }
 
-        .container { width: 95%; max-width: 1000px; margin: auto; padding: 40px 0; }
+        .container { width: 95%; max-width: 1000px; margin: auto; padding: 30px 0; }
         
-        /* شريط أزرار ثابت ومطور بتأثير ضبابي ممتاز */
+        /* شريط البحث المطور لراحة زوار الفيسبوك */
+        .search-container { margin-bottom: 25px; position: relative; }
+        .search-input { width: 100%; padding: 15px 20px; border: 2px solid #eee; border-radius: 15px; font-size: 16px; font-weight: 600; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); outline: none; }
+        .search-input:focus { border-color: #d4af37; box-shadow: 0 4px 20px rgba(212,175,55,0.15); }
+
+        /* شريط أزرار ثابت متطور */
         .buttons { 
             display: flex; 
             flex-wrap: wrap; 
@@ -34,8 +39,6 @@
         }
         .nav-btn { padding: 10px 15px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 80px; max-width: 150px; }
         .active-btn { background: #111; color: #d4af37; }
-        
-        /* زر اعرض عقارك معنا بلون مميز وجذاب */
         .sell-btn { background: #d4af37; border-color: #d4af37; color: #111; }
         .sell-btn:hover { background: #111; color: #d4af37; border-color: #111; }
 
@@ -43,49 +46,36 @@
         .section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border-right: 6px solid #111; transition: 0.3s; }
+        /* كروت العقارات بأسلوبها الوقور والأنيق */
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border-right: 6px solid #111; transition: 0.3s; position: relative; overflow: hidden; }
         .card:hover { border-right-color: #d4af37; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.08); }
         
         .card h3 { font-size: 20px; font-weight: 700; color: #111; }
         .price { font-size: 24px; font-weight: 800; color: #1a73e8; margin: 5px 0; }
         
-        /* تحسين صندوق التفاصيل وحركته */
+        /* صندوق التفاصيل */
         .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,.05); margin-bottom: 30px; border-top: 4px solid #d4af37; }
         .details-box.active { display: block; animation: slideDown 0.3s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         
-        .placeholder-img { width: 100%; height: 160px; background: #fdfbf7; border: 2px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; transition: 0.3s; }
-        .placeholder-img span { font-size: 35px; margin-bottom: 5px; }
+        .placeholder-img { width: 100%; height: 220px; background: #fcfbf9; border: 2px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; position: relative; background-size: cover; background-position: center; }
+        .placeholder-img span { font-size: 40px; margin-bottom: 5px; }
 
-        .whatsapp { display: block; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; margin-top: 20px; transition: 0.3s; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
+        /* أزرار الإجراءات */
+        .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .whatsapp { flex: 3; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; }
         .whatsapp:hover { background: #1ebd58; transform: translateY(-2px); }
+        
+        .share-btn { flex: 1; background: #f1f1f1; color: #333; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .share-btn:hover { background: #e2e2e2; }
 
-        .floating-whatsapp {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25d366;
-            color: #fff;
-            width: 60px;
-            height: 60px;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 35px;
-            box-shadow: 2px 5px 15px rgba(0,0,0,0.25);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+        .floating-whatsapp { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: #fff; width: 60px; height: 60px; border-radius: 50px; text-align: center; font-size: 35px; box-shadow: 2px 5px 15px rgba(0,0,0,0.25); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(5deg); background-color: #128c7e; }
 
         .special-request { background: #111; color: #d4af37; padding: 40px 20px; border-radius: 20px; margin: 40px 0; text-align: center; border: 2px solid #d4af37; }
         .request-btn { display: inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
         .request-btn:hover { background: #fff; color: #111; transform: translateY(-2px); }
 
-        /* ستايل جديد لقسم من نحن وقسم اعرض عقارك الجديد */
         .about-section { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.03); border: 1px solid #eee; margin: 40px 0; }
         .about-section h2 { color: #111; font-size: 26px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
         .about-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 50px; height: 3px; background: #d4af37; }
@@ -94,6 +84,7 @@
         .feature-item h4 { font-weight: 700; margin-bottom: 5px; color: #111; }
 
         .empty-state { text-align: center; padding: 50px 20px; background: #fff; border-radius: 20px; border: 1px dashed #ccc; }
+        .no-results { display: none; text-align: center; padding: 30px; color: #666; font-weight: 600; }
 
         footer { background: #111; color: white; text-align: center; padding: 60px 20px; margin-top: 50px; border-top: 5px solid #d4af37; }
         .admin-note { background: rgba(212, 175, 55, 0.1); padding: 10px 20px; border-radius: 10px; display: inline-block; margin: 15px 0; border: 1px solid rgba(212, 175, 55, 0.3); }
@@ -113,50 +104,113 @@
 </header>
 
 <div class="container">
+    
+    <!-- محرك البحث الفوري -->
+    <div class="search-container">
+        <input type="text" id="propertySearch" class="search-input" placeholder="🔍 ابحث عن عقار.. اكتب المنطقة، السعر، أو المساحة (مثال: الحي السابع أو سوبر لوكس)">
+    </div>
+
     <nav class="buttons">
         <button class="nav-btn active-btn" onclick="showSection('apartments', this)">🏢 الشقق</button>
         <button class="nav-btn" onclick="showSection('villas', this)">🏡 الفيلل</button>
         <button class="nav-btn" onclick="showSection('lands', this)">🌍 الأراضي</button>
         <button class="nav-btn" onclick="showSection('shops', this)">🏪 المحلات</button>
-        <!-- الزر الجديد: اعرض عقارك معنا -->
         <button class="nav-btn sell-btn" onclick="showSection('sell-property', this)">✨ اعرض عقارك</button>
     </nav>
 
     <main>
+        <div id="noResults" class="no-results">عذراً، لم نجد عقارات تطابق بحثك حالياً. تواصل معنا وسنوفرها لك!</div>
+
         <!-- قسم الشقق -->
         <section id="apartments" class="section active">
             <div class="card" onclick="showDetails('a1')"><h3>شقة التنظيم والإدارة</h3><div class="price">1,800,000 ج.م</div><p>140م • أمام أبراج الأطباء</p></div>
-            <div id="a1" class="details-box"><div class="placeholder-img"><span>🏠</span><p>CAPITAL HOME</p></div><p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة التنظيم والإدارة" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a1" class="details-box">
+                <div class="placeholder-img"><span>🏠</span><p>CAPITAL HOME</p></div>
+                <p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة التنظيم والإدارة" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة التنظيم والإدارة بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a2')"><h3>شقة عمارة كمين الصفا</h3><div class="price">750,000 ج.م</div><p>90م • تشطيب جهاز</p></div>
-            <div id="a2" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة كمين الصفا" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a2" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة كمين الصفا" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة عمارة كمين الصفا بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a3')"><h3>شقة بميدان الساعة</h3><div class="price">4,700,000 ج.م</div><p>200م • 8 بلكونات</p></div>
-            <div id="a3" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ميدان الساعة" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a3" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ميدان الساعة" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة بميدان الساعة بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a4')"><h3>شقة عبير سيتي</h3><div class="price">4,500,000 ج.م</div><p>170م • ألترا سوبر لوكس</p></div>
-            <div id="a4" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة عبير سيتي" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a4" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة عبير سيتي" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة عبير سيتي بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a5')"><h3>شقة بمنطقة أبو فليو</h3><div class="price">1,015,000 ج.م</div><p>145م • ناصية</p></div>
-            <div id="a5" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – ناصية</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبو فليو" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a5" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – ناصية</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبو فليو" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة بمنطقة أبو فليو بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a6')"><h3>شقة الحي السابع</h3><div class="price">2,400,000 ج.م</div><p>115م • أرضي بجاردن</p></div>
-            <div id="a6" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>115 متر + 30 متر جاردن – 3 غرف – أمام مكافحة المخدرات – قريب من جامعة دراية</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة الحي السابع" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a6" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>115 متر + 30 متر جاردن – 3 غرف – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة الحي السابع" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة الحي السابع بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a7')"><h3>شقة أبراج الري</h3><div class="price">2,700,000 ج.م</div><p>135م • واجهة شرقية</p></div>
-            <div id="a7" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – واجهة شرقية قبلية - برج به 2 أسانسير</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبراج الري" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a7" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – واجهة شرقية قبلية - برج به 2 أسانسير</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبراج الري" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة أبراج الري بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
 
             <div class="card" onclick="showDetails('a8')"><h3>شقة ديماريس</h3><div class="price">2,000,000 ج.م</div><p>125م • استثمار عقاري</p></div>
-            <div id="a8" class="details-box"><div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div><p>125 متر – 4 غرف – متشطبة بالكامل – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ديماريس" target="_blank">حجز موعد معاينة</a></div>
+            <div id="a8" class="details-box">
+                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
+                <p>125 متر – 4 غرف – متشطبة بالكامل – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p>
+                <div class="action-buttons">
+                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ديماريس" target="_blank">💬 حجز موعد معاينة</a>
+                    <button class="share-btn" onclick="shareProperty('شقة ديماريس بموقع كابيتال هوم')">🔗 مشاركة</button>
+                </div>
+            </div>
         </section>
 
         <!-- قسم الفيلل -->
         <section id="villas" class="section">
             <div class="card" onclick="showDetails('v1')"><h3>فيلا ابني بيتك</h3><div class="price">3,000,000 ج.م</div><p>150م أرض</p></div>
-            <div id="v1" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>المنيا الجديدة – مرحلة 3 – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس.</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا ابني بيتك" target="_blank">حجز موعد معاينة</a></div>
+            <div id="v1" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>المنيا الجديدة – مرحلة 3 – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس.</p><div class="action-buttons"><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا ابني بيتك" target="_blank">💬 حجز موعد معاينة</a><button class="share-btn" onclick="shareProperty('فيلا ابني بيتك - كابيتال هوم')">🔗 مشاركة</button></div></div>
 
             <div class="card" onclick="showDetails('v2')"><h3>فيلا مشروع مراكش</h3><div class="price">10,550,000 ج.م</div><p>بورتو المنيا</p></div>
-            <div id="v2" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة – فيو مباشر على بورتو المنيا.</p><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا مراكش" target="_blank">حجز موعد معاينة</a></div>
+            <div id="v2" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة – فيو مباشر على بورتو المنيا.</p><div class="action-buttons"><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا مراكش" target="_blank">💬 حجز موعد معاينة</a><button class="share-btn" onclick="shareProperty('فيلا مشروع مراكش - كابيتال هوم')">🔗 مشاركة</button></div></div>
         </section>
 
         <!-- الأراضي -->
@@ -177,7 +231,7 @@
             </div>
         </section>
 
-        <!-- القسم الجديد: اعرض عقارك معنا -->
+        <!-- اعرض عقارك معنا -->
         <section id="sell-property" class="section">
             <div class="empty-state" style="border-color: #d4af37; background: #fff;">
                 <h2 style="color: #111; margin-bottom: 15px; font-weight: 800;">✨ سوّق لعقارك مع كابيتال هوم</h2>
@@ -186,7 +240,7 @@
             </div>
         </section>
 
-        <!-- القسم الجديد: من نحن (مضاف بشكل يعزز الموثوقية) -->
+        <!-- من نحن -->
         <section class="about-section">
             <h2>من نحن؟</h2>
             <p><strong>كابيتال هوم (CAPITAL HOME)</strong> هي المنصة العقارية الرائدة والأولى المتخصصة في تسويق وإدارة العقارات بمحافظة المنيا ومدينة المنيا الجديدة. نحن لسنا مجرد وسيط عقاري، بل مستشارك الموثوق الذي يضمن لك استثماراً آمناً واختيارات مدروسة تلبي تطلعات عائلتك ومستقبلك.</p>
@@ -230,8 +284,13 @@ function showSection(id, btn){
     document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
     document.querySelectorAll('.details-box').forEach(box => box.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active-btn');
+    
+    const targetSection = document.getElementById(id);
+    if(targetSection) targetSection.classList.add('active');
+    if(btn) btn.classList.add('active-btn');
+    
+    document.getElementById('propertySearch').value = '';
+    filterProperties();
 }
 
 function showDetails(id){
@@ -246,10 +305,60 @@ function showDetails(id){
         target.classList.remove('active');
     } else {
         target.classList.add('active');
-        
         setTimeout(() => {
             target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 50);
+    }
+}
+
+// نظام التصفية والبحث الفوري الفعّال
+const searchInput = document.getElementById('propertySearch');
+searchInput.addEventListener('input', filterProperties);
+
+function filterProperties() {
+    const filter = searchInput.value.toLowerCase();
+    const activeSection = document.querySelector('.section.active');
+    if (!activeSection) return;
+
+    const cards = activeSection.getElementsByClassName('card');
+    let hasVisibleCard = false;
+
+    for (let i = 0; i < cards.length; i++) {
+        const cardText = cards[i].innerText.toLowerCase();
+        const detailsBox = cards[i].nextElementSibling;
+        const detailsText = (detailsBox && detailsBox.classList.contains('details-box')) ? detailsBox.innerText.toLowerCase() : '';
+        
+        if (cardText.includes(filter) || detailsText.includes(filter)) {
+            cards[i].style.display = "";
+            hasVisibleCard = true;
+        } else {
+            cards[i].style.display = "none";
+            if (detailsBox && detailsBox.classList.contains('details-box')) {
+                detailsBox.classList.remove('active');
+            }
+        }
+    }
+
+    const noResults = document.getElementById('noResults');
+    if (!hasVisibleCard && filter !== "") {
+        noResults.style.display = "block";
+    } else {
+        noResults.style.display = "none";
+    }
+}
+
+// ميزة مشاركة ونسخ رابط العقار
+function shareProperty(title) {
+    const textToCopy = `معاينة لـ [ ${title} ] عبر كابيتال هوم للتسويق العقاري بالمنيا. تصفح الموقع لمعاينة التفاصيل: ${window.location.href}`;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('تم نسخ رابط وتفاصيل العقار بنجاح! يمكنك الآن لصقها ومشاركتها على واتساب مع عائلتك.');
+        }).catch(() => {
+            alert('عذراً، يرجى نسخ الرابط يدويًا من شريط المتصفح.');
+        });
+    } else {
+        alert(textToCopy);
     }
 }
 </script>

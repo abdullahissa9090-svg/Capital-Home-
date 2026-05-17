@@ -15,6 +15,33 @@
 
         .container { width: 95%; max-width: 1000px; margin: auto; padding: 30px 0; }
         
+        /* تصميم أنيق وجذاب لعداد العقارات المتاح لإعطاء هيبة للموقع */
+        .counter-badge {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .counter-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #111;
+            color: #d4af37;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #d4af37;
+        }
+        .counter-number {
+            background: #d4af37;
+            color: #111;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
         /* شريط البحث المطور لراحة زوار الفيسبوك */
         .search-container { margin-bottom: 25px; position: relative; }
         .search-input { width: 100%; padding: 15px 20px; border: 2px solid #eee; border-radius: 15px; font-size: 16px; font-weight: 600; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); outline: none; }
@@ -73,7 +100,7 @@
         .floating-whatsapp:hover { transform: scale(1.1) rotate(5deg); background-color: #128c7e; }
 
         .special-request { background: #111; color: #d4af37; padding: 40px 20px; border-radius: 20px; margin: 40px 0; text-align: center; border: 2px solid #d4af37; }
-        .request-btn { display: inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
+        .request-btn { inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
         .request-btn:hover { background: #fff; color: #111; transform: translateY(-2px); }
 
         .about-section { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.03); border: 1px solid #eee; margin: 40px 0; }
@@ -104,6 +131,15 @@
 </header>
 
 <div class="container">
+    
+    <!-- العداد الجديد المميز والمحفز لثقة العميل والملاك -->
+    <div class="counter-badge">
+        <div class="counter-box">
+            <span>متاح لدينا الآن</span>
+            <span class="counter-number">+12</span>
+            <span>عرض عقاري متاح للمعاينة</span>
+        </div>
+    </div>
     
     <!-- محرك البحث الفوري -->
     <div class="search-container">
@@ -255,7 +291,7 @@
             </div>
         </section>
 
-        <!-- المحلات (تم تعديل الاسم والوصف هنا وإخفاء اسم البرج تماماً) -->
+        <!-- المحلات -->
         <section id="shops" class="section">
             <div class="card" onclick="showDetails('s1')">
                 <h3>محل تجاري مميز بشلبي القديمة</h3>

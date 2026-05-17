@@ -3,457 +3,605 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كابيتال هوم | عقارات المنيا والمنيا الجديدة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <title>كابيتال هوم | تسويق وإدارة العقارات بالمنيا</title>
+    <meta name="description" content="منصة متخصصة في عرض وتسويق العقارات السكنية والتجارية بمحافظة المنيا ومدينة المنيا الجديدة. عروض حقيقية ومعاينات مجانية بالتنسيق مع الملاك مباشرة.">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <meta property="og:title" content="كابيتال هوم | عقارات المنيا والمنيا الجديدة">
+    <meta property="og:description" content="تصفح العروض العقارية المتاحة حالياً بالمنيا والمنيا الجديدة مع تفاصيل دقيقة ومواقع العقارات على الخريطة.">
+    <meta property="og:url" content="https://capital-home.vercel.app/"> 
+    <meta property="og:image" content="brand-og-image.jpg"> 
+    <meta property="og:type" content="website">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "كابيتال هوم لتسويق العقارات",
+      "image": "brand-og-image.jpg",
+      "telephone": "01555086599",
+      "url": "https://capital-home.vercel.app/", 
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "المنيا",
+        "addressCountry": "EG"
+      },
+      "priceRange": "$$$"
+    }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-main: #0c0c0e;
+            --bg-card: #141417;
+            --bg-card-hover: #1b1b1f;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --text-white: #ffffff;
+            --text-muted: #a0a0aa;
+            --price-color: #38bdf8;
+            --whatsapp-color: #22c55e;
+            --phone-color: #2563eb;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: #fdfdfd; color: #111; scroll-behavior: smooth; line-height: 1.8; }
+        body { background: var(--bg-main); color: var(--text-white); scroll-behavior: smooth; line-height: 1.8; -webkit-tap-highlight-color: transparent; }
         
-        header { background: #111; color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #d4af37; }
-        .logo { font-size: 42px; font-weight: 800; color: #d4af37; margin-bottom: 10px; letter-spacing: 2px; }
-        header p { font-size: 18px; opacity: 0.9; }
-
-        .container { width: 95%; max-width: 1000px; margin: auto; padding: 30px 0; }
+        header { 
+            background: linear-gradient(180deg, #111113 0%, var(--bg-main) 100%); 
+            padding: 60px 20px 30px 20px; text-align: center; position: relative;
+        }
+        .logo { font-size: 40px; font-weight: 800; color: var(--gold); margin-bottom: 12px; letter-spacing: 2px; text-shadow: 0 0 20px var(--gold-glow); }
+        header p { font-size: 15px; color: var(--text-muted); font-weight: 500; margin-bottom: 25px; }
         
-        /* تصميم أنيق وجذاب لعداد العقارات المتاح لإعطاء هيبة للموقع */
-        .counter-badge {
-            text-align: center;
-            margin-bottom: 20px;
+        .header-ctas { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .hero-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px;
+            border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; transition: 0.3s ease;
         }
-        .counter-box {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #111;
-            color: #d4af37;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 1px solid #d4af37;
-        }
-        .counter-number {
-            background: #d4af37;
-            color: #111;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: 800;
-            font-size: 16px;
-        }
+        .hero-btn.primary { background: var(--gold); color: var(--bg-main); box-shadow: 0 4px 15px var(--gold-glow); }
+        .hero-btn.secondary { background: rgba(255,255,255,0.04); color: var(--text-white); border: 1px solid rgba(255,255,255,0.06); }
+        .hero-btn:hover { transform: translateY(-2px); }
 
-        /* شريط البحث المطور لراحة زوار الفيسبوك */
-        .search-container { margin-bottom: 25px; position: relative; }
-        .search-input { width: 100%; padding: 15px 20px; border: 2px solid #eee; border-radius: 15px; font-size: 16px; font-weight: 600; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); outline: none; }
-        .search-input:focus { border-color: #d4af37; box-shadow: 0 4px 20px rgba(212,175,55,0.15); }
+        .container { width: 92%; max-width: 950px; margin: auto; padding-bottom: 60px; }
+        
+        .search-container { margin-bottom: 20px; width: 100%; }
+        .search-input { 
+            width: 100%; padding: 15px 20px; background: var(--bg-card); 
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; 
+            font-size: 15px; font-weight: 600; color: var(--text-white); outline: none; transition: 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .search-input:focus { border-color: var(--gold); box-shadow: 0 0 12px var(--gold-glow); }
+        .search-input::placeholder { color: #52525b; }
 
-        /* شريط أزرار ثابت متطور */
+        .filter-panel {
+            background: var(--bg-card); padding: 20px; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.04); margin-bottom: 35px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 6px; }
+        .filter-group label { font-size: 12.5px; font-weight: 700; color: var(--gold); }
+        .filter-select {
+            width: 100%; padding: 12px; background: #0c0c0e;
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+            font-size: 14px; font-weight: 600; color: var(--text-white); outline: none; transition: 0.3s;
+            cursor: pointer;
+        }
+        .filter-select:focus { border-color: var(--gold); }
+
         .buttons { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 8px; 
-            justify-content: center; 
-            margin-bottom: 30px; 
-            position: sticky; 
-            top: 10px; 
-            z-index: 100; 
-            background: rgba(253, 253, 253, 0.85); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 10px; 
-            border-radius: 15px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 30px; 
+            position: sticky; top: 10px; z-index: 100; 
+            background: rgba(12, 12, 14, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 6px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03);
         }
-        .nav-btn { padding: 10px 15px; border: 2px solid #111; background: white; color: #111; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; transition: 0.3s; flex: 1; min-width: 80px; max-width: 150px; }
-        .active-btn { background: #111; color: #d4af37; }
-        .sell-btn { background: #d4af37; border-color: #d4af37; color: #111; }
-        .sell-btn:hover { background: #111; color: #d4af37; border-color: #111; }
+        .nav-btn { 
+            padding: 10px 16px; border: 1px solid rgba(255,255,255,0.06); background: var(--bg-card); 
+            color: var(--text-muted); border-radius: 10px; cursor: pointer; font-size: 13.5px; 
+            font-weight: 600; transition: 0.2s; flex: 1; min-width: 85px;
+        }
+        .active-btn { background: var(--gold); color: var(--bg-main) !important; font-weight: 700; border-color: var(--gold); }
+        .sell-btn { border-color: var(--gold); color: var(--gold); }
 
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .properties-grid { display: flex; flex-direction: column; gap: 16px; }
 
-        /* كروت العقارات بأسلوبها الوقور والأنيق */
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.05); margin-bottom: 15px; cursor: pointer; border-right: 6px solid #111; transition: 0.3s; position: relative; overflow: hidden; }
-        .card:hover { border-right-color: #d4af37; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.08); }
+        .card { 
+            background: var(--bg-card); padding: 25px; border-radius: 16px; 
+            cursor: pointer; transition: 0.3s ease; border: 1px solid rgba(255,255,255,0.03);
+        }
+        .card:hover { 
+            background: var(--bg-card-hover); transform: translateY(-2px); 
+            border-color: rgba(212, 175, 55, 0.25);
+        }
+        .card h3 { font-size: 19px; font-weight: 700; color: var(--text-white); }
+        .price { font-size: 22px; font-weight: 800; color: var(--price-color); margin: 2px 0; }
         
-        .card h3 { font-size: 20px; font-weight: 700; color: #111; }
-        .price { font-size: 24px; font-weight: 800; color: #1a73e8; margin: 5px 0; }
+        .meta-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .meta-badge { background: rgba(255,255,255,0.04); color: var(--text-muted); padding: 2px 10px; border-radius: 6px; font-size: 12.5px; }
+
+        .details-box { 
+            background: #111113; padding: 25px; border-radius: 16px; 
+            border: 1px solid rgba(255,255,255,0.05); margin-top: -10px; margin-bottom: 16px;
+        }
         
-        /* صندوق التفاصيل */
-        .details-box { display: none; background: #fff; padding: 30px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,.05); margin-bottom: 30px; border-top: 4px solid #d4af37; }
-        .details-box.active { display: block; animation: slideDown 0.3s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .image-gallery-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .main-img-box, .sub-img-box { width: 100%; background: #1c1c1f; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .main-img-box { aspect-ratio: 16/10; }
+        .sub-images-column { display: grid; grid-template-rows: 1fr 1fr; gap: 8px; }
+        .sub-img-box { aspect-ratio: 16/10; }
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        .placeholder-img { width: 100%; height: 220px; background: #fcfbf9; border: 2px dashed #d4af37; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-direction: column; color: #d4af37; position: relative; background-size: cover; background-position: center; }
-        .placeholder-img span { font-size: 40px; margin-bottom: 5px; }
+        .no-photos-notice {
+            background: rgba(212, 175, 55, 0.02); border: 1px dashed rgba(212, 175, 55, 0.2);
+            padding: 20px; border-radius: 12px; text-align: center; color: var(--gold);
+            font-size: 14px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
 
-        /* أزرار الإجراءات */
-        .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
-        .whatsapp { flex: 3; text-align: center; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .whatsapp:hover { background: #1ebd58; transform: translateY(-2px); }
-        
-        .share-btn { flex: 1; background: #f1f1f1; color: #333; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .share-btn:hover { background: #e2e2e2; }
+        .bullet-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 15px; background: rgba(255,255,255,0.01); padding: 15px; border-radius: 12px; }
+        .bullet-item { font-size: 14px; color: #d4d4d8; display: flex; align-items: center; gap: 8px; }
+        .bullet-item::before { content: '•'; color: var(--gold); font-size: 18px; font-weight: 700; }
 
-        .floating-whatsapp { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: #fff; width: 60px; height: 60px; border-radius: 50px; text-align: center; font-size: 35px; box-shadow: 2px 5px 15px rgba(0,0,0,0.25); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
-        .floating-whatsapp:hover { transform: scale(1.1) rotate(5deg); background-color: #128c7e; }
+        .action-buttons { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .act-btn { padding: 12px 15px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; border: none; cursor: pointer; }
+        .act-btn.btn-wa { background: var(--whatsapp-color); color: white; flex: 2; min-width: 130px; }
+        .act-btn.btn-call { background: var(--phone-color); color: white; flex: 2; min-width: 130px; }
+        .act-btn.btn-map { background: #4b5563; color: white; flex: 1; min-width: 100px; }
+        .act-btn.btn-sh { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.05); width: 45px; }
 
-        .special-request { background: #111; color: #d4af37; padding: 40px 20px; border-radius: 20px; margin: 40px 0; text-align: center; border: 2px solid #d4af37; }
-        /* تم تصحيح الخطأ هنا بنجاح وإضافة display بالشكل السليم */
-        .request-btn { display: inline-block; background: #d4af37; color: #111; padding: 12px 35px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
-        .request-btn:hover { background: #fff; color: #111; transform: translateY(-2px); }
+        .lead-form-container { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.02); margin: 35px 0; }
+        .lead-form-container h2 { color: var(--text-white); font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .lead-form-container p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .form-control { width: 100%; padding: 14px; background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: white; font-size: 14px; font-weight: 600; outline: none; }
+        .form-control:focus { border-color: var(--gold); }
+        .submit-form-btn { width: 100%; background: var(--gold); color: var(--bg-main); padding: 14px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; margin-top: 12px; font-size: 14.5px; transition: 0.2s; }
 
-        .about-section { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,.03); border: 1px solid #eee; margin: 40px 0; }
-        .about-section h2 { color: #111; font-size: 26px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
-        .about-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 50px; height: 3px; background: #d4af37; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 25px; }
-        .feature-item { background: #fdfbf7; padding: 20px; border-radius: 15px; border-right: 4px solid #d4af37; }
-        .feature-item h4 { font-weight: 700; margin-bottom: 5px; color: #111; }
+        .about-section { 
+            background: linear-gradient(135deg, var(--bg-card) 0%, #0e0e11 100%); 
+            padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); 
+            margin: 40px 0; box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .about-section h2 { color: var(--text-white); font-size: 24px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
+        .about-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 45px; height: 2px; background: var(--gold); }
+        .about-section p { color: #d4d4d8; font-size: 14.5px; line-height: 1.8; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 25px; }
+        .feature-item { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02); transition: 0.3s; }
+        .feature-item:hover { border-color: rgba(212,175,55,0.15); }
+        .feature-item h4 { font-weight: 700; margin-bottom: 6px; color: var(--gold); font-size: 15.5px; }
+        .feature-item p { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
 
-        .empty-state { text-align: center; padding: 50px 20px; background: #fff; border-radius: 20px; border: 1px dashed #ccc; }
-        .no-results { display: none; text-align: center; padding: 30px; color: #666; font-weight: 600; }
+        .static-section { background: var(--bg-card); padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.02); margin: 30px 0; display: none; }
+        .static-section.active { display: block; }
+        .static-section h2 { color: var(--text-white); font-size: 22px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
+        .static-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 40px; height: 2px; background: var(--gold); }
 
-        footer { background: #111; color: white; text-align: center; padding: 60px 20px; margin-top: 50px; border-top: 5px solid #d4af37; }
-        .admin-note { background: rgba(212, 175, 55, 0.1); padding: 10px 20px; border-radius: 10px; display: inline-block; margin: 15px 0; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .phone { font-size: 28px; font-weight: 800; color: #d4af37; text-decoration: none; display: block; margin: 15px 0; transition: 0.3s; }
-        .phone:hover { color: white; }
+        .empty-state { text-align: center; padding: 50px 20px; background: var(--bg-card); border-radius: 20px; }
+        .no-results { display: none; text-align: center; padding: 40px; color: var(--text-muted); font-size: 14.5px; }
+
+        .floating-whatsapp { position: fixed; bottom: 30px; right: 30px; background-color: var(--whatsapp-color); color: #fff; width: 56px; height: 56px; border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s ease; }
+        .floating-whatsapp:hover { transform: scale(1.08); }
+
+        footer { background: #08080a; color: var(--text-muted); text-align: center; padding: 50px 20px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-logo { font-size: 24px; font-weight: 800; color: var(--gold); margin-bottom: 8px; }
+        .admin-note { background: rgba(212, 175, 55, 0.04); padding: 6px 20px; border-radius: 30px; display: inline-block; margin: 15px 0; border: 1px solid rgba(212, 175, 55, 0.12); color: var(--gold); font-size: 13.5px; font-weight: 600; }
+        .phone { font-size: 28px; font-weight: 800; color: var(--text-white); text-decoration: none; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن أحد العقارات المتاحة" class="floating-whatsapp" target="_blank" aria-label="Contact on WhatsApp">
-    <svg width="35" height="35" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة" class="floating-whatsapp" target="_blank" aria-label="Contact on WhatsApp">
+    <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
 <header>
     <div class="logo">CAPITAL HOME</div>
-    <p>دليلك العقاري الأول في محافظة المنيا</p>
+    <p>تسويق وإدارة العقارات السكنية والتجارية بمحافظة المنيا</p>
+    <div class="header-ctas">
+        <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد حجز استشارة عقارية مجانية" class="hero-btn primary" target="_blank">💼 استشارة عقارية مجانية</a>
+        <a href="tel:01555086599" class="hero-btn secondary">📞 اتصال مباشر بالمكتب</a>
+    </div>
 </header>
 
 <div class="container">
     
-    <!-- العداد الجذاب لتشجيع العملاء والملاك -->
-    <div class="counter-badge">
-        <div class="counter-box">
-            <span>متاح لدينا الآن</span>
-            <span class="counter-number">+12</span>
-            <span>عرض عقاري متاح للمعاينة</span>
-        </div>
-    </div>
-    
-    <!-- محرك البحث الفوري -->
     <div class="search-container">
-        <input type="text" id="propertySearch" class="search-input" placeholder="🔍 ابحث عن عقار.. اكتب المنطقة، السعر، أو المساحة (مثال: الحي السابع أو سوبر لوكس)">
+        <input type="text" id="propertySearch" class="search-input" placeholder="🔍 ابحث بالمنطقة، السعر، أو نوع التشطيب (مثال: الحي السابع أو سوبر لوكس)...">
+    </div>
+
+    <div class="filter-panel">
+        <div class="filter-group">
+            <label>المنطقة أو المدينة</label>
+            <select id="filterLocation" class="filter-select">
+                <option value="all">كل المناطق</option>
+                <option value="المنيا">مدينة المنيا</option>
+                <option value="المنيا الجديدة">المنيا الجديدة</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>نوع التشطيب</label>
+            <select id="filterFinishing" class="filter-select">
+                <option value="all">كل الأنواع</option>
+                <option value="سوبر لوكس">سوبر لوكس</option>
+                <option value="تشطيب جهاز">تشطيب جهاز</option>
+                <option value="على الطوب">على الطوب / العظم</option>
+                <option value="نصف تشطيب">نصف تشطيب</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>السعر الأقصى (ج.م)</label>
+            <select id="filterPrice" class="filter-select">
+                <option value="all">أي سعر</option>
+                <option value="1000000">حتى 1,000,000</option>
+                <option value="2500000">حتى 2,500,000</option>
+                <option value="5000000">حتى 5,000,000</option>
+            </select>
+        </div>
     </div>
 
     <nav class="buttons">
-        <button class="nav-btn active-btn" onclick="showSection('apartments', this)">🏢 الشقق</button>
-        <button class="nav-btn" onclick="showSection('villas', this)">🏡 الفيلل</button>
-        <button class="nav-btn" onclick="showSection('lands', this)">🌍 الأراضي</button>
-        <button class="nav-btn" onclick="showSection('shops', this)">🏪 المحلات</button>
-        <button class="nav-btn sell-btn" onclick="showSection('sell-property', this)">✨ اعرض عقارك</button>
+        <button class="nav-btn active-btn" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>
+        <button class="nav-btn" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>
+        <button class="nav-btn" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>
+        <button class="nav-btn sell-btn" data-target="sell-property-sec">✨ اعرض عقارك</button>
     </nav>
 
     <main>
-        <div id="noResults" class="no-results">عذراً، لم نجد عقارات تطابق بحثك حالياً. تواصل معنا وسنوفرها لك!</div>
+        <div id="noResults" class="no-results">لم نجد عقارات تطابق خيارات التصفية الحالية. يمكنك كتابة طلبك بالأسفل وسنوفرها لك.</div>
 
-        <!-- قسم الشقق -->
-        <section id="apartments" class="section active">
-            <div class="card" onclick="showDetails('a1')"><h3>شقة التنظيم والإدارة</h3><div class="price">1,800,000 ج.م</div><p>140م • أمام أبراج الأطباء</p></div>
-            <div id="a1" class="details-box">
-                <div class="placeholder-img"><span>🏠</span><p>CAPITAL HOME</p></div>
-                <p>أمام أبراج الأطباء – 140 متر – 4 غرف + صالة كبيرة – 2 حمام – مطبخ أمريكاني – الدور السابع – أسانسير – دبل فيس – على الطوب – عدادات كاملة</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة التنظيم والإدارة" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة التنظيم والإدارة بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
+        <div id="propertiesWrapper" class="properties-grid"></div>
 
-            <div class="card" onclick="showDetails('a2')"><h3>شقة عمارة كمين الصفا</h3><div class="price">750,000 ج.م</div><p>90م • تشطيب جهاز</p></div>
-            <div id="a2" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>خلف مصنع الكولا وأمام كمبوند القضاء – 90 متر – الدور الخامس – تشطيب جهاز – واجهة أمامية – بدون أقساط</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة كمين الصفا" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة عمارة كمين الصفا بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a3')"><h3>شقة بميدان الساعة</h3><div class="price">4,700,000 ج.م</div><p>200م • 8 بلكونات</p></div>
-            <div id="a3" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>200 متر – برج مرخص بالكامل – الدور التاسع – 8 بلكونات – 3 غرف + ليفنج + ريسبشن 3 قطع – على العظم</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ميدان الساعة" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة بميدان الساعة بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a4')"><h3>شقة عبير سيتي</h3><div class="price">4,500,000 ج.م</div><p>170م • ألترا سوبر لوكس</p></div>
-            <div id="a4" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>170 متر – أول علوي – واجهة بحرية – تشطيب شخصي فاخر – جبس بورد – باركيه – عدادات كاملة</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة عبير سيتي" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة عبير سيتي بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a5')"><h3>شقة بمنطقة أبو فليو</h3><div class="price">1,015,000 ج.م</div><p>145م • ناصية</p></div>
-            <div id="a5" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>145 متر – الدور السادس – قريب من مدرسة سمارت – على الطوب – عداد مياه – ناصية</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبو فليو" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة بمنطقة أبو فليو بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a6')"><h3>شقة الحي السابع</h3><div class="price">2,400,000 ج.م</div><p>115م • أرضي بجاردن</p></div>
-            <div id="a6" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>115 متر + 30 متر جاردن – 3 غرف – أمام مكافحة المخدرات – قريب من جامعة دراية</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة الحي السابع" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة الحي السابع بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a7')"><h3>شقة أبراج الري</h3><div class="price">2,700,000 ج.م</div><p>135م • واجهة شرقية</p></div>
-            <div id="a7" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>135 متر – تشطيب ألترا لوكس – 3 غرف – ريسبشن كبير – واجهة شرقية قبلية - برج به 2 أسانسير</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة أبراج الري" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة أبراج الري بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a8')"><h3>شقة ديماريس</h3><div class="price">2,000,000 ج.م</div><p>125م • استثمار عقاري</p></div>
-            <div id="a8" class="details-box">
-                <div class="placeholder-img"><span>🏢</span><p>CAPITAL HOME</p></div>
-                <p>125 متر – 4 غرف – متشطبة بالكامل – مؤجرة حاليًا بـ 8,000 جنيه شهريًا</p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة شقة ديماريس" target="_blank">💬 حجز موعد معاينة</a>
-                    <button class="share-btn" onclick="shareProperty('شقة ديماريس بموقع كابيتال هوم')">🔗 مشاركة</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="showDetails('a9')">
-                <h3>شقة مميزة بميدان الساعة (بجوار راية)</h3>
-                <div class="price">3,650,000 ج.م</div>
-                <p>111م • سوبر لوكس • موقع مميز</p>
-            </div>
-            <div id="a9" class="details-box">
-                <div class="placeholder-img">
-                    <span>🏢</span>
-                    <p>CAPITAL HOME</p>
-                </div>
-                <p>
-                    شقة للبيع بميدان الساعة<br>
-                    على الشارع العمومي<br>
-                    بجوار راية ماركت<br>
-                    الدور السابع (ليس الأخير)<br>
-                    واجهة بحرية<br>
-                    2 أسانسير<br>
-                    تشطيب سوبر لوكس<br>
-                    عدادات غاز + كهرباء + مياه<br>
-                    نسبة في الأرض<br>
-                    المساحة: 111 متر<br>
-                    السعر المطلوب: 3,650,000 جنيه
-                </p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الاستفسار عن شقة ميدان الساعة (111م)" target="_blank">
-                        💬 حجز موعد معاينة
-                    </a>
-                    <button class="share-btn" onclick="shareProperty('شقة مميزة - ميدان الساعة (111م) - كابيتال هوم')">
-                        🔗 مشاركة
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- قسم الفيلل -->
-        <section id="villas" class="section">
-            <div class="card" onclick="showDetails('v1')"><h3>فيلا ابني بيتك</h3><div class="price">3,000,000 ج.م</div><p>150م أرض</p></div>
-            <div id="v1" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>المنيا الجديدة – مرحلة 3 – 150 متر أرض – نصف تشطيب – واجهة بحرية – أمام جامعة اللوتس.</p><div class="action-buttons"><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا ابني بيتك" target="_blank">💬 حجز موعد معاينة</a><button class="share-btn" onclick="shareProperty('فيلا ابني بيتك - كابيتال هوم')">🔗 مشاركة</button></div></div>
-
-            <div class="card" onclick="showDetails('v2')"><h3>فيلا مشروع مراكش</h3><div class="price">10,550,000 ج.م</div><p>بورتو المنيا</p></div>
-            <div id="v2" class="details-box"><div class="placeholder-img"><span>🏡</span><p>CAPITAL HOME</p></div><p>161م أرض – بدروم + أرضي + أول + حديقة + حمام سباحة – فيو مباشر على بورتو المنيا.</p><div class="action-buttons"><a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز موعد لمعاينة فيلا مراكش" target="_blank">💬 حجز موعد معاينة</a><button class="share-btn" onclick="shareProperty('فيلا مشروع مراكش - كابيتال هوم')">🔗 مشاركة</button></div></div>
-        </section>
-
-        <!-- الأراضي -->
-        <section id="lands" class="section">
+        <section id="sell-property-sec" class="static-section">
             <div class="empty-state">
-                <h2 style="color: #d4af37; margin-bottom: 10px;">🌍 عروض الأراضي</h2>
-                <p>يتم تحديث قائمة العروض حالياً.. تواصل معنا لطلبات خاصة.</p>
-                <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أبحث عن قطعة أرض في المنيا" class="whatsapp">استفسار سريع عبر واتساب</a>
+                <h2 style="color: var(--text-white); margin-bottom: 15px; font-weight: 800;">✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>
+                <p style="margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; color: var(--text-muted);">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة وموثوقة.</p>
+                <a href="https://wa.me/201555086599?text=مرحباً، أريد تسويق عقاري معكم. تفاصيل العقار: " class="act-btn btn-wa" style="display: inline-flex; padding: 14px 40px; margin: auto;">ارسل تفاصيل العقار عبر واتساب</a>
             </div>
         </section>
 
-        <!-- المحلات -->
-        <section id="shops" class="section">
-            <div class="card" onclick="showDetails('s1')">
-                <h3>محل تجاري مميز بشلبي القديمة</h3>
-                <div class="price">850,000 ج.م</div>
-                <p>28م • تشطيب لوكس • موقع استثماري</p>
-            </div>
-
-            <div id="s1" class="details-box">
-                <div class="placeholder-img">
-                    <span>🏪</span>
-                    <p>CAPITAL HOME</p>
+        <section class="lead-form-container">
+            <h2>📬 لم تجد مواصفات عقارك؟</h2>
+            <p>سجل طلبك وسنقوم بالبحث والتواصل معك فور توفر العقار المناسب لطلبك تماماً.</p>
+            <form id="leadForm">
+                <div class="form-grid">
+                    <input type="text" id="clientName" class="form-control" placeholder="الاسم الكريم" required>
+                    <input type="tel" id="clientPhone" class="form-control" placeholder="رقم الهاتف أو الواتساب" required>
+                    <input type="text" id="clientRequest" class="form-control" placeholder="مواصفات العقار المطلوب وميزانيتك" required>
                 </div>
-                <p>
-                    محل تجاري مميز للبيع – منطقة شلبي القديمة<br>
-                    المساحة: 28 متر<br>
-                    تشطيب لوكس بالكامل<br>
-                    به عداد كهرباء مستقل<br>
-                    موقع حيوي ممتاز مناسب جداً للاستثمار أو بدء مشروعك الخاص فوراً<br>
-                    السعر المطلوب: 850,000 جنيه (قابل للتفاوض)
-                </p>
-                <div class="action-buttons">
-                    <a class="whatsapp" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الاستفسار عن المحل التجاري المعروض بشلبي القديمة" target="_blank">
-                        💬 حجز معاينة
-                    </a>
-                    <button class="share-btn" onclick="shareProperty('محل تجاري بشلبي القديمة - كابيتال هوم')">
-                        🔗 مشاركة
-                    </button>
-                </div>
-            </div>
+                <button type="submit" class="submit-form-btn">ارسل طلبي للمكتب فوراً</button>
+            </form>
         </section>
 
-        <!-- اعرض عقارك معنا -->
-        <section id="sell-property" class="section">
-            <div class="empty-state" style="border-color: #d4af37; background: #fff;">
-                <h2 style="color: #111; margin-bottom: 15px; font-weight: 800;">✨ سوّق لعقارك مع كابيتال هوم</h2>
-                <p style="margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">هل تمتلك شقة، فيلا، أرض، أو محل تجاري في المنيا أو المنيا الجديدة وتريد بيعه أو إيجاره بأفضل سعر وفي أسرع وقت؟ نحن نتولى المهمة بالكامل.</p>
-                <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد عرض عقاري للبيع/الإيجار معكم. تفاصيل العقار هي: " class="whatsapp" style="background: #d4af37; color: #111; display: inline-block; padding: 12px 40px;">اضغط هنا لإرسال تفاصيل عقارك</a>
-            </div>
-        </section>
-
-        <!-- من نحن -->
         <section class="about-section">
             <h2>من نحن؟</h2>
-            <p><strong>كابيتال هوم (CAPITAL HOME)</strong> هي المنصة العقارية الرائدة والأولى المتخصصة في تسويق وإدارة العقارات بمحافظة المنيا ومدينة المنيا الجديدة. نحن لسنا مجرد وسيط عقاري، بل مستشارك الموثوق الذي يضمن لك استثماراً آمناً واختيارات مدروسة تلبي تطلعات عائلتك ومستقبلك.</p>
-            
+            <p><strong>كابيتال هوم (CAPITAL HOME)</strong> مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نقوم بدور المستشار الأمين للمشتري لتأمين استثماره وفحص العقارات قانونياً، ونوفر للملاك قنوات تسويق حقيقية للوصول للعميل المناسب وبدون مبالغات.</p>
             <div class="features-grid">
                 <div class="feature-item">
-                    <h4>🤝 مصداقية وأمان</h4>
-                    <p>نراجع كافة الأوراق القانونية والتعاقدات لضمان حقك كاملاً.</p>
+                    <h4>🤝 فحص وتأمين قانوني</h4>
+                    <p>نراجع كافة الأوراق والتراخيص والتعاقدات للتأكد من سلامة موقف العقار قبل الشراء وحفظ حقوقك بالكامل.</p>
                 </div>
                 <div class="feature-item">
-                    <h4>📍 خبرة محلية</h4>
-                    <p>فهم عميق ودقيق لأسعار السوق العقاري في المنيا والمنيا الجديدة.</p>
+                    <h4>📍 دراية جغرافية حقيقية</h4>
+                    <p>تقييم عادل ومنطقي للأسعار مبني على حركة التداول والبيع الفعلي داخل أحياء المنيا والمنيا الجديدة.</p>
                 </div>
                 <div class="feature-item">
-                    <h4>🔍 شفافية تامة</h4>
-                    <p>نوفر لك أدق التفاصيل والمواصفات الحقيقية للعقارات بدون مبالغة.</p>
+                    <h4>🔍 معاينات واقعية</h4>
+                    <p>نلتزم بالشفافية المطلقة وعرض مواصفات وتفاصيل العقار كما هي تماماً على أرض الواقع دون أي تجميل.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- طلب خاص -->
-        <section class="special-request">
-            <h2>لم تجد ما تبحث عنه؟</h2>
-            <p>أخبرنا بمواصفات العقار الذي تحلم به وسنوفر لك أفضل الخيارات المتاحة.</p>
-            <a href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد طلب عقار بمواصفات خاصة" class="request-btn">إرسال طلبك الآن</a>
         </section>
     </main>
 </div>
 
 <footer>
     <div class="footer-logo">CAPITAL HOME</div>
-    <p>"نحن لا نبيع مجرد جدران، نحن نختار لك مستقبلك."</p>
-    <div class="admin-note">إدارة وإشراف: <strong>أ/ عبد الله</strong></div>
-    <p>للتواصل المباشر والاستشارات العقارية:</p>
+    <p>نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>
+    <div class="admin-note">إدارة وإشراف وتواصل: <strong>أ/ عبد الله</strong></div>
+    <p>للاستشارات العقارية المباشرة والمعاينة:</p>
     <a href="tel:01555086599" class="phone">01555086599</a>
-    <p style="font-size: 13px; opacity: 0.5; margin-top: 30px;">جميع الحقوق محفوظة لشركة كابيتال هوم © 2026</p>
+    <p style="font-size: 13px; opacity: 0.4; margin-top: 30px;">جميع الحقوق محفوظة لشركة كابيتال هوم © 2026</p>
 </footer>
 
 <script>
-function showSection(id, btn){
-    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('.details-box').forEach(box => box.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
-    
-    const targetSection = document.getElementById(id);
-    if(targetSection) targetSection.classList.add('active');
-    if(btn) btn.classList.add('active-btn');
-    
-    document.getElementById('propertySearch').value = '';
-    filterProperties();
-}
-
-function showDetails(id){
-    const target = document.getElementById(id);
-    const isActive = target.classList.contains('active');
-    
-    document.querySelectorAll('.details-box').forEach(box => {
-        if(box.id !== id) box.classList.remove('active');
-    });
-    
-    if (isActive) {
-        target.classList.remove('active');
-    } else {
-        target.classList.add('active');
-        setTimeout(() => {
-            target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 50);
+const propertiesData = [
+    {
+        id: "a2",
+        category: "شقة",
+        title: "شقة عمارة كمين الصفا",
+        price: 750000,
+        priceText: "750,000 ج.م",
+        locationCategory: "المنيا الجديدة",
+        finishing: "تشطيب جهاز",
+        meta: ["📐 90م", "📍 خلف كمبوند القضاء"],
+        bullets: ["الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل جاهز للسكن", "الواجهة: أمامية بحرية بالكامل", "الوضعية المالية: خالصة تماماً بدون أي أقساط متبقية"],
+        imgMain: "", 
+        imgSub1: "",
+        imgSub2: "",
+        mapUrl: "" 
+    },
+    {
+        id: "a3",
+        category: "شقة",
+        title: "شقة مرخصة بميدان الساعة",
+        price: 4700000,
+        priceText: "4,700,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "على الطوب",
+        meta: ["📐 200م", "🖼️ 8 بلكونات"],
+        bullets: ["المساحة: 200 متر مربع", "الترخيص: عمارة مرخصة ومسجلة قانونياً", "الدور: التاسع ببرج حديث", "المميزات الإضافية: غنية بـ 8 بلكونات كاملة", "التقسيم الداخلي: 3 غرف + ليفنج + ريسبشن يتسع لـ 3 قطع", "الوضعية الحالية: على العظم وجاهزة لأعمال التشطيب"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a4",
+        category: "شقة",
+        title: "شقة عبير سيتي الفاخرة",
+        price: 4500000,
+        priceText: "4,500,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "سوبر لوكس",
+        meta: ["📐 170م", "✨ ألترا سوبر لوكس"],
+        bullets: ["المساحة الصافية: 170 متر", "الدور: الأول علوي المفضل هندسياً", "الواجهة والتهوية: واجهة بحرية مفتوحة بالكامل وغير مجروحة", "ديكورات داخلية: جبس بورد حديث وأرضيات باركيه فاخرة", "المرافق الأساسية: متوفر عداد كهرباء، مياه، وغاز طبيعي"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a5",
+        category: "شقة",
+        title: "شقة ناصية بمنطقة أبو فليو",
+        price: 1015000,
+        priceText: "1,015,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "على الطوب",
+        meta: ["📐 145م", "📐 ناصية صريحة"],
+        bullets: ["المساحة الإجمالية: 145 متر", "الدور: السادس", "الموقع: بالقرب من مدرسة سمارت الخاصة بأبو فليو", "الحالة التعاقدية: البيع على الطوب الأحمر", "المميزات الجغرافية: ناصية بحرية غربية ممتازة للتهوية والإضاءة", "المرافق الحالية: متوفر عداد مياه رسمي مخصص للشقة"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a6",
+        category: "شقة",
+        title: "شقة أرضي بجاردن الحي السابع",
+        price: 2400000,
+        priceText: "2,400,000 ج.م",
+        locationCategory: "المنيا الجديدة",
+        finishing: "نصف تشطيب",
+        meta: ["📐 115م", "🏡 أرضي بجاردن"],
+        bullets: ["المساحة الداخلية: 115 متر صافي", "المساحة الخارجية: حديقة خاصة مخصصة بمساحة 30 متر", "عدد الغرف: 3 غرف نوم مستقلة وواسعة", "الموقع: أمام مبنى مكافحة المخدرات بالحي السابع", "المحيط العام: بالقرب من جامعة دراية الاستثمارية للمغتربين"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a7",
+        category: "شقة",
+        title: "شقة جاهزة للسكن بأبراج الري",
+        price: 2700000,
+        priceText: "2,700,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "سوبر لوكس",
+        meta: ["📐 135م", "🌅 شرقية قبلية"],
+        bullets: ["المساحة: 135 متر مربع جاهزة للاستلام", "مستوى التشطيب: ألترا سوبر لوكس حديث وعصري", "التقسيم: 3 غرف نوم + صالة استقبال مريحة", "التهوية والاتجاه: شرقية قبلية تدخلها الشمس وصحية تماماً", "تجهيزات البرج: مدخل فخم ومجهز بـ 2 أسانسير حديث شغالين"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a8",
+        category: "شقة",
+        title: "شقة استثمارية حي ديماريس",
+        price: 2000000,
+        priceText: "2,000,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "سوبر لوكس",
+        meta: ["📐 125م", "💰 عائد إيجاري"],
+        bullets: ["المساحة: 125 متر مربع", "التقسيم: 4 غرف نوم كبيرة وعملية", "الحالة الفنية: كاملة التشطيب والمعاينة فورية", "الوضع الاستثمارية: مؤجرة حالياً بـ 8,000 جنيه شهرياً بعقد ساري"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "a9",
+        category: "شقة", 
+        title: "شقة مميزة بميدان الساعة (بجوار راية)",
+        price: 3650000,
+        priceText: "3,650,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "سوبر لوكس",
+        meta: ["📐 111م", "🌊 واجهة بحرية"],
+        bullets: ["الموقع الإستراتيجي: بميدان الساعة مباشرة على الشارع العمومي بجوار راية", "المساحة: 111 متر صافي", "الدور: السابع (وليس الدور الأخير)", "المرافق: عمارة بها 2 أسانسير • غاز طبيعي • مياه • كهرباء مستقلة", "الملكية: تشمل نسبة قانونية مسجلة ومحددة في الأرض والأجزاء المشتركة", "التشطيب والجاهزية: كاملة التشطيب سوبر لوكس على المفتاح والبيع كاش"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "v1",
+        category: "فيلا",
+        title: "فيلا مستقلة ابني بيتك",
+        price: 3000000,
+        priceText: "3,000,000 ج.م",
+        locationCategory: "المنيا الجديدة",
+        finishing: "نصف تشطيب",
+        meta: ["📐 150م أرض", "🧱 المرحلة الثالثة"],
+        bullets: ["الموقع الجغرافي: المنيا الجديدة - ابني بيتك المرحلة الثالثة", "المساحة الكلية للأرض: 150 متر مربع", "الواجهة: بحرية صريحة ومفتوحة لضمان تجدد الهواء", "الحالة الفنية: نصف تشطيب وجاهزة للتقسيم الداخلي والديكور الشخصي", "مزايا استراتيجية: تقع مباشرة أمام جامعة اللوتس وقريبة من الخدمات"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "v2",
+        category: "فيلا",
+        title: "فيلا مشروع مراكش الفاخرة",
+        price: 10550000,
+        priceText: "10,550,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "نصف تشطيب",
+        meta: ["📍 بورتو المنيا", "🏊 حمام سباحة خاص"],
+        bullets: ["الإطلالة: فيو مباشر ومفتوح على كمبوند بورتو المنيا الفخم", "المساحة المسجلة: 161 متر مساحة أرض مستقلة", "التصميم التعميري: بدروم واسع + دور أرضي + دور أول علوي", "الرفاهية الملحقة: حديقة عائلية خاصة خضراء ومجهزة بحمام سباحة خاص"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
+    },
+    {
+        id: "s1",
+        category: "محل",
+        title: "محل تجاري حيوي بشلبي القديمة",
+        price: 850000,
+        priceText: "850,000 ج.م",
+        locationCategory: "المنيا",
+        finishing: "سوبر لوكس",
+        meta: ["📐 28م", "🏪 الكثافة الشرائية العالية"],
+        bullets: ["الموقع الاستراتيجي: في قلب منطقة شلبي القديمة الحيوية والتجارية", "المساحة الفردية: 28 متر مربع مستقل ومثالي لكافة الأنشطة", "الحالة الهندسية: كامل التشطيب لوكس وجاهز للافتتاح والتشغيل فوراً", "التجهيزات الفنية: متوفر عداد كهرباء تجاري مستقل وخاص بالمحل", "التقييم المالي: السعر المطلوب 850,000 جنيه كاش وقابل للتفاوض البسيط للجادين"],
+        imgMain: "", imgSub1: "", imgSub2: "", mapUrl: ""
     }
-}
+];
 
-// نظام التصفية والبحث الفوري الفعّال
-const searchInput = document.getElementById('propertySearch');
-searchInput.addEventListener('input', filterProperties);
+let currentCategory = "شقة";
 
-function filterProperties() {
-    const filter = searchInput.value.toLowerCase();
-    const activeSection = document.querySelector('.section.active');
-    if (!activeSection) return;
+function renderProperties() {
+    const wrapper = document.getElementById('propertiesWrapper');
+    wrapper.innerHTML = '';
+    
+    const keyword = document.getElementById('propertySearch').value.toLowerCase();
+    const locationVal = document.getElementById('filterLocation').value;
+    const finishingVal = document.getElementById('filterFinishing').value;
+    const priceVal = document.getElementById('filterPrice').value;
 
-    const cards = activeSection.getElementsByClassName('card');
-    let hasVisibleCard = false;
-
-    for (let i = 0; i < cards.length; i++) {
-        const cardText = cards[i].innerText.toLowerCase();
-        const detailsBox = cards[i].nextElementSibling;
-        const detailsText = (detailsBox && detailsBox.classList.contains('details-box')) ? detailsBox.innerText.toLowerCase() : '';
+    const filtered = propertiesData.filter(item => {
+        if (item.category !== currentCategory) return false;
+        if (locationVal !== 'all' && item.locationCategory !== locationVal) return false;
+        if (finishingVal !== 'all' && item.finishing !== finishingVal) return false;
+        if (priceVal !== 'all' && item.price > parseInt(priceVal)) return false;
         
-        if (cardText.includes(filter) || detailsText.includes(filter)) {
-            cards[i].style.display = "";
-            hasVisibleCard = true;
-        } else {
-            cards[i].style.display = "none";
-            if (detailsBox && detailsBox.classList.contains('details-box')) {
-                detailsBox.classList.remove('active');
-            }
+        if (keyword) {
+            const matchTitle = item.title.toLowerCase().includes(keyword);
+            const matchBullets = item.bullets.some(b => b.toLowerCase().includes(keyword));
+            if (!matchTitle && !matchBullets) return false;
         }
-    }
+        return true;
+    });
 
     const noResults = document.getElementById('noResults');
-    if (!hasVisibleCard && filter !== "") {
-        noResults.style.display = "block";
-    } else {
-        noResults.style.display = "none";
+    if (filtered.length === 0) {
+        noResults.style.display = 'block';
+        return;
     }
+    noResults.style.display = 'none';
+
+    filtered.forEach(prop => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'card';
+        cardEl.dataset.id = prop.id; 
+        
+        let metaBadges = prop.meta.map(m => `<span class="meta-badge">${m}</span>`).join('');
+        cardEl.innerHTML = `<h3>${prop.title}</h3><div class="price">${prop.priceText}</div><div class="meta-container">${metaBadges}</div>`;
+        
+        const detailEl = document.createElement('div');
+        detailEl.className = 'details-box';
+        detailEl.id = `box-${prop.id}`;
+        detailEl.style.display = 'none';
+        
+        let bulletItems = prop.bullets.map(b => `<div class="bullet-item">${b}</div>`).join('');
+        
+        let galleryHTML = '';
+        if (prop.imgMain && prop.imgSub1 && prop.imgSub2) {
+            galleryHTML = `
+                <div class="image-gallery-grid">
+                    <div class="main-img-box"><img class="gallery-img" src="${prop.imgMain}" alt="${prop.title}" loading="lazy"></div>
+                    <div class="sub-images-column">
+                        <div class="sub-img-box"><img class="gallery-img" src="${prop.imgSub1}" alt="معاينة 1" loading="lazy"></div>
+                        <div class="sub-img-box"><img class="gallery-img" src="${prop.imgSub2}" alt="معاينة 2" loading="lazy"></div>
+                    </div>
+                </div>`;
+        } else {
+            galleryHTML = `<div class="no-photos-notice">🛡️ المعاينة الفعلية تتم بالتنسيق المباشر والمسبق مع المالك عبر المكتب</div>`;
+        }
+
+        let mapButtonHTML = prop.mapUrl ? `<a class="act-btn btn-map" href="${prop.mapUrl}" target="_blank">📍 موقع العقار</a>` : '';
+        
+        detailEl.innerHTML = `
+            ${galleryHTML}
+            <div class="bullet-details">${bulletItems}</div>
+            <div class="action-buttons">
+                <a class="act-btn btn-wa" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد المعاينة والاستفسار عن: ${prop.title}" target="_blank">💬 حجز معاينة واتساب</a>
+                <a class="act-btn btn-call" href="tel:01555086599">📞 اتصال مباشر</a>
+                ${mapButtonHTML}
+                <button class="act-btn btn-sh" data-title="${prop.title}">🔗 مشاركة</button>
+            </div>
+        `;
+
+        wrapper.appendChild(cardEl);
+        wrapper.appendChild(detailEl);
+    });
+
+    bindEvents();
 }
 
-// ميزة مشاركة ونسخ رابط العقار
-function shareProperty(title) {
-    const textToCopy = `معاينة لـ [ ${title} ] عبر كابيتال هوم للتسويق العقاري بالمنيا. تصفح الموقع لمعاينة التفاصيل: ${window.location.href}`;
-    
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            alert('تم نسخ رابط وتفاصيل العقار بنجاح! يمكنك الآن لصقها ومشاركتها على واتساب مع عائلتك.');
-        }).catch(() => {
-            alert('عذراً، يرجى نسخ الرابط يدويًا من شريط المتصفح.');
+function bindEvents() {
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', function() {
+            const id = this.dataset.id; 
+            const targetBox = document.getElementById(`box-${id}`);
+            const isActive = targetBox.style.display === 'block';
+
+            document.querySelectorAll('.details-box').forEach(box => box.style.display = 'none');
+
+            if (!isActive) {
+                targetBox.style.display = 'block';
+                setTimeout(() => {
+                    targetBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
+            }
         });
-    } else {
-        alert(textToCopy);
-    }
+    });
+
+    document.querySelectorAll('.btn-sh').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const title = this.dataset.title;
+            const shareData = {
+                title: 'كابيتال هوم للتسويق العقاري',
+                text: `معاينة وتفاصيل: [ ${title} ] بمحافظة المنيا. تفضل بزيارة المنصة:`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.log(err));
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`).then(() => {
+                    alert('تم نسخ رابط وتفاصيل العقار بنجاح! يمكنك الآن لصقها في واتساب وإرسالها لعائلتك.');
+                });
+            }
+        });
+    });
 }
+
+document.getElementById('leadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('clientName').value;
+    const phone = document.getElementById('clientPhone').value;
+    const request = document.getElementById('clientRequest').value;
+    
+    const waText = `مرحباً أستاذ عبد الله، تم تسجيل طلب عقار جديد عبر موقع كابيتال هوم:%0A👤 الاسم: ${name}%0A📞 الهاتف: ${phone}%0A🎯 الطلب المطلوب وميزانيتي: ${request}`;
+    window.open(`https://wa.me/201555086599?text=${waText}`, '_blank');
+});
+
+document.getElementById('propertySearch').addEventListener('input', renderProperties);
+document.getElementById('filterLocation').addEventListener('change', renderProperties);
+document.getElementById('filterFinishing').addEventListener('change', renderProperties);
+document.getElementById('filterPrice').addEventListener('change', renderProperties);
+
+document.querySelectorAll('.nav-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
+        this.classList.add('active-btn');
+
+        const target = this.dataset.target;
+        const cat = this.dataset.cat;
+
+        if (target === 'properties-wrapper') {
+            document.getElementById('sell-property-sec').style.display = 'none';
+            document.getElementById('propertiesWrapper').style.display = 'flex';
+            currentCategory = cat;
+            renderProperties();
+        } else {
+            document.getElementById('propertiesWrapper').style.display = 'none';
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('sell-property-sec').style.display = 'block';
+            document.getElementById('sell-property-sec').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => { renderProperties(); });
 </script>
 
 </body>

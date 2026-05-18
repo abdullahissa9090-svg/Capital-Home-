@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كابيتال هوم | عقارات المنيا وشقق للبيع في المنيا الجديدة</title>
-    <meta name="description" content="تبحث عن شقق للبيع في المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الشقق، الفيلل، والمحلات التجارية بأمان قانوني وتنسيق مباشر مع الملاك.">
+    <meta name="description" content="تبحث عن شقق للبيع in المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الشقق، الفيلل، والمحلات التجارية بأمان قانوني وتنسيق مباشر مع الملاك.">
     <meta name="keywords" content="عقارات المنيا, شقق للبيع في المنيا, عقارات المنيا الجديدة, مكتب عقارات في المنيا">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -597,7 +597,7 @@
             <p><strong>كابيتال هوم (CAPITAL HOME)</strong> مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نقوم بدور المستشار الأمين للمشتري لتأمين استثماره وفحص العقارات قانونياً.</p>
             <div class="features-grid">
                 <div class="feature-item"><h4>🤝 فحص وتأمين قانوني</h4><p>نأمن موقف العقار قانونياً وحفظ حقوقك بالكامل.</p></div>
-                <div class="feature-item"><h4>📍 دراية جغرافية حقيقية</h4><p>تقييم عادل ومنطقي للأسعار مبني على حركة السوق الفعلي.</p></div>
+                <div class="feature-item"><h4>📍 دراية جغرافية حقيقية</h4><p>تقييم عادل ومنطكي للأسعار مبني على حركة السوق الفعلي.</p></div>
                 <div class="feature-item"><h4>🔍 معاينات واقعية</h4><p>نلتزم بالشفافية وعرض مواصفات العقار الحقيقية دون تجميل.</p></div>
             </div>
         </section>
@@ -612,6 +612,7 @@
 </footer>
 
 <script>
+// 🌟 تم تعديل الـ id ليرتبط بالزر والدالة مباشرة بالأسفل بدون أي تعليق
 const propertiesData = [
     { id: "CH-102", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", meta: ["📊 كود: CH-102", "📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["كود التتبع العقاري: CH-102", "الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل", "الوضعية المالية: خالصة تماماً بدون أقساط"] },
     { id: "CH-103", category: "شقة", title: "شقة مرخصة بميدان الساعة", price: 4700000, priceText: "4 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", meta: ["📊 كود: CH-103", "📐 200م", "🏢 برج مرخص"], bullets: ["كود التتبع العقاري: CH-103", "المساحة: 200 متر مربع", "الترخيص: عمارة مرخصة ومسجلة قانونياً", "الدور: التاسع ببرج حديث", "التقسيم: 3 غرف + ليفنج + ريسبشن 3 قطع", "الوضعية: على العظم وجاهزة للتشطيب"] },
@@ -655,7 +656,7 @@ function renderProperties() {
     filtered.forEach(prop => {
         const cardEl = document.createElement('div'); 
         cardEl.className = 'card'; 
-        cardEl.dataset.id = prop.id; 
+        cardEl.setAttribute('data-id', prop.id); // 🛠️ تم تصحيح طريقة كتابة وقراءة الـ id هنا لترتبط بالأزرار بالكامل
         
         let metaBadges = prop.meta.map(m => `<span class="meta-badge">${m}</span>`).join('');
         cardEl.innerHTML = `<h3>${prop.title}</h3><div class="price">${prop.priceText}</div><div class="meta-container">${metaBadges}</div>`;
@@ -703,7 +704,7 @@ function triggerDynamicRender() {
 function bindEvents() {
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function() {
-            const id = this.dataset.id; 
+            const id = this.getAttribute('data-id'); // 🛠️ قراءة صحيحة للكود CH-102
             const targetBox = document.getElementById(`box-${id}`);
             const isActive = targetBox.style.display === 'block';
             document.querySelectorAll('.details-box').forEach(box => box.style.display = 'none');
@@ -717,8 +718,8 @@ function bindEvents() {
     document.querySelectorAll('.btn-sh').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation(); 
-            const title = this.dataset.title; 
-            const id = this.dataset.id;
+            const title = this.getAttribute('data-title'); 
+            const id = this.getAttribute('data-id');
             const text = `معاينة وتفاصيل عقار كود [ ${id} ] - ${title} بمحافظة المنيا. تفضل بزيارة المنصة: ${window.location.href}`;
             if (navigator.share) { 
                 navigator.share({ title: 'كابيتال هوم', text: text, url: window.location.href }).catch(err => console.log(err)); 
@@ -744,8 +745,8 @@ document.querySelectorAll('.nav-btn').forEach(button => {
     button.addEventListener('click', function() {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn')); 
         this.classList.add('active-btn');
-        const target = this.dataset.target; 
-        currentCategory = this.dataset.cat;
+        const target = this.getAttribute('data-target'); 
+        currentCategory = this.getAttribute('data-cat');
         if (target === 'properties-wrapper') {
             document.getElementById('sell-property-sec').style.display = 'none'; 
             document.getElementById('propertiesWrapper').style.display = 'flex'; 
@@ -754,4 +755,12 @@ document.querySelectorAll('.nav-btn').forEach(button => {
             document.getElementById('propertiesWrapper').style.display = 'none'; 
             document.getElementById('noResults').style.display = 'none';
             document.getElementById('sell-property-sec').style.display = 'block'; 
-            document.getElementById('sell-property-
+            document.getElementById('sell-property-sec').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => { triggerDynamicRender(); });
+</script>
+</body>
+</html>

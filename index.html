@@ -4,214 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كابيتال هوم | عقارات المنيا وشقق للبيع في المنيا الجديدة</title>
-    <meta name="description" content="تبحث عن شقق للبيع في المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الشقق، الفيلل, والمحلات التجارية بأمان قانوني وتنسيق مباشر مع الملاك.">
+    <meta name="description" content="تبحث عن شقق للبيع في المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الشقق، الفيلل، والمحلات التجارية بأمان قانوني وتنسيق مباشر مع الملاك.">
     <meta name="keywords" content="عقارات المنيا, شقق للبيع في المنيا, عقارات المنيا الجديدة, مكتب عقارات في المنيا">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0c0c0e; --bg-card: #141417; --bg-card-hover: #1b1b1f; --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.15); --text-white: #ffffff; --text-muted: #a0a0aa;
-            --price-color: #38bdf8; --whatsapp-color: #22c55e; --phone-color: #2563eb;
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgMain: '#0c0c0e',
+                        bgCard: '#141417',
+                        bgCardHover: '#1b1b1f',
+                        goldCustom: '#d4af37',
+                        priceBlue: '#38bdf8',
+                        whatsappGreen: '#22c55e',
+                        phoneBlue: '#2563eb'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: var(--bg-main); color: var(--text-white); scroll-behavior: smooth; line-height: 1.8; -webkit-tap-highlight-color: transparent; }
-        header { background: linear-gradient(180deg, #111113 0%, var(--bg-main) 100%); padding: 40px 20px 30px 20px; text-align: center; }
-        .brand-logo-img { width: 160px; height: 160px; object-fit: contain; margin-bottom: 5px; filter: drop-shadow(0 0 15px var(--gold-glow)); }
-        header p { font-size: 16px; color: #e4e4e7; font-weight: 600; margin-bottom: 25px; max-width: 600px; margin: 0 auto; }
-        .header-ctas { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-        .hero-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; transition: 0.3s ease; }
-        .hero-btn.primary { background: var(--gold); color: var(--bg-main); box-shadow: 0 4px 15px var(--gold-glow); }
-        .hero-btn.secondary { background: rgba(255,255,255,0.04); color: var(--text-white); border: 1px solid rgba(255,255,255,0.06); }
-        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-        .container { width: 92%; max-width: 950px; margin: auto; padding-bottom: 60px; }
-        .search-container { margin-bottom: 20px; width: 100%; }
-        .search-input { width: 100%; padding: 15px 20px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; font-size: 15px; font-weight: 600; color: var(--text-white); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
-        .search-input:focus { border-color: var(--gold); box-shadow: 0 0 12px var(--gold-glow); }
-        .search-input::placeholder { color: #52525b; }
-        .filter-panel { background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 35px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .filter-group { display: flex; flex-direction: column; gap: 6px; }
-        .filter-group label { font-size: 12.5px; font-weight: 700; color: var(--gold); }
-        .filter-select { width: 100%; padding: 12px; background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--text-white); outline: none; cursor: pointer; }
-        .buttons { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 30px; position: sticky; top: 10px; z-index: 100; background: rgba(12, 12, 14, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 6px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.03); }
-        .nav-btn { padding: 10px 16px; border: 1px solid rgba(255,255,255,0.06); background: var(--bg-card); color: var(--text-muted); border-radius: 10px; cursor: pointer; font-size: 13.5px; font-weight: 600; flex: 1; min-width: 85px; }
-        .active-btn { background: var(--gold); color: var(--bg-main) !important; font-weight: 700; border-color: var(--gold); }
-        .sell-btn { border-color: var(--gold); color: var(--gold); }
-        .properties-grid { display: flex; flex-direction: column; gap: 16px; }
-        
-        .card { background: var(--bg-card); padding: 25px; border-radius: 16px; cursor: pointer; transition: 0.3s ease; border: 1px solid rgba(255,255,255,0.03); }
-        .card:hover { background: var(--bg-card-hover); transform: translateY(-3px); border-color: var(--gold); box-shadow: 0 10px 30px var(--gold-glow); }
-        .card h3 { font-size: 19px; font-weight: 700; color: var(--text-white); }
-        .price { font-size: 22px; font-weight: 800; color: var(--price-color); margin: 2px 0; letter-spacing: 0.3px; }
-        .meta-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-        .meta-badge { background: rgba(255,255,255,0.04); color: var(--text-muted); padding: 2px 10px; border-radius: 6px; font-size: 12.5px; }
-        .details-box { background: #111113; padding: 25px; border-radius: 16px; border: 1px solid var(--gold); margin-top: -10px; margin-bottom: 16px; box-shadow: 0 0 20px var(--gold-glow); }
-        .no-photos-notice { background: rgba(212, 175, 55, 0.02); border: 1px dashed rgba(212, 175, 55, 0.2); padding: 20px; border-radius: 12px; text-align: center; color: var(--gold); font-size: 14px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .bullet-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 15px; background: rgba(255,255,255,0.01); padding: 15px; border-radius: 12px; }
-        .bullet-item { font-size: 14px; color: #d4d4d8; display: flex; align-items: center; gap: 8px; }
-        .bullet-item::before { content: '•'; color: var(--gold); font-size: 18px; font-weight: 700; }
-        
-        .action-buttons { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
-        .act-btn { padding: 12px 15px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; border: none; cursor: pointer; }
-        .act-btn.btn-wa { background: var(--whatsapp-color); color: white; flex: 3; min-width: 140px; }
-        .act-btn.btn-video { background: var(--gold); color: var(--bg-main); flex: 3; min-width: 140px; }
-        .act-btn.btn-call { background: var(--phone-color); color: white; flex: 2; min-width: 110px; }
-        .act-btn.btn-sh { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.05); width: 45px; }
-        .act-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .skeleton-card { background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
-        .skeleton-line { background: #222226; height: 18px; border-radius: 4px; position: relative; overflow: hidden; }
-        .skeleton-line.title { width: 60%; height: 22px; }
-        .skeleton-line.price { width: 35%; height: 20px; }
-        .skeleton-line.badge { width: 45%; height: 14px; }
-        .skeleton-line::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); animation: skeleton-shimmer 1.2s infinite; }
-        @keyframes skeleton-shimmer { 100% { transform: translateX(100%); } }
-        .why-us-container { background: linear-gradient(135deg, var(--bg-card) 0%, #1c1c22 100%); padding: 35px; border-radius: 20px; border: 1px solid rgba(212,175,55,0.15); margin: 35px 0; }
-        .why-us-container h2 { font-size: 24px; font-weight: 800; color: var(--text-white); margin-bottom: 20px; position: relative; padding-bottom: 10px; text-align: center; }
-        .why-us-container h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 2px; background: var(--gold); }
-        .why-us-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .why-us-item { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border-right: 4px solid var(--gold); }
-        .why-us-item h4 { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 5px; }
-        .why-us-item p { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
-        .lead-form-container { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.02); margin: 35px 0; }
-        .lead-form-container h2 { color: var(--text-white); font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-        .lead-form-container p { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-        .form-control { width: 100%; padding: 14px; background: #0c0c0e; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: white; font-size: 14px; font-weight: 600; outline: none; }
-        .form-control:focus { border-color: var(--gold); }
-        .submit-form-btn { width: 100%; background: var(--gold); color: var(--bg-main); padding: 14px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; margin-top: 12px; font-size: 14.5px; }
-        .about-section { background: linear-gradient(135deg, var(--bg-card) 0%, #0e0e11 100%); padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); margin: 40px 0; }
-        .about-section h2 { color: var(--text-white); font-size: 24px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
-        .about-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 45px; height: 2px; background: var(--gold); }
-        .about-section p { color: #d4d4d8; font-size: 14.5px; line-height: 1.8; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 25px; }
-        .feature-item { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.02); }
-        .feature-item h4 { font-weight: 700; margin-bottom: 6px; color: var(--gold); font-size: 15.5px; }
-        .feature-item p { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
-        .static-section { background: var(--bg-card); padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.02); margin: 30px 0; display: none; }
-        .static-section.active { display: block; }
-        .static-section h2 { color: var(--text-white); font-size: 22px; font-weight: 800; margin-bottom: 15px; position: relative; padding-bottom: 10px; }
-        .static-section h2::after { content: ''; position: absolute; bottom: 0; right: 0; width: 40px; height: 2px; background: var(--gold); }
-        .empty-state { text-align: center; padding: 50px 20px; background: var(--bg-card); border-radius: 20px; }
-        .no-results { display: none; text-align: center; padding: 40px; color: var(--text-muted); font-size: 14.5px; }
-        footer { background: #08080a; color: var(--text-muted); text-align: center; padding: 50px 20px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-logo { font-size: 24px; font-weight: 800; color: var(--gold); margin-bottom: 8px; }
-        .admin-note { background: rgba(212, 175, 55, 0.04); padding: 6px 20px; border-radius: 30px; display: inline-block; margin: 15px 0; border: 1px solid rgba(212, 175, 55, 0.12); color: var(--gold); font-size: 13.5px; font-weight: 600; }
-        .phone { font-size: 28px; font-weight: 800; color: var(--text-white); text-decoration: none; display: block; margin-top: 5px; }
-        .floating-whatsapp { position: fixed; bottom: 30px; right: 30px; background-color: var(--whatsapp-color); color: #fff; width: 56px; height: 56px; border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s ease; }
-        .floating-whatsapp:hover { transform: scale(1.08); }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }
+        .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     </style>
 </head>
-<body>
+<body class="text-white bg-bgMain scroll-smooth antialiased pb-16">
 
-<a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة" class="floating-whatsapp" target="_blank" aria-label="Contact on WhatsApp">
-    <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
+    <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة" 
+       target="_blank" 
+       class="floating-whatsapp fixed bottom-6 right-6 bg-whatsappGreen text-white w-14 h-14 rounded-full shadow-2xl z-50 flex items-center justify-center transition-transform duration-300 hover:scale-110"
+       aria-label="Contact on WhatsApp">
+        <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
 
-<header>
-    <img src="brand-og-image.jpg" alt="لوجو كابيتال هوم لتسويق العقارات بالمنيا" class="brand-logo-img">
-    <p>نساعدك في اختيار العقار المناسب بأمان قانوني وثقة كاملة</p>
-    <div class="header-ctas">
-        <a href="#leadForm" class="hero-btn primary">🎯 اطلب عقارك حسب ميزانيتك الآن</a>
-        <a href="tel:01555086599" class="hero-btn secondary">📞 اتصال مباشر بالمكتب</a>
-    </div>
-</header>
-
-<div class="container">
-    <div class="search-container">
-        <input type="text" id="propertySearch" class="search-input" placeholder="🔍 ابحث بالمنطقة، السعر، أو نوع التشطيب (مثال: الحي السابع)...">
-    </div>
-
-    <div class="filter-panel">
-        <div class="filter-group">
-            <label>المنطقة أو المدينة</label>
-            <select id="filterLocation" class="filter-select">
-                <option value="all">كل المناطق</option>
-                <option value="المنيا">مدينة المنيا</option>
-                <option value="المنيا الجديدة">المنيا الجديدة</option>
-            </select>
+    <header class="flex flex-col items-center justify-center pt-12 pb-8 px-4 text-center">
+        <img src="brand-og-image.jpg" alt="لوجو كابيتال هوم لتسويق العقارات بالمنيا" class="w-40 h-40 object-contain mb-2 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+        <p class="text-base text-zinc-300 font-semibold max-w-lg mx-auto">نساعدك في اختيار العقار المناسب بأمان قانوني وثقة كاملة</p>
+        <div class="flex justify-center gap-3 flex-wrap mt-4">
+            <a href="#leadForm" class="bg-goldCustom text-bgMain px-6 py-3 rounded-xl font-bold text-sm shadow-[0_4px_15px_rgba(212,175,55,0.25)] transition-transform duration-200 hover:-translate-y-0.5">🎯 اطلب عقارك حسب ميزانيتك الآن</a>
+            <a href="tel:01555086599" class="bg-white/5 border border-white/10 text-white px-6 py-3 rounded-xl font-bold text-sm transition-transform duration-200 hover:-translate-y-0.5">📞 اتصال مباشر بالمكتب</a>
         </div>
-        <div class="filter-group">
-            <label>نوع التشطيب</label>
-            <select id="filterFinishing" class="filter-select">
-                <option value="all">كل الأنواع</option>
-                <option value="سوبر لوكس">سوبر لوكس</option>
-                <option value="تشطيب جهاز">تشطيب جهاز</option>
-                <option value="على الطوب">على الطوب / العظم</option>
-                <option value="نصف تشطيب">نصف تشطيب</option>
-            </select>
+    </header>
+
+    <div class="w-[92%] max-w-[950px] mx-auto mt-4">
+        <div class="mb-6 w-100">
+            <input type="text" id="propertySearch" class="w-full px-6 py-4 bg-bgCard border border-white/5 rounded-2xl text-base font-semibold text-white placeholder-zinc-600 outline-none shadow-inner focus:border-goldCustom focus:shadow-[0_0_15px_rgba(212,175,55,0.15)] transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو نوع التشطيب (مثال: الحي السابع)...">
         </div>
-        <div class="filter-group">
-            <label>السعر الأقصى</label>
-            <select id="filterPrice" class="filter-select">
-                <option value="all">أي سعر</option>
-                <option value="1000000">حتى مليون جنيه</option>
-                <option value="2500000">حتى 2.5 مليون</option>
-                <option value="5000000">حتى 5 مليون</option>
-            </select>
-        </div>
-    </div>
 
-    <nav class="buttons">
-        <button class="nav-btn active-btn" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>
-        <button class="nav-btn" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>
-        <button class="nav-btn" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>
-        <button class="nav-btn sell-btn" data-target="sell-property-sec">✨ اعرض عقارك</button>
-    </nav>
-
-    <main>
-        <div id="noResults" class="no-results">لم نجد عقارات تطابق خيارات التصفية الحالية.</div>
-        <div id="propertiesWrapper" class="properties-grid"></div>
-
-        <section class="why-us-container">
-            <h2>لماذا تختار كابيتال هوم؟</h2>
-            <div class="why-us-grid">
-                <div class="why-us-item"><h4>🔍 فحص قانوني كامل</h4><p>نراجع وندقق تراخيص العقار لضمان خلوه من أي ثغرات قبل الشراء.</p></div>
-                <div class="why-us-item"><h4>📸 معاينات حقيقية</h4><p>نبتعد عن الصور الوهمية، كل المواصفات مطابقة للواقع بدقة.</p></div>
-                <div class="why-us-item"><h4>⚖️ تفاوض لصالح العميل</h4><p>ندير التفاوض المالي لضمن لك السعر العادل والحقيقي للعقار.</p></div>
-                <div class="why-us-item"><h4>🛡️ حماية مستقبلية</h4><p>نؤمن خطوات التعاقد والاستلام القانوني لتبدأ براحة بال مطلقة.</p></div>
+        <div class="bg-bgCard p-6 rounded-2xl border border-white/5 mb-8 grid grid-cols-1 sm:grid-cols-3 gap-5 shadow-lg">
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold text-goldCustom">المنطقة أو المدينة</label>
+                <select id="filterLocation" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">
+                    <option value="all">كل المناطق</option>
+                    <option value="المنيا">مدينة المنيا</option>
+                    <option value="المنيا الجديدة">المنيا الجديدة</option>
+                </select>
             </div>
-        </section>
-
-        <section id="sell-property-sec" class="static-section">
-            <div class="empty-state">
-                <h2>✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>
-                <p style="margin-bottom: 25px; color: var(--text-muted);">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة.</p>
-                <a href="https://wa.me/201555086599?text=مرحباً، أريد تسويق عقاري معكم." class="act-btn btn-wa" style="display: inline-flex; padding: 14px 40px; margin: auto;">ارسل تفاصيل العقار عبر واتساب</a>
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold text-goldCustom">نوع التشطيب</label>
+                <select id="filterFinishing" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">
+                    <option value="all">كل الأنواع</option>
+                    <option value="سوبر لوكس">سوبر لوكس</option>
+                    <option value="تشطيب جهاز">تشطيب جهاز</option>
+                    <option value="على الطوب">على الطوب / العظم</option>
+                    <option value="نصف تشطيب">نصف تشطيب</option>
+                </select>
             </div>
-        </section>
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-bold text-goldCustom">السعر الأقصى</label>
+                <select id="filterPrice" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">
+                    <option value="all">أي سعر</option>
+                    <option value="1000000">حتى مليون جنيه</option>
+                    <option value="2500000">حتى 2.5 مليون</option>
+                    <option value="5000000">حتى 5 مليون</option>
+                </select>
+            </div>
+        </div>
 
-        <section class="lead-form-container">
-            <h2>📬 لم تجد مواصفات عقارك؟</h2>
-            <p>سجل طلبك وسنقوم بالبحث والتواصل معك فور توفر العقار المناسب لطلبك.</p>
-            <form id="leadForm">
-                <div class="form-grid">
-                    <input type="text" id="clientName" class="form-control" placeholder="الاسم الكريم" required>
-                    <input type="tel" id="clientPhone" class="form-control" placeholder="رقم الهاتف" required>
-                    <input type="text" id="clientRequest" class="form-control" placeholder="المواصفات المطلوبة والميزانية" required>
+        <nav class="buttons sticky-nav bg-bgMain/90 border border-white/5 p-1.5 rounded-2xl flex flex-wrap gap-1.5 justify-center mb-8">
+            <button class="nav-btn active-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>
+            <button class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>
+            <button class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>
+            <button class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-goldCustom/10 border border-goldCustom text-goldCustom rounded-xl font-bold text-sm transition-all duration-200" data-target="sell-property-sec">✨ اعرض عقارك</button>
+        </nav>
+
+        <main>
+            <div id="noResults" class="hidden text-center py-12 text-zinc-500 font-semibold text-base">لم نجد عقارات تطابق خيارات التصفية الحالية.</div>
+            <div id="propertiesWrapper" class="properties-grid flex flex-col gap-4"></div>
+
+            <section class="why-us-container bg-gradient-to-br from-bgCard to-[#1c1c22] p-8 rounded-2xl border border-goldCustom/10 my-12 shadow-xl">
+                <h2 class="text-2xl font-extrabold text-white mb-6 text-center relative pb-3">لماذا تختار كابيتال هوم؟<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-[3px] bg-goldCustom rounded-full"></span></h2>
+                <div class="why-us-grid grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">
+                        <h4 class="text-base font-bold text-goldCustom mb-1">🔍 فحص قانوني كامل</h4>
+                        <p class="text-sm text-zinc-400 leading-relaxed">نراجع وندقق تراخيص العقار لضمان خلوه من أي ثغرات قبل الشراء.</p>
+                    </div>
+                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">
+                        <h4 class="text-base font-bold text-goldCustom mb-1">📸 معاينات حقيقية</h4>
+                        <p class="text-sm text-zinc-400 leading-relaxed">نبتعد عن الصور الوهمية، كل المواصفات مطابقة للواقع بدقة.</p>
+                    </div>
+                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">
+                        <h4 class="text-base font-bold text-goldCustom mb-1">⚖️ تفاوض لصالح العميل</h4>
+                        <p class="text-sm text-zinc-400 leading-relaxed">ندير التفاوض المالي لنضمن لك السعر العادل والحقيقي للعقار.</p>
+                    </div>
+                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">
+                        <h4 class="text-base font-bold text-goldCustom mb-1">🛡️ حماية مستقبلية</h4>
+                        <p class="text-sm text-zinc-400 leading-relaxed">نؤمن خطوات التعاقد والاستلام القانوني لتبدأ براحة بال مطلقة.</p>
+                    </div>
                 </div>
-                <button type="submit" class="submit-form-btn">ارسل طلبي للمكتب فوراً</button>
-            </form>
-        </section>
+            </section>
 
-        <section class="about-section">
-            <h2>من نحن؟</h2>
-            <p><strong>كابيتال هوم (CAPITAL HOME)</strong> مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نقوم بدور المستشار الأمين للمشتري لتأمين استثماره وفحص العقارات قانونياً.</p>
-            <div class="features-grid">
-                <div class="feature-item"><h4>🤝 فحص وتأمين قانوني</h4><p>نأمن موقف العقار قانونياً وحفظ حقوقك بالكامل.</p></div>
-                <div class="feature-item"><h4>📍 دراية جغرافية حقيقية</h4><p>تقييم عادل ومنطقي للأسعار مبني على حركة السوق الفعلي.</p></div>
-                <div class="feature-item"><h4>🔍 معاينات واقعية</h4><p>نلتزم بالشفافية وعرض مواصفات العقار الحقيقية دون تجميل.</p></div>
-            </div>
-        </section>
-    </main>
-</div>
+            <section id="sell-property-sec" class="static-section hidden bg-bgCard p-8 rounded-2xl border border-white/5 my-8 shadow-xl">
+                <div class="empty-state text-center py-6">
+                    <h2 class="text-2xl font-extrabold text-white mb-2">✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>
+                    <p class="text-sm text-zinc-400 mb-6">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة.</p>
+                    <a href="https://wa.me/201555086599?text=مرحباً، أريد تسويق عقاري معكم." class="act-btn inline-flex bg-whatsappGreen text-white font-bold py-3 px-10 rounded-xl transition-all hover:scale-105 shadow-lg shadow-whatsappGreen/20">ارسل تفاصيل العقار عبر واتساب</a>
+                </div>
+            </section>
 
-<footer>
-    <div class="footer-logo">CAPITAL HOME</div>
-    <p>نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>
-    <div class="admin-note">إدارة وإشراف وتواصل: <strong>أ/ عبد الله</strong></div>
-    <a href="tel:01555086599" class="phone">01555086599</a>
-</footer>
+            <section class="lead-form-container bg-bgCard p-8 rounded-2xl border border-white/5 my-12 shadow-xl">
+                <h2 class="text-xl font-extrabold text-white mb-1">📬 لم تجد مواصفات عقارك?</h2>
+                <p class="text-sm text-zinc-400 mb-6">سجل طلبك وسنقوم بالبحث والتواصل معك فور توفر العقار المناسب لطلبك.</p>
+                <form id="leadForm" class="flex flex-col gap-4">
+                    <div class="form-grid grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="clientName" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="الاسم الكريم" required>
+                        <input type="tel" id="clientPhone" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="رقم الهاتف" required>
+                        <input type="text" id="clientRequest" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="المواصفات المطلوبة والميزانية" required>
+                    </div>
+                    <button type="submit" class="submit-form-btn w-full bg-goldCustom text-bgMain py-4 rounded-xl font-bold text-sm shadow-md transition-all duration-200 hover:brightness-110">ارسل طلبي للمكتب فوراً</button>
+                </form>
+            </section>
+
+            <section class="about-section bg-gradient-to-br from-bgCard to-[#0e0e11] p-8 rounded-2xl border border-white/5 my-12 shadow-xl">
+                <h2 class="text-2xl font-extrabold text-white mb-4 relative pb-3">من نحن؟<span class="absolute bottom-0 right-0 w-12 h-[3px] bg-goldCustom rounded-full"></span></h2>
+                <p class="text-zinc-300 text-base leading-relaxed"><strong>كابيتال هوم (CAPITAL HOME)</strong> مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نقوم بدور المستشار الأمين للمشتري لتأمين استثماره وفحص العقارات قانونياً.</p>
+                <div class="features-grid grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">
+                        <h4 class="font-bold text-goldCustom mb-1 text-base">🤝 فحص وتأمين قانوني</h4>
+                        <p class="text-xs text-zinc-400">نأمن موقف العقار قانونياً وحفظ حقوقك بالكامل.</p>
+                    </div>
+                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">
+                        <h4 class="font-bold text-goldCustom mb-1 text-base">📍 دراية جغرافية حقيقية</h4>
+                        <p class="text-xs text-zinc-400">تقييم عادل ومنطقي للأسعار مبني على حركة السوق الفعلي.</p>
+                    </div>
+                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">
+                        <h4 class="font-bold text-goldCustom mb-1 text-base">🔍 معاينات واقعية</h4>
+                        <p class="text-xs text-zinc-400">نلتزم بالشفافية وعرض مواصفات العقار الحقيقية دون تجميل.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-[#08080a] text-zinc-400 text-center py-12 px-4 mt-16 border-t border-white/5">
+        <div class="text-2xl font-extrabold text-white mb-2 tracking-wider">CAPITAL HOME</div>
+        <p class="text-sm max-w-sm mx-auto">نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>
+        <div class="bg-white/5 py-1.5 px-6 rounded-full inline-block my-4 border border-white/10 text-white text-sm font-semibold">إدارة وإشراف وتواصل: <strong>أ/ عبد الله</strong></div>
+        <a href="tel:01555086599" class="phone text-3xl font-extrabold text-white block mt-2 hover:text-goldCustom transition-colors">01555086599</a>
+    </footer>
 
 <script>
+// 📊 داتا العقارات الـ 11 الحصرية الثابتة بعد تعديل الكلمة الإنجليزية "متر"
 const propertiesData = [
     { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", meta: ["📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل", "الوضعية المالية: خالصة تماماً بدون أقساط"] },
     { id: "a3", category: "شقة", title: "شقة مرخصة بميدان الساعة", price: 4700000, priceText: "4 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", meta: ["📐 200م", "🏢 برج مرخص"], bullets: ["المساحة: 200 متر مربع", "الترخيص: عمارة مرخصة ومسجلة قانونياً", "الدور: التاسع ببرج حديث", "التقسيم: 3 غرف + ليفنج + ريسبشن 3 قطع", "الوضعية: على العظم وجاهزة للتشطيب"] },
@@ -247,35 +207,35 @@ function renderProperties() {
 
     const noResults = document.getElementById('noResults');
     if (filtered.length === 0) { 
-        noResults.style.display = 'block'; 
+        noResults.classList.remove('hidden');
         return; 
     }
-    noResults.style.display = 'none';
+    noResults.classList.add('hidden');
 
     filtered.forEach(prop => {
         const cardEl = document.createElement('div'); 
-        cardEl.className = 'card'; 
+        cardEl.className = 'card bg-bgCard p-6 rounded-2xl cursor-pointer transition-all duration-300 border border-white/5 hover:bg-bgCardHover hover:-translate-y-1 hover:border-goldCustom hover:shadow-[0_10px_30px_rgba(212,175,55,0.15)]'; 
         cardEl.setAttribute('data-id', prop.id); 
         
-        let metaBadges = prop.meta.map(m => `<span class="meta-badge">${m}</span>`).join('');
-        cardEl.innerHTML = `<h3>${prop.title}</h3><div class="price">${prop.priceText}</div><div class="meta-container">${metaBadges}</div>`;
+        let metaBadges = prop.meta.map(m => `<span class="bg-white/5 text-zinc-400 py-1 px-3 rounded-lg text-xs font-semibold">${m}</span>`).join('');
+        cardEl.innerHTML = `<h3 class="text-xl font-bold text-white">${prop.title}</h3><div class="text-2xl font-extrabold text-priceBlue my-1.5">${prop.priceText}</div><div class="flex flex-wrap gap-2 mt-3">${metaBadges}</div>`;
         
         const detailEl = document.createElement('div'); 
-        detailEl.className = 'details-box'; 
+        detailEl.className = 'details-box bg-[#111113] p-6 rounded-2xl border border-goldCustom mt-[-10px] mb-4 shadow-[0_0_25px_rgba(212,175,55,0.1)]'; 
         detailEl.id = `box-${prop.id}`; 
         detailEl.style.display = 'none';
         
-        let bulletItems = prop.bullets.map(b => `<div class="bullet-item">${b}</div>`).join('');
-        let galleryHTML = `<div class="no-photos-notice">🛡️ المعاينة الميدانية تتم بالتنسيق المسبق مع المالك عبر المكتب لحفظ السرية والجدية</div>`;
+        let bulletItems = prop.bullets.map(b => `<div class="text-sm text-zinc-300 font-medium flex items-center gap-2 before:content-['•'] before:text-goldCustom before:text-2xl before:font-bold">${b}</div>`).join('');
+        let galleryHTML = `<div class="bg-white/[0.02] border border-dashed border-goldCustom/20 p-5 rounded-xl text-center text-goldCustom text-sm font-semibold mb-5 flex items-center justify-center gap-2">🛡️ المعاينة الميدانية تتم بالتنسيق المسبق مع المالك عبر المكتب لحفظ السرية والجدية</div>`;
 
         detailEl.innerHTML = `
             ${galleryHTML}
-            <div class="bullet-details">${bulletItems}</div>
-            <div class="action-buttons">
-                <a class="act-btn btn-wa" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز معاينة مجانية لـ: ${prop.title}" target="_blank">💬 حجز معاينة مجانية الآن</a>
-                <a class="act-btn btn-video" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الحصول على فيديو المعاينة الواقعية لـ: ${prop.title}" target="_blank">🎬 اطلب فيديو المعاينة الحقيقية</a>
-                <a class="act-btn btn-call" href="tel:01555086599">📞 اتصال</a>
-                <button class="act-btn btn-sh" data-title="${prop.title}" data-id="${prop.id}">🔗</button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/[0.01] p-4 rounded-xl border border-white/5">${bulletItems}</div>
+            <div class="flex gap-2 mt-6 flex-wrap">
+                <a class="flex-1 min-w-[140px] py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد حجز معاينة مجانية لـ: ${prop.title}" target="_blank">💬 حجز معاينة مجانية الآن</a>
+                <a class="flex-1 min-w-[140px] py-3.5 px-4 bg-goldCustom text-bgMain rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الحصول على فيديو المعاينة الواقعية لـ: ${prop.title}" target="_blank">🎬 اطلب فيديو المعاينة</a>
+                <a class="w-24 py-3.5 px-4 bg-phoneBlue text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="tel:01555086599">📞 اتصال</a>
+                <button class="w-12 py-3.5 px-4 bg-white/5 border border-white/5 text-white rounded-xl font-bold text-sm flex items-center justify-center transition-all hover:bg-white/10 btn-sh" data-title="${prop.title}" data-id="${prop.id}">🔗</button>
             </div>`;
         wrapper.appendChild(cardEl); 
         wrapper.appendChild(detailEl);
@@ -286,11 +246,11 @@ function renderProperties() {
 function renderSkeletons() {
     const wrapper = document.getElementById('propertiesWrapper'); 
     wrapper.innerHTML = '';
-    document.getElementById('noResults').style.display = 'none';
+    document.getElementById('noResults').classList.add('hidden');
     for(let i=0; i<3; i++) {
         const skEl = document.createElement('div'); 
-        skEl.className = 'skeleton-card';
-        skEl.innerHTML = `<div class="skeleton-line title"></div><div class="skeleton-line price"></div><div class="skeleton-line badge"></div>`;
+        skEl.className = 'skeleton-card bg-bgCard p-6 rounded-2xl border border-white/5 flex flex-col gap-3 relative overflow-hidden';
+        skEl.innerHTML = `<div class="skeleton-line title bg-zinc-800 h-6 w-3/5 rounded"></div><div class="skeleton-line price bg-zinc-800 h-5 w-1/3 rounded"></div><div class="skeleton-line badge bg-zinc-800 h-4 w-2/5 rounded"></div>`;
         wrapper.appendChild(skEl);
     }
 }
@@ -342,18 +302,24 @@ document.getElementById('filterPrice').addEventListener('change', triggerDynamic
 
 document.querySelectorAll('.nav-btn').forEach(button => {
     button.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn')); 
-        this.classList.add('active-btn');
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.remove('active-btn', 'bg-goldCustom', 'text-bgMain');
+            b.classList.add('bg-bgCard', 'text-zinc-400');
+        }); 
+        this.classList.add('active-btn', 'bg-goldCustom', 'text-bgMain');
+        this.classList.remove('bg-bgCard', 'text-zinc-400');
+        
         const target = this.getAttribute('data-target'); 
         currentCategory = this.getAttribute('data-cat');
         if (target === 'properties-wrapper') {
-            document.getElementById('sell-property-sec').style.display = 'none'; 
-            document.getElementById('propertiesWrapper').style.display = 'flex'; 
+            document.getElementById('sell-property-sec').classList.add('hidden'); 
+            document.getElementById('propertiesWrapper').classList.remove('hidden'); 
             triggerDynamicRender();
         } else {
-            document.getElementById('propertiesWrapper').style.display = 'none'; 
-            document.getElementById('noResults').style.display = 'none';
-            document.getElementById('sell-property-sec').style.display = 'block'; 
+            // 🛠️ تم التعديل الذكي هنا باستخدام كلاسات تايلوند لضمان قفل الشاشات بشكل صحيح وموحد
+            document.getElementById('propertiesWrapper').classList.add('hidden'); 
+            document.getElementById('noResults').classList.add('hidden');
+            document.getElementById('sell-property-sec').classList.remove('hidden'); 
             document.getElementById('sell-property-sec').scrollIntoView({ behavior: 'smooth' });
         }
     });

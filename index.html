@@ -28,9 +28,70 @@
     }  
 </script>  
 <style>  
-    body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }  
-    .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }  
-</style>
+    body{
+font-family:'Cairo',sans-serif;
+background:#0c0c0e;
+-webkit-tap-highlight-color:transparent;
+}
+
+.sticky-nav{
+position:sticky;
+top:12px;
+z-index:100;
+backdrop-filter:blur(14px);
+}
+
+.card{
+background:linear-gradient(
+180deg,
+#17171b,
+#121215
+);
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.skeleton-line{
+background:
+linear-gradient(
+90deg,
+#222 25%,
+#333 50%,
+#222 75%
+);
+
+background-size:200% 100%;
+animation:loading 1.2s infinite;
+}
+
+@keyframes loading{
+0%{
+background-position:200%;
+}
+
+100%{
+background-position:-200%;
+}
+}
+
+.details-box{
+overflow:hidden;
+animation:fade .25s ease;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:none;
+}
+}
 
 </head>  
 <body class="text-white bg-bgMain scroll-smooth antialiased pb-16">  <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة"   

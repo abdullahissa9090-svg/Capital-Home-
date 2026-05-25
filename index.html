@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>  
+<html lang="ar" dir="rtl">    
 <head>    
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
@@ -32,152 +32,141 @@
         body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
         .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        
+        /* تأثيرات الدخول الحركية */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-enter {
+            opacity: 0;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* تأثير الشبكة المعمارية في الخلفية */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
     </style>  
 </head>    
 
-<body class="text-white bg-bgMain scroll-smooth antialiased pb-16">  
+<body class="text-white bg-bgMain scroll-smooth antialiased pb-16 relative">  
+
+    <!-- شبكة معمارية في الخلفية لإعطاء طابع عقاري فخم -->
+    <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-[-1] opacity-50"></div>
+
     <a href="https://wa.me/201555086599?text=مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة"     
        target="_blank"     
        rel="noopener noreferrer"    
-       class="floating-whatsapp fixed bottom-6 right-6 bg-whatsappGreen text-white w-14 h-14 rounded-full shadow-2xl z-50 flex items-center justify-center transition-transform duration-300 hover:scale-110"    
+       class="floating-whatsapp fixed bottom-6 right-6 bg-whatsappGreen text-white w-14 h-14 rounded-full shadow-2xl z-50 flex items-center justify-center transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)]"    
        aria-label="Contact on WhatsApp">    
         <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>    
     </a>    
     
-    <header class="flex flex-col items-center justify-center pt-12 pb-8 px-4 text-center">    
-        <img src="brand-og-image.jpg" alt="لوجو كابيتال هوم لتسويق العقارات بالمنيا" class="w-40 h-40 object-contain mb-2 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">    
-        <p class="text-base text-zinc-300 font-semibold max-w-lg mx-auto">نساعدك في اختيار العقار المناسب بأمان قانوني وثقة كاملة</p>    
-        <div class="flex justify-center gap-3 flex-wrap mt-4">    
-            <a href="#leadForm" class="bg-goldCustom text-bgMain px-6 py-3 rounded-xl font-bold text-sm shadow-[0_4px_15px_rgba(212,175,55,0.25)] transition-transform duration-200 hover:-translate-y-0.5">🎯 اطلب عقارك حسب ميزانيتك الآن</a>    
-            <a href="tel:01555086599" class="bg-white/5 border border-white/10 text-white px-6 py-3 rounded-xl font-bold text-sm transition-transform duration-200 hover:-translate-y-0.5">📞 اتصال مباشر بالمكتب</a>    
+    <header class="relative flex flex-col items-center justify-center pt-16 pb-12 px-4 text-center overflow-hidden">    
+        <!-- إضاءة خلفية للوجو -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-goldCustom/20 rounded-full blur-[80px] z-[-1]"></div>
+        
+        <img src="brand-og-image.jpg" alt="لوجو كابيتال هوم لتسويق العقارات بالمنيا" class="w-44 h-44 object-contain mb-4 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] relative z-10">    
+        <p class="text-lg text-zinc-300 font-semibold max-w-lg mx-auto relative z-10">نساعدك في اختيار العقار المناسب بأمان قانوني وثقة كاملة</p>    
+        
+        <div class="flex justify-center gap-4 flex-wrap mt-6 relative z-10">    
+            <a href="#leadForm" class="bg-gradient-to-l from-goldCustom to-[#b8952b] text-bgMain px-8 py-3.5 rounded-xl font-bold text-sm shadow-[0_5px_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(212,175,55,0.4)]">🎯 اطلب عقارك الآن</a>    
+            <a href="tel:01555086599" class="bg-white/5 backdrop-blur-sm border border-white/10 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/10">📞 اتصال مباشر بالمكتب</a>    
         </div>    
     </header>    
     
-    <div class="w-[92%] max-w-[950px] mx-auto mt-4">    
-        <div class="mb-6 w-full relative">    
-            <label for="propertySearch" class="sr-only">ابحث بالمنطقة، السعر، أو نوع التشطيب</label>
-            <input type="text" id="propertySearch" class="w-full px-6 py-4 bg-bgCard border border-white/5 rounded-2xl text-base font-semibold text-white placeholder-zinc-600 outline-none shadow-inner focus:border-goldCustom focus:shadow-[0_0_15px_rgba(212,175,55,0.15)] transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو نوع التشطيب (مثال: الحي السابع)...">    
+    <div class="w-[92%] max-w-[1100px] mx-auto mt-2">    
+        
+        <!-- شريط البحث المحسن والزجاجي -->
+        <div class="mb-10 w-full max-w-3xl mx-auto relative z-20 group">    
+            <label for="propertySearch" class="sr-only">ابحث بالمنطقة، السعر، أو الميزة</label>
+            <div class="absolute inset-0 bg-gradient-to-r from-goldCustom/20 to-transparent blur-xl rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
+            <input type="text" id="propertySearch" class="w-full relative px-6 py-5 bg-bgCard/80 backdrop-blur-md border border-white/10 rounded-2xl text-base font-semibold text-white placeholder-zinc-500 outline-none shadow-[0_8px_30px_rgba(0,0,0,0.5)] focus:border-goldCustom focus:bg-bgCard transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو الميزة (مثال: المنيا الجديدة، تقسيط)...">    
         </div>    
         
-        <div class="bg-bgCard p-6 rounded-2xl border border-white/5 mb-8 grid grid-cols-1 sm:grid-cols-3 gap-5 shadow-lg">    
-            <div class="flex flex-col gap-2">    
-                <label for="filterLocation" class="text-xs font-bold text-goldCustom">المنطقة أو المدينة</label>    
-                <select id="filterLocation" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">    
-                    <option value="all">كل المناطق</option>    
-                    <option value="المنيا">مدينة المنيا</option>    
-                    <option value="المنيا الجديدة">المنيا الجديدة</option>    
-                </select>    
-            </div>    
-            <div class="flex flex-col gap-2">    
-                <label for="filterFinishing" class="text-xs font-bold text-goldCustom">نوع التشطيب</label>    
-                <select id="filterFinishing" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">    
-                    <option value="all">كل الأنواع</option>    
-                    <option value="سوبر لوكس">سوبر لوكس</option>    
-                    <option value="تشطيب جهاز">تشطيب جهاز</option>    
-                    <option value="على الطوب">على الطوب / العظم</option>    
-                    <option value="نصف تشطيب">نصف تشطيب</option>    
-                </select>    
-            </div>    
-            <div class="flex flex-col gap-2">    
-                <label for="filterPrice" class="text-xs font-bold text-goldCustom">السعر الأقصى</label>    
-                <select id="filterPrice" class="w-full p-3 bg-bgMain border border-white/10 rounded-xl text-sm font-semibold text-white outline-none cursor-pointer">    
-                    <option value="all">أي سعر</option>    
-                    <option value="1000000">حتى مليون جنيه</option>    
-                    <option value="2500000">حتى 2.5 مليون</option>    
-                    <option value="5000000">حتى 5 مليون</option>    
-                </select>    
-            </div>    
-        </div>    
-
-        <nav class="buttons sticky-nav bg-bgMain/90 border border-white/5 p-1.5 rounded-2xl flex flex-wrap gap-1.5 justify-center mb-8">    
-            <button id="btnCat-شقة" class="nav-btn active-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>    
-            <button id="btnCat-فيلا" class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>    
-            <button id="btnCat-محل" class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all duration-200" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>    
-            <button class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-goldCustom/10 border border-goldCustom text-goldCustom rounded-xl font-bold text-sm transition-all duration-200" data-target="sell-property-sec">✨ اعرض عقارك</button>    
+        <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex flex-wrap gap-1.5 justify-center mb-10 max-w-2xl mx-auto shadow-lg">    
+            <button id="btnCat-شقة" class="nav-btn active-btn flex-1 min-w-[85px] py-3 px-4 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>    
+            <button id="btnCat-فيلا" class="nav-btn flex-1 min-w-[85px] py-3 px-4 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>    
+            <button id="btnCat-محل" class="nav-btn flex-1 min-w-[85px] py-3 px-4 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>    
+            <button class="nav-btn flex-1 min-w-[85px] py-3 px-4 bg-goldCustom/10 border border-goldCustom/50 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300 hover:bg-goldCustom hover:text-bgMain" data-target="sell-property-sec">✨ اعرض عقارك</button>    
         </nav>    
 
         <main>    
-            <div id="noResults" class="hidden text-center py-12 text-zinc-500 font-semibold text-base">لم نجد عقارات تطابق خيارات التصفية الحالية.</div>    
-            <div id="propertiesWrapper" class="properties-grid flex flex-col gap-4"></div>    
+            <div id="noResults" class="hidden text-center py-16 text-zinc-500 font-semibold text-lg bg-bgCard/30 rounded-3xl border border-white/5">لم نجد عقارات تطابق بحثك الحالي. جرب كلمات أخرى!</div>    
+            
+            <!-- تم تغيير الحاوية لتصبح Grid -->
+            <div id="propertiesWrapper" class="properties-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>    
 
-            <section class="why-us-container bg-gradient-to-br from-bgCard to-[#1c1c22] p-8 rounded-2xl border border-goldCustom/10 my-12 shadow-xl">    
-                <h2 class="text-2xl font-extrabold text-white mb-6 text-center relative pb-3">لماذا تختار كابيتال هوم؟<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-[3px] bg-goldCustom rounded-full"></span></h2>    
-                <div class="why-us-grid grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">    
-                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">    
-                        <h4 class="text-base font-bold text-goldCustom mb-1">🔍 فحص قانوني كامل</h4>    
+            <section class="why-us-container bg-gradient-to-br from-[#121215] to-[#0c0c0e] p-8 md:p-10 rounded-3xl border border-goldCustom/10 my-16 shadow-2xl relative overflow-hidden">    
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-goldCustom/5 rounded-full blur-3xl pointer-events-none"></div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-8 text-center relative pb-4">لماذا تختار كابيتال هوم؟<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-[3px] bg-goldCustom rounded-full shadow-[0_0_10px_rgba(212,175,55,0.5)]"></span></h2>    
+                <div class="why-us-grid grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 relative z-10">    
+                    <div class="why-us-item bg-black/40 backdrop-blur-sm p-6 rounded-2xl border border-white/5 hover:border-goldCustom/30 transition-colors">    
+                        <h4 class="text-lg font-bold text-goldCustom mb-2">🔍 فحص قانوني كامل</h4>    
                         <p class="text-sm text-zinc-400 leading-relaxed">نراجع وندقق تراخيص العقار لضمان خلوه من أي ثغرات قبل الشراء.</p>    
                     </div>    
-                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">    
-                        <h4 class="text-base font-bold text-goldCustom mb-1">📸 معاينات حقيقية</h4>    
+                    <div class="why-us-item bg-black/40 backdrop-blur-sm p-6 rounded-2xl border border-white/5 hover:border-goldCustom/30 transition-colors">    
+                        <h4 class="text-lg font-bold text-goldCustom mb-2">📸 معاينات حقيقية</h4>    
                         <p class="text-sm text-zinc-400 leading-relaxed">نبتعد عن الصور الوهمية، كل المواصفات مطابقة للواقع بدقة.</p>    
                     </div>    
-                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">    
-                        <h4 class="text-base font-bold text-goldCustom mb-1">⚖️ تفاوض لصالح العميل</h4>    
+                    <div class="why-us-item bg-black/40 backdrop-blur-sm p-6 rounded-2xl border border-white/5 hover:border-goldCustom/30 transition-colors">    
+                        <h4 class="text-lg font-bold text-goldCustom mb-2">⚖️ تفاوض لصالح العميل</h4>    
                         <p class="text-sm text-zinc-400 leading-relaxed">ندير التفاوض المالي لنضمن لك السعر العادل والحقيقي للعقار.</p>    
                     </div>    
-                    <div class="why-us-item bg-black/30 p-5 rounded-xl border-r-4 border-goldCustom border-y border-l border-white/5">    
-                        <h4 class="text-base font-bold text-goldCustom mb-1">🛡️ حماية مستقبلية</h4>    
+                    <div class="why-us-item bg-black/40 backdrop-blur-sm p-6 rounded-2xl border border-white/5 hover:border-goldCustom/30 transition-colors">    
+                        <h4 class="text-lg font-bold text-goldCustom mb-2">🛡️ حماية مستقبلية</h4>    
                         <p class="text-sm text-zinc-400 leading-relaxed">نؤمن خطوات التعاقد والاستلام القانوني لتبدأ براحة بال مطلقة.</p>    
                     </div>    
                 </div>    
             </section>    
 
-            <section id="sell-property-sec" class="static-section hidden bg-bgCard p-8 rounded-2xl border border-white/5 my-8 shadow-xl">    
-                <div class="empty-state text-center py-6">    
-                    <h2 class="text-2xl font-extrabold text-white mb-2">✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>    
-                    <p class="text-sm text-zinc-400 mb-6">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة.</p>    
-                    <a href="https://wa.me/201555086599?text=مرحباً، أريد تسويق عقاري معكم." target="_blank" rel="noopener noreferrer" class="act-btn inline-flex bg-whatsappGreen text-white font-bold py-3 px-10 rounded-xl transition-all hover:scale-105 shadow-lg shadow-whatsappGreen/20">ارسل تفاصيل العقار عبر واتساب</a>    
+            <section id="sell-property-sec" class="static-section hidden bg-gradient-to-tr from-bgCard to-black p-10 rounded-3xl border border-white/5 my-10 shadow-2xl relative">    
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-50 rounded-3xl"></div>
+                <div class="empty-state text-center py-8 relative z-10">    
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>    
+                    <p class="text-base text-zinc-400 mb-8 max-w-xl mx-auto">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة ومدروسة.</p>    
+                    <a href="https://wa.me/201555086599?text=مرحباً، أريد تسويق عقاري معكم." target="_blank" rel="noopener noreferrer" class="act-btn inline-flex items-center gap-2 bg-whatsappGreen text-white font-bold py-4 px-10 rounded-xl transition-all hover:-translate-y-1 shadow-[0_10px_25px_rgba(34,197,94,0.3)]">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        ارسل تفاصيل العقار عبر واتساب
+                    </a>    
                 </div>    
             </section>    
 
-            <section class="lead-form-container bg-bgCard p-8 rounded-2xl border border-white/5 my-12 shadow-xl">    
-                <h2 class="text-xl font-extrabold text-white mb-1">📬 لم تجد مواصفات عقارك؟</h2>    
-                <p class="text-sm text-zinc-400 mb-6">سجل طلبك وسنقوم بالبحث والتواصل معك فور توفر العقار المناسب لطلبك.</p>    
-                <form id="leadForm" class="flex flex-col gap-4">    
-                    <div class="form-grid grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <section class="lead-form-container bg-bgCard p-8 md:p-10 rounded-3xl border border-white/5 my-12 shadow-2xl">    
+                <h2 class="text-2xl font-extrabold text-white mb-2">📬 لم تجد مواصفات عقارك؟</h2>    
+                <p class="text-base text-zinc-400 mb-8">سجل طلبك وسنقوم بالبحث والتواصل معك فور توفر العقار المناسب لطلبك.</p>    
+                <form id="leadForm" class="flex flex-col gap-5">    
+                    <div class="form-grid grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="w-full relative">
                             <label for="clientName" class="sr-only">الاسم الكريم</label>
-                            <input type="text" id="clientName" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="الاسم الكريم" required>    
+                            <input type="text" id="clientName" class="form-control w-full p-4 bg-black/50 border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom focus:bg-black/80 transition-colors" placeholder="الاسم الكريم" required>    
                         </div>
                         <div class="w-full relative">
                             <label for="clientPhone" class="sr-only">رقم الهاتف</label>
-                            <input type="tel" id="clientPhone" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="رقم الهاتف" required>    
+                            <input type="tel" id="clientPhone" class="form-control w-full p-4 bg-black/50 border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom focus:bg-black/80 transition-colors" placeholder="رقم الهاتف" required>    
                         </div>
                         <div class="w-full relative">
                             <label for="clientRequest" class="sr-only">المواصفات المطلوبة والميزانية</label>
-                            <input type="text" id="clientRequest" class="form-control w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom" placeholder="المواصفات المطلوبة والميزانية" required>    
+                            <input type="text" id="clientRequest" class="form-control w-full p-4 bg-black/50 border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom focus:bg-black/80 transition-colors" placeholder="المواصفات والميزانية" required>    
                         </div>
                     </div>    
-                    <button type="submit" class="submit-form-btn w-full bg-goldCustom text-bgMain py-4 rounded-xl font-bold text-sm shadow-md transition-all duration-200 hover:brightness-110">ارسل طلبي للمكتب فوراً</button>    
+                    <button type="submit" class="submit-form-btn w-full md:w-auto md:self-end bg-goldCustom text-bgMain px-10 py-4 rounded-xl font-bold text-sm shadow-[0_5px_15px_rgba(212,175,55,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(212,175,55,0.4)]">ارسل طلبي للمكتب فوراً</button>    
                 </form>    
-            </section>    
-
-            <section class="about-section bg-gradient-to-br from-bgCard to-[#0e0e11] p-8 rounded-2xl border border-white/5 my-12 shadow-xl">    
-                <h2 class="text-2xl font-extrabold text-white mb-4 relative pb-3">من نحن؟<span class="absolute bottom-0 right-0 w-12 h-[3px] bg-goldCustom rounded-full"></span></h2>    
-                <p class="text-zinc-300 text-base leading-relaxed"><strong>كابيتال هوم (CAPITAL HOME)</strong> مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نقوم بدور المستشار الأمين للمشتري لتأمين استثماره وفحص العقارات قانونياً.</p>    
-                <div class="features-grid grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">    
-                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">    
-                        <h4 class="font-bold text-goldCustom mb-1 text-base">🤝 فحص وتأمين قانوني</h4>    
-                        <p class="text-xs text-zinc-400">نأمن موقف العقار قانونياً وحفظ حقوقك بالكامل.</p>    
-                    </div>    
-                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">    
-                        <h4 class="font-bold text-goldCustom mb-1 text-base">📍 دراية جغرافية حقيقية</h4>    
-                        <p class="text-xs text-zinc-400">تقييم عادل ومنطقي للأسعار مبني على حركة السوق الفعلي.</p>    
-                    </div>    
-                    <div class="feature-item bg-black/20 p-5 rounded-xl border border-white/5">    
-                        <h4 class="font-bold text-goldCustom mb-1 text-base">🔍 معاينات واقعية</h4>    
-                        <p class="text-xs text-zinc-400">نلتزم بالشفافية وعرض مواصفات العقار الحقيقية دون تجميل.</p>    
-                    </div>    
-                </div>    
             </section>    
         </main>
     </div>    
 
-    <footer class="bg-[#08080a] text-zinc-400 text-center py-12 px-4 mt-16 border-t border-white/5">    
-        <div class="text-2xl font-extrabold text-white mb-2 tracking-wider">CAPITAL HOME</div>    
-        <p class="text-sm max-w-sm mx-auto">نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>    
-        <div class="bg-white/5 py-1.5 px-6 rounded-full inline-block my-4 border border-white/10 text-white text-sm font-semibold">إدارة وإشراف وتواصل: <strong>أ/ عبد الله</strong></div>    
-        <a href="tel:01555086599" class="phone text-3xl font-extrabold text-white block mt-2 hover:text-goldCustom transition-colors">01555086599</a>    
+    <footer class="bg-[#08080a] text-zinc-400 text-center py-16 px-4 mt-20 border-t border-white/5 relative">    
+        <div class="text-3xl font-extrabold text-white mb-3 tracking-wider relative inline-block">
+            CAPITAL HOME
+            <span class="absolute -top-1 -right-4 w-6 h-6 bg-goldCustom/20 rounded-full blur-md"></span>
+        </div>    
+        <p class="text-sm max-w-sm mx-auto mb-6">نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>    
+        <div class="bg-white/5 py-2 px-6 rounded-full inline-block mb-6 border border-white/10 text-white text-sm font-semibold shadow-inner">إدارة وإشراف وتواصل: <strong class="text-goldCustom">أ/ عبد الله</strong></div>    
+        <a href="tel:01555086599" class="phone text-4xl font-extrabold text-white block hover:text-goldCustom transition-colors duration-300">01555086599</a>    
     </footer>  
 
     <script>    
@@ -237,31 +226,22 @@
     }    
         
     function renderProperties() {    
-        document.querySelectorAll('.details-box').forEach(box => box.style.display = 'none');    
-        
         const wrapper = document.getElementById('propertiesWrapper');     
         wrapper.innerHTML = '';    
+        
         const keyword = normalizeArabic(document.getElementById('propertySearch').value);    
-        const locationVal = document.getElementById('filterLocation').value;    
-        const finishingVal = document.getElementById('filterFinishing').value;    
-        const priceVal = document.getElementById('filterPrice').value;    
         
         const filtered = propertiesData.filter(item => {    
             if (item.category !== currentCategory) return false;    
-            if (locationVal !== 'all' && item.locationCategory !== locationVal) return false;    
-            if (finishingVal !== 'all' && item.finishing !== finishingVal) return false;    
-                
-            let effectivePrice = item.price;    
-            if (priceVal !== 'all' && effectivePrice > parseInt(priceVal)) return false;    
-                
             if (keyword) {    
                 const matchTitle = normalizeArabic(item.title).includes(keyword);    
                 const matchPriceText = normalizeArabic(item.priceText).includes(keyword);    
                 const matchLocation = normalizeArabic(item.locationCategory).includes(keyword);    
+                const matchFinishing = normalizeArabic(item.finishing).includes(keyword);
                 const matchBullets = item.bullets.some(b => normalizeArabic(b).includes(keyword));    
                 const matchMeta = item.meta.some(m => normalizeArabic(m).includes(keyword));    
                     
-                if (!matchTitle && !matchPriceText && !matchLocation && !matchBullets && !matchMeta) return false;    
+                if (!matchTitle && !matchPriceText && !matchLocation && !matchFinishing && !matchBullets && !matchMeta) return false;    
             }    
             return true;    
         });    
@@ -273,55 +253,78 @@
         }    
         noResults.classList.add('hidden');    
         
-        filtered.forEach(prop => {    
+        filtered.forEach((prop, index) => {    
             const cardEl = document.createElement('div');     
-            cardEl.className = 'card bg-bgCard p-6 rounded-2xl cursor-pointer transition-all duration-300 border border-white/5 hover:bg-bgCardHover hover:-translate-y-1 hover:border-goldCustom hover:shadow-[0_10px_30px_rgba(212,175,55,0.15)]';     
+            // إضافة كلاس الحركات (Animation) مع تأخير زمني تدريجي لكل كارت
+            cardEl.className = 'card animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full';     
+            cardEl.style.animationDelay = `${index * 100}ms`;
             cardEl.setAttribute('data-id', prop.id);     
-                
+            
+            // خلفية زخرفية للكارت
+            const bgDecorative = `<div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-goldCustom/10 to-transparent rounded-full blur-3xl pointer-events-none transition-all duration-500 group-hover:from-goldCustom/20"></div>`;
+
             let metaBadges = prop.meta.map(m => {    
                 const isInstallment = m.includes('تقسيط');    
                 const styleClasses = isInstallment     
-                    ? 'bg-goldCustom text-black'     
-                    : 'bg-white/5 text-zinc-400';    
-                return '<span class="' + styleClasses + ' py-1 px-3 rounded-lg text-xs font-bold">' + m + '</span>';    
+                    ? 'bg-goldCustom text-bgMain shadow-[0_0_10px_rgba(212,175,55,0.4)]'     
+                    : 'bg-white/5 text-zinc-300 border border-white/5';    
+                return `<span class="${styleClasses} py-1.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center">${m}</span>`;    
             }).join('');    
         
-            cardEl.innerHTML = '<h3 class="text-xl font-bold text-white">' + prop.title + '</h3><div class="text-2xl font-extrabold text-priceBlue my-1.5">' + prop.priceText + '</div><div class="flex flex-wrap gap-2 mt-3">' + metaBadges + '</div>';    
-                
-            const detailEl = document.createElement('div');     
-            detailEl.className = 'details-box bg-[#111113] p-6 rounded-2xl border border-goldCustom mt-[-10px] mb-4 shadow-[0_0_25px_rgba(212,175,55,0.1)]';     
-            detailEl.id = 'box-' + prop.id;     
-            detailEl.style.display = 'none';    
-                
-            let bulletItems = prop.bullets.map(b => '<div class="text-sm text-zinc-300 font-medium flex items-center gap-2 before:content-[\'•\'] before:text-goldCustom before:text-2xl before:font-bold">' + b + '</div>').join('');    
-            let galleryHTML = '<div class="bg-white/[0.02] border border-dashed border-goldCustom/20 p-5 rounded-xl text-center text-goldCustom text-sm font-semibold mb-5 flex items-center justify-center gap-2">🛡️ المعاينة الميدانية تتم بالتنسيق المسبق مع المالك عبر المكتب لحفظ السرية والجدية</div>';    
+            const summaryHTML = `
+                <div class="p-6 pb-5 cursor-pointer card-summary flex flex-col h-full z-10 relative group">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-xl font-bold text-white leading-tight group-hover:text-goldCustom transition-colors">${prop.title}</h3>
+                    </div>
+                    <div class="text-2xl font-extrabold text-priceBlue mb-4 tracking-tight">${prop.priceText}</div>
+                    <div class="flex flex-wrap gap-2 mt-auto pt-2">${metaBadges}</div>
+                    
+                    <div class="w-full flex items-center justify-center gap-2 mt-6 pt-4 border-t border-white/5 text-xs text-zinc-500 font-bold uppercase tracking-wider group-hover:text-goldCustom transition-colors">
+                        اضغط لرؤية التفاصيل الكاملة
+                        <svg class="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            `;
+
+            let bulletItems = prop.bullets.map(b => `<div class="text-sm text-zinc-300 font-medium flex items-start gap-2 before:content-['✓'] before:text-goldCustom before:text-base before:font-bold before:mt-[-2px]">${b}</div>`).join('');    
+            let galleryHTML = `<div class="bg-goldCustom/5 border border-dashed border-goldCustom/30 p-4 rounded-xl text-center text-goldCustom text-xs font-semibold mb-6 flex items-center justify-center gap-2">🛡️ المعاينة الميدانية تتم بالتنسيق المسبق مع المالك عبر المكتب</div>`;    
         
             let paymentPlanHTML = '';    
             if (prop.paymentPlan) {    
-                paymentPlanHTML = '<div class="mb-5 bg-gradient-to-r from-goldCustom/10 to-transparent border border-goldCustom/20 p-4 rounded-xl">' +    
-                    '<h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 خطة السداد</h4>' +    
-                    '<div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">' +    
-                        '<div class="bg-black/40 p-2.5 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-0.5">💰 الأوفر:</span><strong class="text-white text-sm">' + prop.paymentPlan.offer + '</strong></div>' +    
-                        '<div class="bg-black/40 p-2.5 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-0.5">💳 المدفوع:</span><strong class="text-white text-sm">' + prop.paymentPlan.paid + '</strong></div>' +    
-                        '<div class="bg-black/40 p-2.5 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-0.5">📅 المتبقي:</span><strong class="text-white text-sm">' + prop.paymentPlan.remaining + '</strong></div>' +    
-                        '<div class="bg-black/40 p-2.5 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-0.5">💵 القسط:</span><strong class="text-priceBlue text-sm">' + prop.paymentPlan.value + '</strong></div>' +    
-                    '</div>' +    
-                '</div>';    
+                paymentPlanHTML = `
+                <div class="mb-6 bg-gradient-to-l from-goldCustom/10 to-transparent border border-goldCustom/20 p-5 rounded-xl">
+                    <h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 خطة السداد المالية</h4>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💰 الأوفر المطلوب:</span><strong class="text-white text-sm block">${prop.paymentPlan.offer}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💳 إجمالي المدفوع:</span><strong class="text-white text-sm block">${prop.paymentPlan.paid}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">📅 الأقساط المتبقية:</span><strong class="text-white text-sm block">${prop.paymentPlan.remaining}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💵 قيمة القسط:</span><strong class="text-priceBlue text-sm block">${prop.paymentPlan.value}</strong></div>
+                    </div>
+                </div>`;    
             }    
         
-            const contactBtnText = prop.customContactText ? prop.customContactText : "حجز معاينة مجانية الآن";    
+            const contactBtnText = prop.customContactText ? prop.customContactText : "احجز معاينة مجانية";    
         
-            detailEl.innerHTML = galleryHTML + paymentPlanHTML +    
-                '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white/[0.01] p-4 rounded-xl border border-white/5">' + bulletItems + '</div>' +    
-                '<div class="flex gap-2 mt-6 flex-wrap">' +    
-                    '<a class="flex-1 min-w-[140px] py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الاستفسار بخصوص: ' + prop.title + '" target="_blank" rel="noopener noreferrer">💬 ' + contactBtnText + '</a>' +    
-                    '<a class="flex-1 min-w-[140px] py-3.5 px-4 bg-goldCustom text-bgMain rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الحصول على فيديو المعاينة الواقعية لـ: ' + prop.title + '" target="_blank" rel="noopener noreferrer">🎬 اطلب فيديو المعاينة</a>' +    
-                    '<a class="w-24 py-3.5 px-4 bg-phoneBlue text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:brightness-110" href="tel:01555086599">📞 اتصال</a>' +    
-                    '<button class="w-12 py-3.5 px-4 bg-white/5 border border-white/5 text-white rounded-xl font-bold text-sm flex items-center justify-center transition-all hover:bg-white/10 btn-sh" data-title="' + prop.title + '" data-id="' + prop.id + '">🔗</button>' +    
-                '</div>';    
-                    
+            const detailHTML = `
+                <div class="details-box hidden px-6 pb-6 pt-2 bg-black/20 border-t border-white/5">
+                    ${galleryHTML} 
+                    ${paymentPlanHTML}
+                    <div class="flex flex-col gap-3 bg-white/[0.02] p-5 rounded-xl border border-white/5 mb-6">
+                        ${bulletItems}
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <a class="w-full py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الاستفسار بخصوص: ${prop.title}" target="_blank" rel="noopener noreferrer">💬 ${contactBtnText}</a>
+                        <div class="flex gap-2">
+                            <a class="flex-1 py-3 px-2 bg-goldCustom text-bgMain rounded-xl font-bold text-sm flex items-center justify-center gap-1 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=مرحباً أستاذ عبد الله، أريد الحصول على فيديو المعاينة الواقعية لـ: ${prop.title}" target="_blank" rel="noopener noreferrer">🎬 طلب فيديو</a>
+                            <a class="flex-1 py-3 px-2 bg-phoneBlue text-white rounded-xl font-bold text-sm flex items-center justify-center gap-1 transition-all hover:brightness-110" href="tel:01555086599">📞 اتصال</a>
+                            <button class="w-14 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg flex items-center justify-center transition-all hover:bg-white/10 btn-sh" data-title="${prop.title}" data-id="${prop.id}">🔗</button>
+                        </div>
+                    </div>
+                </div>
+            `;    
+            
+            cardEl.innerHTML = bgDecorative + summaryHTML + detailHTML;
             wrapper.appendChild(cardEl);     
-            wrapper.appendChild(detailEl);    
         });    
         bindEvents();    
     }    
@@ -332,8 +335,8 @@
         document.getElementById('noResults').classList.add('hidden');    
         for(let i=0; i<3; i++) {    
             const skEl = document.createElement('div');     
-            skEl.className = 'skeleton-card bg-bgCard p-6 rounded-2xl border border-white/5 flex flex-col gap-3 relative overflow-hidden';    
-            skEl.innerHTML = '<div class="skeleton-line title bg-zinc-800 h-6 w-3/5 rounded"></div><div class="skeleton-line price bg-zinc-800 h-5 w-1/3 rounded"></div><div class="skeleton-line badge bg-zinc-800 h-4 w-2/5 rounded"></div>';    
+            skEl.className = 'skeleton-card bg-bgCard p-6 rounded-3xl border border-white/5 flex flex-col gap-4 h-56 relative overflow-hidden';    
+            skEl.innerHTML = '<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]"></div><div class="bg-zinc-800/50 h-6 w-3/4 rounded-lg"></div><div class="bg-zinc-800/50 h-8 w-1/2 rounded-lg mt-2"></div><div class="flex gap-2 mt-auto"><div class="bg-zinc-800/50 h-6 w-16 rounded-lg"></div><div class="bg-zinc-800/50 h-6 w-20 rounded-lg"></div></div>';    
             wrapper.appendChild(skEl);    
         }    
     }    
@@ -365,16 +368,31 @@
                 return;     
             }    
         
-            const card = e.target.closest('.card');    
-            if (card && wrapper.contains(card)) {    
-                const id = card.getAttribute('data-id');     
-                const targetBox = document.getElementById('box-' + id);    
-                const isActive = targetBox.style.display === 'block';    
-                    
-                document.querySelectorAll('.details-box').forEach(box => box.style.display = 'none');    
-                if (!isActive) {     
-                    targetBox.style.display = 'block';     
-                    setTimeout(() => { targetBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 50);     
+            const summary = e.target.closest('.card-summary');    
+            if (summary && wrapper.contains(summary)) {    
+                const card = summary.closest('.card');
+                const detailsBox = card.querySelector('.details-box');
+                const isHidden = detailsBox.classList.contains('hidden');
+                
+                // إغلاق كل الكروت المفتوحة أولاً لتنظيم الـ Grid
+                document.querySelectorAll('.details-box').forEach(box => {
+                    box.classList.add('hidden');
+                    box.closest('.card').classList.remove('border-goldCustom', 'shadow-[0_0_20px_rgba(212,175,55,0.15)]');
+                    box.closest('.card').classList.add('border-white/5');
+                    const svg = box.closest('.card').querySelector('svg');
+                    if(svg) svg.classList.remove('rotate-180');
+                });
+
+                if (isHidden) {     
+                    detailsBox.classList.remove('hidden');     
+                    card.classList.remove('border-white/5');
+                    card.classList.add('border-goldCustom', 'shadow-[0_0_20px_rgba(212,175,55,0.15)]');
+                    const svg = card.querySelector('svg');
+                    if(svg) svg.classList.add('rotate-180');
+
+                    setTimeout(() => { 
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+                    }, 100);     
                 }    
                 return;    
             }    
@@ -385,25 +403,22 @@
         
     document.getElementById('leadForm').addEventListener('submit', function(e) {    
         e.preventDefault();    
-        const waText = 'مرحباً أستاذ عبد الله، تم تسجيل طلب عقار جديد عبر موقع كابيتال هوم:%0A👤 الاسم: ' + document.getElementById('clientName').value + '%0A📞 الهاتف: ' + document.getElementById('clientPhone').value + '%0A🎯 الطلب المطلوب وميزانيتي: ' + document.getElementById('clientRequest').value;    
+        const waText = 'مرحباً أستاذ عبد الله، تم تسجيل طلب عقار جديد عبر موقع كابيتال هوم:%0A👤 الاسم: ' + document.getElementById('clientName').value + '%0A📞 الهاتف: ' + document.getElementById('clientPhone').value + '%0A🎯 الطلب والميزانية: ' + document.getElementById('clientRequest').value;    
         window.open('https://wa.me/201555086599?text=' + waText, '_blank', 'noopener,noreferrer');    
     });    
         
     document.getElementById('propertySearch').addEventListener('input', triggerDynamicRender);    
-    document.getElementById('filterLocation').addEventListener('change', triggerDynamicRender);    
-    document.getElementById('filterFinishing').addEventListener('change', triggerDynamicRender);    
-    document.getElementById('filterPrice').addEventListener('change', triggerDynamicRender);    
         
     function switchCategoryUI(categoryName) {    
         document.querySelectorAll('.nav-btn').forEach(b => {    
-            b.classList.remove('active-btn', 'bg-goldCustom', 'text-bgMain');    
-            b.classList.add('bg-bgCard', 'text-zinc-400');    
+            b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+            b.classList.add('bg-transparent', 'border-transparent', 'text-zinc-400');    
         });    
             
         const targetBtn = document.getElementById('btnCat-' + categoryName);    
         if (targetBtn) {    
-            targetBtn.classList.add('active-btn', 'bg-goldCustom', 'text-bgMain');    
-            targetBtn.classList.remove('bg-bgCard', 'text-zinc-400');    
+            targetBtn.classList.add('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+            targetBtn.classList.remove('bg-transparent', 'border-transparent', 'text-zinc-400');    
         }    
             
         currentCategory = categoryName;    
@@ -421,11 +436,11 @@
                 triggerDynamicRender();    
             } else {    
                 document.querySelectorAll('.nav-btn').forEach(b => {    
-                    b.classList.remove('active-btn', 'bg-goldCustom', 'text-bgMain');    
-                    b.classList.add('bg-bgCard', 'text-zinc-400');    
+                    b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                    b.classList.add('bg-transparent', 'border-transparent', 'text-zinc-400');    
                 });     
-                this.classList.add('active-btn', 'bg-goldCustom', 'text-bgMain');    
-                this.classList.remove('bg-bgCard', 'text-zinc-400');    
+                this.classList.add('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                this.classList.remove('bg-transparent', 'border-transparent', 'text-zinc-400');    
                     
                 document.getElementById('propertiesWrapper').classList.add('hidden');     
                 document.getElementById('noResults').classList.add('hidden');    
@@ -445,15 +460,24 @@
                 triggerDynamicRender();    
                     
                 setTimeout(() => {    
-                    const targetBox = document.getElementById('box-' + propertyId);    
-                    if (targetBox) {    
-                        targetBox.style.display = 'block';    
-                        targetBox.scrollIntoView({ behavior: 'smooth', block: 'center' });    
+                    const card = document.querySelector(`.card[data-id="${propertyId}"]`);
+                    if (card) {    
+                        const summary = card.querySelector('.card-summary');
+                        if(summary) summary.click(); // افتح الكارت برمجياً
                     }    
-                }, 450);    
+                }, 500);    
             }    
         }    
     }    
+
+    // تعريف الـ Shimmer effect للاسكيليتون
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
         
     document.addEventListener("DOMContentLoaded", () => {     
         triggerDynamicRender();     

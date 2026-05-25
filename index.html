@@ -3,207 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كابيتال هوم | عقارات المنيا وشقق للبيع في المنيا الجديدة</title>
-    <meta name="description" content="تبحث عن شقق للبيع في المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الشقق، الفيلل، والمحلات التجارية بأمان قانوني وتنسيق مباشر مع الملاك.">
-    <meta name="keywords" content="عقارات المنيا, شقق للبيع في المنيا, عقارات المنيا الجديدة, مكتب عقارات في المنيا">
+    <title>كابيتال هوم | عقارات المنيا</title>
     <meta name="theme-color" content="#0c0c0e">
-    
-    <meta name="robots" content="index, follow">
-    <link id="metaCanonical" rel="canonical" href="">
-
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="كابيتال هوم">
-    <meta id="ogUrl" property="og:url" content="">
-    <meta property="og:title" content="كابيتال هوم | عقارات المنيا وشقق للبيع في المنيا الجديدة">
-    <meta property="og:description" content="تبحث عن شقق للبيع في المنيا أو عقارات المنيا الجديدة؟ كابيتال هوم يوفر لك أفضل الخيارات العقارية بأمان قانوني وتفاوض عادل.">
-    <meta property="og:image" content="brand-og-image.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap">
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RealEstateAgent",
-      "name": "كابيتال هوم لتسويق وإشراف العقارات",
-      "image": "brand-og-image.jpg",
-      "description": "مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة.",
-      "telephone": "+201555086599",
-      "address": { "@type": "PostalAddress", "addressLocality": "المنيا", "addressCountry": "EG" }
-    }
-    </script>
-
     <style>
-        *,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
-        html{line-height:1.5;font-family:'Cairo',sans-serif}
-        body{margin:0;background-color:#0c0c0e;color:#fff;-webkit-font-smoothing:antialiased}
-        button,input,select{font-family:inherit;outline:none}
-        .scroll-smooth{scroll-behavior:smooth}
-        
-        /* تحسينات التصميم المطلوبة */
-        .card{min-height:145px;display:flex;flex-direction:column;justify-content:space-between;padding:1.25rem !important;background-color:#141417;border:1px solid rgba(255,255,255,0.05);border-radius:1rem;transition:all 0.3s}
-        .card:hover{background-color:#1b1b1f;border-color:#d4af37;transform:translateY(-0.25rem);box-shadow:0 10px 30px rgba(212,175,55,0.15)}
-        
-        .details-box{padding:1.25rem !important;max-height:0;opacity:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1),opacity 0.25s ease-in-out;background-color:#111113;border:1px solid #d4af37;border-radius:1rem;margin-top:0;margin-bottom:0}
-        .details-box.open-box{max-height:1200px;opacity:1;margin-top:-10px;margin-bottom:1rem}
-        
-        .sticky-nav{position:sticky;top:8px;z-index:110;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-        .properties-grid{gap:1.5rem;display:flex;flex-direction:column}
-        
-        .floating-whatsapp{position:fixed;bottom:20px;right:20px;z-index:50;width:45px;height:45px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:0.3s}
-        
-        .text-priceBlue{color:#38bdf8}
-        .bg-goldCustom{background-color:#d4af37}
-        .bg-whatsappGreen{background-color:#22c55e}
-        .bg-phoneBlue{background-color:#2563eb}
-        .text-bgMain{color:#0c0c0e}
-        .active-btn{background-color:#d4af37;color:#0c0c0e}
+        /* CSS مصلح وبسيط لضمان الترتيب الرأسي */
+        body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; color: #fff; margin: 0; padding: 0; }
+        .container { width: 92%; max-width: 600px; margin: 0 auto; padding-top: 1rem; }
+        header { text-align: center; padding: 1rem 0; }
+        .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #141417; color: #fff; margin-bottom: 1rem; }
+        nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav-btn { padding: 10px 15px; border-radius: 8px; background: #141417; border: 1px solid #333; color: #a1a1aa; font-weight: bold; }
+        .nav-btn.active-btn { background: #d4af37; color: #0c0c0e; }
+        .card { background: #141417; padding: 20px; border-radius: 16px; border: 1px solid #333; margin-bottom: 15px; cursor: pointer; }
+        .price-text { color: #38bdf8; font-weight: bold; margin: 10px 0; }
+        .details-box { display: none; background: #111113; padding: 20px; border-radius: 16px; border: 1px solid #d4af37; margin-top: -10px; margin-bottom: 15px; }
+        .details-box.open-box { display: block; }
+        .floating-whatsapp { position: fixed; bottom: 20px; right: 20px; background: #22c55e; padding: 10px; border-radius: 50%; }
     </style>
 </head>
-<body class="pb-16">
+<body>
 
-    <a id="floatingWhatsappBtn" href="https://wa.me/201555086599" target="_blank" rel="noopener noreferrer" class="floating-whatsapp" aria-label="واتساب">
-        <svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
-    </a>
-
-    <header class="flex flex-col items-center justify-center pt-6 pb-4 px-4 text-center">
-        <img loading="eager" fetchpriority="high" decoding="async" width="112" height="112" src="brand-og-image.jpg" alt="لوجو كابيتال هوم" class="w-28 h-28 object-contain mb-2">
-        <p class="text-sm text-zinc-300 font-semibold max-w-lg mx-auto">نساعدك في اختيار العقار المناسب بأمان قانوني</p>
-        <div class="flex justify-center gap-3 flex-wrap mt-3">
-            <a href="#leadForm" class="bg-goldCustom text-bgMain px-5 py-2.5 rounded-xl font-bold text-xs">🎯 اطلب عقارك</a>
-            <a href="tel:01555086599" class="bg-white/5 border border-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-xs">📞 اتصال مباشر</a>
-        </div>
+<div class="container">
+    <header>
+        <img src="brand-og-image.jpg" width="100" height="100" alt="Logo">
+        <p style="color:#d4d4d8; font-size: 0.9rem;">نساعدك في اختيار العقار المناسب</p>
     </header>
 
-    <div class="w-[92%] max-w-[950px] mx-auto mt-2">
-        <div class="mb-6 w-full">
-            <input type="text" id="propertySearch" class="w-full px-6 py-4 bg-bgCard border border-white/5 rounded-2xl text-base font-semibold text-white outline-none focus:border-goldCustom" placeholder="🔍 ابحث عن عقار...">
-        </div>
+    <input type="text" id="propertySearch" class="search-box" placeholder="🔍 ابحث عن عقار...">
 
-        <nav class="sticky-nav bg-bgMain/90 border border-white/5 p-1.5 rounded-2xl flex flex-wrap gap-1.5 justify-center mb-8">
-            <button id="btnCat-شقة" class="nav-btn active-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all" data-target="properties-wrapper" data-cat="شقة">🏢 الشقق</button>
-            <button id="btnCat-فيلا" class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all" data-target="properties-wrapper" data-cat="فيلا">🏡 الفيلل</button>
-            <button id="btnCat-محل" class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-bgCard border border-white/5 text-zinc-400 rounded-xl font-bold text-sm transition-all" data-target="properties-wrapper" data-cat="محل">🏪 المحلات</button>
-            <button class="nav-btn flex-1 min-w-[85px] py-2.5 px-4 bg-goldCustom/10 border border-goldCustom text-goldCustom rounded-xl font-bold text-sm transition-all" data-target="sell-property-sec">✨ اعرض عقارك</button>
-        </nav>
+    <nav>
+        <button id="btnCat-شقة" class="nav-btn active-btn" onclick="setCat('شقة')">🏢 الشقق</button>
+        <button id="btnCat-فيلا" class="nav-btn" onclick="setCat('فيلا')">🏡 الفيلل</button>
+        <button id="btnCat-محل" class="nav-btn" onclick="setCat('محل')">🏪 المحلات</button>
+    </nav>
 
-        <main>
-            <div id="noResults" class="hidden text-center py-12 text-zinc-500 font-semibold text-base">لا توجد نتائج — جرّب كلمات بحث مختلفة.</div>
-            <div id="propertiesWrapper" class="properties-grid"></div>
+    <div id="noResults" style="display:none; text-align:center; color:#71717a;">لا توجد نتائج.</div>
+    <div id="propertiesWrapper"></div>
+</div>
 
-            <section id="sell-property-sec" class="hidden bg-bgCard p-8 rounded-2xl border border-white/5 my-8 shadow-xl text-center">
-                <h2 class="text-2xl font-extrabold text-white mb-2">✨ سوّق لعقارك باحترافية</h2>
-                <a id="lnkSellProperty" href="https://wa.me/201555086599" target="_blank" rel="noopener noreferrer" class="inline-flex bg-whatsappGreen text-white font-bold py-3 px-10 rounded-xl">ارسل تفاصيل العقار عبر واتساب</a>
-            </section>
-
-            <section id="leadForm" class="bg-bgCard p-8 rounded-2xl border border-white/5 my-12 shadow-xl">
-                <h2 class="text-xl font-extrabold text-white mb-1">📬 لم تجد مواصفات عقارك؟</h2>
-                <form id="leadFormSubmit" class="flex flex-col gap-4 mt-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input type="text" id="clientName" class="w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm" placeholder="الاسم الكريم" required>
-                        <input type="tel" id="clientPhone" class="w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm" placeholder="رقم الهاتف" required>
-                    </div>
-                    <input type="text" id="clientRequest" class="w-full p-4 bg-bgMain border border-white/10 rounded-xl text-white text-sm" placeholder="المواصفات المطلوبة" required>
-                    <button type="submit" class="w-full bg-goldCustom text-bgMain py-4 rounded-xl font-bold text-sm">ارسل طلبي للمكتب</button>
-                </form>
-            </section>
-        </main>
-    </div>
-
-    <footer class="bg-[#08080a] text-zinc-400 text-center py-12 px-4 mt-16 border-t border-white/5">
-        <div class="text-2xl font-extrabold text-white mb-2">CAPITAL HOME</div>
-        <a href="tel:01555086599" class="text-xl font-extrabold text-white block mt-2">01555086599</a>
-    </footer>
+<a href="https://wa.me/201555086599" class="floating-whatsapp">
+    <svg width="25" height="25" fill="white" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+</a>
 
 <script>
-const propertiesData = [
-    { id: "a1_installment", category: "شقة", title: "شقة دريم ڤالي الفاخرة (تقسيط وتنازل)", price: 864000, priceText: "أوفر 150 ألف + استكمال الأقساط", locationCategory: "المنيا الجديدة", finishing: "نصف تشطيب", meta: ["📐 135م", "🏢 دور أول علوي", "💳 تقسيط"], bullets: ["الموقع: كمبوند دريم ڤالي", "المساحة: 135 متر مربع", "الدور: الأول علوي", "قانوني: تنازل فوري"], paymentPlan: { offer: "150 ألف", paid: "714 ألف", remaining: "16 قسط", value: "55,750 / 3 شهور" }, customContactText: "استفسر عن التنازل" },
-    { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", meta: ["📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["المساحة: 90م", "الدور: الخامس"] },
-    { id: "s1", category: "محل", title: "محل تجاري حيوي بشلبي القديمة", price: 850000, priceText: "850 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", meta: ["📐 28م", "🏪 موقع استثماري"], bullets: ["المساحة: 28م", "عداد تجاري"] }
+const data = [
+    { id: "a1", category: "شقة", title: "شقة دريم ڤالي الفاخرة", priceText: "أوفر 150 ألف + أقساط", meta: ["135م", "تقسيط"] },
+    { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", priceText: "750 ألف جنيه", meta: ["90م"] }
 ];
+let cat = "شقة";
 
-let currentCategory = "شقة";
-let renderTimeout;
-
-const indexedProperties = propertiesData.map(item => ({...item, normTitle: normalizeArabic(item.title)}));
-
-function normalizeArabic(str) {
-    return String(str).toLowerCase().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[ً-ٟ]/g, '').replace(/[^\u0600-\u06FF0-9a-z\s]/gi, '').replace(/\s+/g, ' ').trim();
+function setCat(c) {
+    cat = c;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active-btn', b.textContent.includes(c)));
+    render();
 }
 
-function renderProperties() {
-    const wrapper = document.getElementById('propertiesWrapper');
-    if (!wrapper) return;
-    wrapper.innerHTML = '';
-    const keyword = normalizeArabic(document.getElementById('propertySearch')?.value || '');
-    const filtered = indexedProperties.filter(i => i.category === currentCategory && (keyword === '' || i.normTitle.includes(keyword)));
-    
-    document.getElementById('noResults')?.classList.toggle('hidden', filtered.length > 0);
-    const fragment = document.createDocumentFragment();
-
-    filtered.forEach(prop => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.setAttribute('data-id', prop.id);
-        card.innerHTML = `<h3>${prop.title}</h3><div class="text-priceBlue">${prop.priceText}</div><div class="flex gap-2"></div>`;
-        prop.meta.forEach(m => card.querySelector('.flex').innerHTML += `<span class="${m.includes('تقسيط')?'bg-goldCustom text-black':'bg-white/5'} px-3 rounded-lg text-xs font-bold">${m}</span>`);
-        
-        const details = document.createElement('div');
-        details.className = 'details-box';
-        details.id = 'box-' + prop.id;
-        details.innerHTML = `<div class="p-5 border-dashed border border-goldCustom/20 text-goldCustom mb-5">🛡️ المعاينة بالتنسيق المسبق</div>`;
-        if (prop.paymentPlan) {
-            details.innerHTML += `<div class="grid grid-cols-2 gap-2 text-xs mb-4"><div>💰 الأوفر: ${prop.paymentPlan.offer}</div><div>💳 المدفوع: ${prop.paymentPlan.paid}</div><div>📅 المتبقي: ${prop.paymentPlan.remaining}</div><div>💵 القسط: ${prop.paymentPlan.value}</div></div>`;
-        }
-        details.innerHTML += `<div class="flex gap-2"><a href="https://wa.me/201555086599?text=${encodeURIComponent('استفسار: ' + prop.title)}" class="flex-1 bg-whatsappGreen text-white p-3 rounded-lg font-bold text-sm">واتساب</a><a href="tel:01555086599" class="flex-1 bg-phoneBlue text-white p-3 rounded-lg font-bold text-sm">اتصال</a><button class="w-12 bg-white/5 btn-sh" data-title="${prop.title}" data-id="${prop.id}">🔗</button></div>`;
-        
-        fragment.appendChild(card);
-        fragment.appendChild(details);
+function render() {
+    const wrap = document.getElementById('propertiesWrapper');
+    wrap.innerHTML = '';
+    const filtered = data.filter(i => i.category === cat);
+    filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.innerHTML = `<div class="card" onclick="document.getElementById('box-${p.id}').classList.toggle('open-box')">
+            <div style="font-weight:bold">${p.title}</div>
+            <div class="price-text">${p.priceText}</div>
+        </div>
+        <div class="details-box" id="box-${p.id}">تفاصيل ${p.title}</div>`;
+        wrap.appendChild(div);
     });
-    wrapper.appendChild(fragment);
 }
-
-document.getElementById('propertiesWrapper').addEventListener('click', e => {
-    const shareBtn = e.target.closest('.btn-sh');
-    if (shareBtn) {
-        const title = shareBtn.getAttribute('data-title'), id = shareBtn.getAttribute('data-id');
-        const url = window.location.href.split('?')[0] + '?property=' + id;
-        navigator.clipboard.writeText(url).then(() => alert('تم نسخ الرابط!'));
-        return;
-    }
-    const card = e.target.closest('.card');
-    if (card) {
-        const box = document.getElementById('box-' + card.getAttribute('data-id'));
-        document.querySelectorAll('.details-box').forEach(b => b !== box && b.classList.remove('open-box'));
-        box.classList.toggle('open-box');
-    }
-});
-
-document.getElementById('propertySearch').addEventListener('input', () => { clearTimeout(renderTimeout); renderTimeout = setTimeout(renderProperties, 300); });
-document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', function() {
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-btn', 'bg-goldCustom', 'text-bgMain'));
-    this.classList.add('active-btn', 'bg-goldCustom', 'text-bgMain');
-    currentCategory = this.getAttribute('data-cat');
-    renderProperties();
-}));
-
-document.getElementById('leadFormSubmit').addEventListener('submit', e => {
-    e.preventDefault();
-    const text = `طلب عقار: ${document.getElementById('clientName').value} - ${document.getElementById('clientRequest').value}`;
-    window.open('https://wa.me/201555086599?text=' + encodeURIComponent(text), '_blank');
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    const cleanUrl = window.location.origin + window.location.pathname;
-    document.getElementById('metaCanonical').href = cleanUrl;
-    document.getElementById('ogUrl').content = cleanUrl;
-    document.getElementById('floatingWhatsappBtn').href = "https://wa.me/201555086599?text=" + encodeURIComponent("مرحباً كابيتال هوم، أريد الاستفسار عن عروض العقارات المتاحة");
-    document.getElementById('lnkSellProperty').href = "https://wa.me/201555086599?text=" + encodeURIComponent("مرحباً، أريد تسويق عقاري معكم.");
-    renderProperties();
-});
+render();
 </script>
 </body>
 </html>

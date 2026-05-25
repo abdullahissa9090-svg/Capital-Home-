@@ -1,118 +1,646 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كابيتال هوم | عقارات المنيا</title>
-    <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; color: #fff; margin: 0; padding: 0; }
-        .container { width: 92%; max-width: 600px; margin: 0 auto; padding-top: 1rem; }
-        header { text-align: center; padding: 1rem 0; }
-        .logo { width: 100px; height: 100px; margin-bottom: 0.5rem; }
-        #propertySearch { width: 100%; padding: 14px; border-radius: 12px; background: #141417; border: 1px solid #333; color: #fff; margin-bottom: 1.5rem; }
-        .nav-container { display: flex; gap: 8px; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; position: sticky; top: 8px; z-index: 100; background: rgba(12,12,14,0.9); padding: 8px; border-radius: 12px; }
-        .nav-btn { padding: 8px 16px; border-radius: 8px; background: #141417; border: 1px solid #333; color: #a1a1aa; font-weight: bold; font-size: 0.9rem; }
-        .nav-btn.active-btn { background: #d4af37; color: #0c0c0e; }
-        .card { background: #141417; padding: 20px; border-radius: 1rem; border: 1px solid #333; margin-bottom: 15px; cursor: pointer; transition: 0.3s; min-height: 145px; display: flex; flex-direction: column; justify-content: center; }
-        .card:hover { border-color: #d4af37; transform: translateY(-3px); }
-        .price-text { color: #38bdf8; font-size: 1.1rem; font-weight: 800; margin-top: 8px; }
-        .details-box { display: none; background: #111113; padding: 15px; border-radius: 1rem; border: 1px solid #d4af37; margin-top: -10px; margin-bottom: 15px; }
-        .details-box.open-box { display: block; }
-        .floating-whatsapp { position: fixed; bottom: 20px; right: 20px; background: #22c55e; padding: 10px; border-radius: 50%; z-index: 99; }
-    </style>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+كابيتال هوم | عقارات المنيا
+</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Cairo;
+}
+
+body{
+background:#0c0c0e;
+color:white;
+}
+
+.container{
+width:min(95%,1200px);
+margin:auto;
+}
+
+header{
+padding:50px 20px;
+text-align:center;
+}
+
+.logo{
+width:140px;
+height:140px;
+object-fit:contain;
+}
+
+.sub{
+color:#aaa;
+margin-top:10px;
+}
+
+.heroBtns{
+display:flex;
+gap:10px;
+justify-content:center;
+margin-top:25px;
+flex-wrap:wrap;
+}
+
+.btn{
+padding:14px 20px;
+border-radius:14px;
+text-decoration:none;
+font-weight:800;
+}
+
+.gold{
+background:#d4af37;
+color:black;
+}
+
+.dark{
+background:#16161a;
+color:white;
+}
+
+.search{
+
+margin-top:30px;
+
+}
+
+.search input{
+
+width:100%;
+
+padding:18px;
+
+border-radius:18px;
+
+background:#141417;
+
+border:1px solid #222;
+
+color:white;
+
+}
+
+.tabs{
+
+display:flex;
+
+gap:10px;
+
+margin:25px 0;
+
+}
+
+.tab{
+
+flex:1;
+
+padding:15px;
+
+border:none;
+
+border-radius:14px;
+
+background:#16161a;
+
+color:white;
+
+}
+
+.active{
+
+background:#d4af37;
+
+color:black;
+
+}
+
+.grid{
+
+display:grid;
+
+gap:18px;
+
+}
+
+.card{
+
+background:#141417;
+
+padding:20px;
+
+border-radius:20px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+}
+
+.price{
+
+color:#38bdf8;
+
+font-size:28px;
+
+font-weight:800;
+
+margin:10px 0;
+
+}
+
+.tags{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+}
+
+.tag{
+
+padding:8px 12px;
+
+background:#1f1f24;
+
+border-radius:10px;
+
+}
+
+.details{
+
+display:none;
+
+margin-top:20px;
+
+color:#bbb;
+
+}
+
+.card.open .details{
+
+display:block;
+
+}
+
+.wa{
+
+display:block;
+
+margin-top:20px;
+
+padding:14px;
+
+background:#22c55e;
+
+text-align:center;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:14px;
+
+}
+
+footer{
+
+padding:50px;
+
+text-align:center;
+
+color:#777;
+
+}
+
+.float{
+
+position:fixed;
+
+left:20px;
+
+bottom:20px;
+
+width:60px;
+
+height:60px;
+
+border-radius:50%;
+
+background:#22c55e;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+text-decoration:none;
+
+font-size:30px;
+
+}
+
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
-    <header>
-        <img src="brand-og-image.jpg" class="logo" alt="Logo">
-        <p style="color:#d4d4d8; font-size: 0.8rem;">نساعدك في اختيار العقار المناسب بأمان</p>
-    </header>
 
-    <input type="text" id="propertySearch" placeholder="🔍 ابحث عن عقار...">
+<header>
 
-    <nav class="nav-container">
-        <button class="nav-btn active-btn" onclick="setCat('شقة', this)">🏢 الشقق</button>
-        <button class="nav-btn" onclick="setCat('فيلا', this)">🏡 الفيلل</button>
-        <button class="nav-btn" onclick="setCat('محل', this)">🏪 المحلات</button>
-    </nav>
+<img
+src="brand-og-image.jpg"
+class="logo">
 
-    <div id="noResults" style="display:none; text-align:center; color:#71717a; margin-bottom:20px;">لا توجد نتائج — جرّب كلمات بحث مختلفة.</div>
-    <div id="propertiesWrapper"></div>
+<h1>
 
-    <section id="leadForm" style="background:#141417; padding:20px; border-radius:1rem; margin-top:30px;">
-        <h2 style="font-size:1.1rem; margin-bottom:10px;">📬 سجل طلبك</h2>
-        <form id="leadFormSubmit" style="display:flex; flex-direction:column; gap:10px;">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="clientName" placeholder="الاسم" required style="width:50%; padding:12px; background:#0c0c0e; border-radius:8px; border:1px solid #333; color:#fff;">
-                <input type="tel" id="clientPhone" placeholder="الهاتف" required style="width:50%; padding:12px; background:#0c0c0e; border-radius:8px; border:1px solid #333; color:#fff;">
-            </div>
-            <textarea id="clientRequest" placeholder="المواصفات المطلوبة" style="padding:12px; background:#0c0c0e; border-radius:8px; border:1px solid #333; color:#fff;"></textarea>
-            <button type="submit" style="padding:12px; background:#d4af37; border-radius:8px; font-weight:bold; color:#0c0c0e;">ارسل الطلب</button>
-        </form>
-    </section>
+CAPITAL HOME
+
+</h1>
+
+<p class="sub">
+
+عقارات المنيا والمنيا الجديدة
+
+</p>
+
+<div class="heroBtns">
+
+<a
+class="btn gold"
+href="#list">
+
+العروض
+
+</a>
+
+<a
+class="btn dark"
+href="tel:01555086599">
+
+اتصال
+
+</a>
+
 </div>
 
-<a href="https://wa.me/201555086599" class="floating-whatsapp">
-    <svg width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+</header>
+
+<div class="search">
+
+<input
+id="search"
+
+placeholder="ابحث عن عقار">
+
+</div>
+
+<div class="tabs">
+
+<button
+class="tab active">
+
+شقق
+
+</button>
+
+<button
+class="tab">
+
+فيلل
+
+</button>
+
+<button
+class="tab">
+
+محلات
+
+</button>
+
+</div>
+
+<div
+id="list"
+class="grid">
+
+</div>
+<footer>
+
+<div
+style="
+font-size:28px;
+font-weight:800;
+">
+
+CAPITAL HOME
+
+</div>
+
+<br>
+
+<div>
+
+01555086599
+
+</div>
+
+</footer>
+
+</div>
+
+<a
+
+class="float"
+
+href="https://wa.me/201555086599"
+
+>
+
+💬
+
 </a>
 
 <script>
-const propertiesData = [
-    { id: "a1", category: "شقة", title: "شقة دريم ڤالي الفاخرة", priceText: "864,000 ج.م", meta: ["135م", "تقسيط"] },
-    { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", priceText: "750,000 ج.م", meta: ["90م", "تشطيب جهاز"] },
-    { id: "a3", category: "شقة", title: "شقة مرخصة بميدان الساعة", priceText: "4,700,000 ج.م", meta: ["200م", "مرخصة"] },
-    { id: "a4", category: "شقة", title: "شقة عبير سيتي الفاخرة", priceText: "4,500,000 ج.م", meta: ["170م", "سوبر لوكس"] },
-    { id: "a5", category: "شقة", title: "شقة ناصية بمنطقة أبو فليو", priceText: "1,015,000 ج.م", meta: ["145م", "على الطوب"] },
-    { id: "a6", category: "شقة", title: "شقة أرضي بجاردن الحي السابع", priceText: "2,400,000 ج.م", meta: ["115م", "جاردن"] },
-    { id: "a7", category: "شقة", title: "شقة جاهزة للسكن بأبراج الري", priceText: "2,700,000 ج.م", meta: ["135م", "سوبر لوكس"] },
-    { id: "a8", category: "شقة", title: "شقة استثمارية حي ديماريس", priceText: "2,000,000 ج.م", meta: ["125م", "استثمار"] },
-    { id: "a9", category: "شقة", title: "شقة بميدان الساعة (بجوار راية)", priceText: "3,650,000 ج.م", meta: ["111م", "بحرية"] },
-    { id: "v1", category: "فيلا", title: "فيلا مستقلة ابني بيتك", priceText: "3,000,000 ج.م", meta: ["150م", "المرحلة الثالثة"] },
-    { id: "v2", category: "فيلا", title: "فيلا مشروع مراكش الفاخرة", priceText: "10,550,000 ج.م", meta: ["161م", "حمام سباحة"] },
-    { id: "s1", category: "محل", title: "محل تجاري حيوي بشلبي القديمة", priceText: "850,000 ج.م", meta: ["28م", "سوبر لوكس"] }
-];
 
-let cat = "شقة";
+const data=[
 
-function setCat(c, btn) {
-    cat = c;
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-btn'));
-    btn.classList.add('active-btn');
-    render();
+{
+
+title:
+
+"شقة دريم ڤالي",
+
+price:
+
+"2.4 مليون",
+
+tags:
+
+["115م","3 غرف"],
+
+details:
+
+"دور أول علوي • جاردن 30م • قريبة من جامعة دراية"
+
+},
+
+{
+
+title:
+
+"شقة ميدان الساعة",
+
+price:
+
+"3.65 مليون",
+
+tags:
+
+["111م","سوبر لوكس"],
+
+details:
+
+"برج حديث • 2 أسانسير • غاز طبيعي"
+
+},
+
+{
+
+title:
+
+"فيلا مراكش",
+
+price:
+
+"10.5 مليون",
+
+tags:
+
+["161م","حمام سباحة"],
+
+details:
+
+"تشطيب فاخر • موقع مميز"
+
+},
+
+{
+
+title:
+
+"محل شلبي",
+
+price:
+
+"850 ألف",
+
+tags:
+
+["28م"],
+
+details:
+
+"عداد تجاري • تشطيب لوكس"
+
 }
 
-function render() {
-    const wrap = document.getElementById('propertiesWrapper');
-    const search = document.getElementById('propertySearch').value.toLowerCase();
-    wrap.innerHTML = '';
-    
-    const filtered = propertiesData.filter(i => i.category === cat && i.title.toLowerCase().includes(search));
-    document.getElementById('noResults').style.display = filtered.length ? 'none' : 'block';
+]
 
-    filtered.forEach(p => {
-        const div = document.createElement('div');
-        div.innerHTML = `<div class="card" onclick="this.nextElementSibling.classList.toggle('open-box')">
-            <div style="font-weight:bold">${p.title}</div>
-            <div class="price-text">${p.priceText}</div>
-            <div style="display:flex; gap:5px; margin-top:8px;">
-                ${p.meta.map(m => `<span style="background:#333; padding:2px 8px; border-radius:5px; font-size:11px;">${m}</span>`).join('')}
-            </div>
-        </div>
-        <div class="details-box" id="box-${p.id}">
-            <div style="margin-bottom:15px; font-size:0.9rem;">تفاصيل إضافية عن ${p.title}</div>
-            <div style="display:flex; gap:10px;">
-                <a href="https://wa.me/201555086599?text=${encodeURIComponent('استفسار: ' + p.title)}" class="flex-1" style="text-align:center; background:#22c55e; padding:10px; border-radius:8px; font-weight:bold; font-size:0.9rem;">واتساب</a>
-                <a href="tel:01555086599" class="flex-1" style="text-align:center; background:#2563eb; padding:10px; border-radius:8px; font-weight:bold; font-size:0.9rem;">اتصال</a>
-                <button class="w-12" style="background:#333; border-radius:8px;" onclick="navigator.clipboard.writeText(window.location.href.split('?')[0] + '?property=${p.id}').then(()=>alert('تم النسخ'))">🔗</button>
-            </div>
-        </div>`;
-        wrap.appendChild(div);
-    });
+const list=
+
+document
+
+.getElementById(
+
+"list"
+
+)
+
+function render(
+
+arr=data
+
+){
+
+list.innerHTML=""
+
+arr.forEach(
+
+p=>{
+
+list.innerHTML+=`
+
+<div
+class="card">
+
+<h2>
+
+${p.title}
+
+</h2>
+
+<div
+class="price">
+
+${p.price}
+
+</div>
+
+<div
+class="tags">
+
+${p.tags
+
+.map(
+
+x=>
+
+`<span
+class="tag">
+
+${x}
+
+</span>`
+
+)
+
+.join("")}
+
+</div>
+
+<div
+class="details">
+
+${p.details}
+
+<a
+
+class="wa"
+
+href=
+
+"https://wa.me/201555086599"
+
+>
+
+استفسار
+
+</a>
+
+</div>
+
+</div>
+
+`
+
 }
 
-document.getElementById('propertySearch').addEventListener('input', render);
-render();
+)
+
+document
+
+.querySelectorAll(
+
+".card"
+
+)
+
+.forEach(
+
+x=>
+
+x.onclick=
+
+()=>
+
+x.classList.toggle(
+
+"open"
+
+)
+
+)
+
+}
+
+render()
+
+document
+
+.getElementById(
+
+"search"
+
+)
+
+.oninput=
+
+e=>{
+
+const v=
+
+e.target.value
+
+.toLowerCase()
+
+render(
+
+data.filter(
+
+x=>
+
+x.title
+
+.toLowerCase()
+
+.includes(v)
+
+||
+
+x.details
+
+.toLowerCase()
+
+.includes(v)
+
+)
+
+)
+
+}
+
 </script>
+
 </body>
+
 </html>

@@ -10,11 +10,13 @@ name="viewport"
 content="width=device-width,initial-scale=1">
 
 <title>
-كابيتال هوم | عقارات المنيا
+
+Capital Home | عقارات المنيا
+
 </title>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap"
+href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
 rel="stylesheet">
 
 <style>
@@ -26,60 +28,151 @@ box-sizing:border-box;
 font-family:Cairo;
 }
 
+:root{
+
+--bg:#0c0c0e;
+
+--card:#141417;
+
+--gold:#d4af37;
+
+--text:#ffffff;
+
+--muted:#a1a1aa;
+
+--blue:#38bdf8;
+
+}
+
 body{
-background:#0c0c0e;
+
+background:
+
+linear-gradient(
+180deg,
+#08080a,
+#111
+);
+
 color:white;
+
 }
 
 .container{
-width:min(95%,1200px);
+
+width:min(94%,1200px);
+
 margin:auto;
+
 }
 
 header{
-padding:50px 20px;
+
+padding:60px 0;
+
 text-align:center;
+
 }
 
 .logo{
-width:140px;
-height:140px;
-object-fit:contain;
+
+width:120px;
+
+height:120px;
+
+border-radius:30px;
+
+background:
+
+linear-gradient(
+135deg,
+#1a1a1f,
+#25252b
+);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+margin:auto;
+
+font-size:28px;
+
+font-weight:800;
+
+color:var(--gold);
+
+}
+
+.hero{
+
+margin-top:25px;
+
+font-size:34px;
+
+font-weight:800;
+
 }
 
 .sub{
-color:#aaa;
-margin-top:10px;
+
+color:var(--muted);
+
+margin-top:12px;
+
+line-height:1.8;
+
 }
 
-.heroBtns{
+.actions{
+
 display:flex;
-gap:10px;
+
 justify-content:center;
+
+gap:14px;
+
 margin-top:25px;
+
 flex-wrap:wrap;
+
 }
 
 .btn{
-padding:14px 20px;
-border-radius:14px;
-text-decoration:none;
+
+padding:14px 22px;
+
+border-radius:16px;
+
 font-weight:800;
+
+text-decoration:none;
+
 }
 
 .gold{
-background:#d4af37;
+
+background:var(--gold);
+
 color:black;
+
 }
 
 .dark{
-background:#16161a;
+
+background:var(--card);
+
 color:white;
+
+border:1px solid #26262d;
+
 }
 
 .search{
 
-margin-top:30px;
+margin:35px 0;
 
 }
 
@@ -91,9 +184,9 @@ padding:18px;
 
 border-radius:18px;
 
-background:#141417;
+border:1px solid #26262d;
 
-border:1px solid #222;
+background:#151519;
 
 color:white;
 
@@ -105,7 +198,7 @@ display:flex;
 
 gap:10px;
 
-margin:25px 0;
+margin-bottom:25px;
 
 }
 
@@ -113,21 +206,23 @@ margin:25px 0;
 
 flex:1;
 
-padding:15px;
+padding:16px;
+
+background:var(--card);
 
 border:none;
 
-border-radius:14px;
+color:#999;
 
-background:#16161a;
+border-radius:18px;
 
-color:white;
+font-weight:800;
 
 }
 
-.active{
+.tab.active{
 
-background:#d4af37;
+background:var(--gold);
 
 color:black;
 
@@ -137,19 +232,41 @@ color:black;
 
 display:grid;
 
+grid-template-columns:
+
+repeat(
+auto-fit,
+minmax(
+320px,
+1fr
+)
+
+);
+
 gap:18px;
 
 }
 
 .card{
 
-background:#141417;
+background:
 
-padding:20px;
+rgba(
+20,
+20,
+23,
+.9
+);
 
-border-radius:20px;
+border:
 
-cursor:pointer;
+1px solid
+
+#222;
+
+padding:22px;
+
+border-radius:26px;
 
 transition:.3s;
 
@@ -157,19 +274,33 @@ transition:.3s;
 
 .card:hover{
 
-transform:translateY(-5px);
+transform:
+
+translateY(-6px);
+
+border-color:
+
+var(--gold);
+
+}
+
+.title{
+
+font-size:22px;
+
+font-weight:800;
 
 }
 
 .price{
 
-color:#38bdf8;
+margin-top:10px;
 
-font-size:28px;
+font-size:30px;
+
+color:var(--blue);
 
 font-weight:800;
-
-margin:10px 0;
 
 }
 
@@ -177,9 +308,11 @@ margin:10px 0;
 
 display:flex;
 
-gap:10px;
+gap:8px;
 
 flex-wrap:wrap;
+
+margin-top:15px;
 
 }
 
@@ -187,25 +320,21 @@ flex-wrap:wrap;
 
 padding:8px 12px;
 
-background:#1f1f24;
+background:#1d1d22;
 
-border-radius:10px;
+border-radius:12px;
+
+font-size:13px;
 
 }
 
 .details{
 
-display:none;
-
-margin-top:20px;
+margin-top:18px;
 
 color:#bbb;
 
-}
-
-.card.open .details{
-
-display:block;
+line-height:1.8;
 
 }
 
@@ -217,25 +346,27 @@ margin-top:20px;
 
 padding:14px;
 
-background:#22c55e;
+border-radius:16px;
 
 text-align:center;
 
-color:white;
-
 text-decoration:none;
 
-border-radius:14px;
+background:#22c55e;
+
+color:white;
+
+font-weight:800;
 
 }
 
 footer{
 
-padding:50px;
+padding:70px 0;
 
 text-align:center;
 
-color:#777;
+color:#888;
 
 }
 
@@ -243,9 +374,9 @@ color:#777;
 
 position:fixed;
 
-left:20px;
-
 bottom:20px;
+
+left:20px;
 
 width:60px;
 
@@ -257,13 +388,13 @@ background:#22c55e;
 
 display:flex;
 
-justify-content:center;
-
 align-items:center;
 
-text-decoration:none;
+justify-content:center;
 
-font-size:30px;
+font-size:28px;
+
+text-decoration:none;
 
 }
 
@@ -277,23 +408,26 @@ font-size:30px;
 
 <header>
 
-<img
-src="brand-og-image.jpg"
-class="logo">
+<div class="logo">
 
-<h1>
+CH
+
+</div>
+
+<div class="hero">
 
 CAPITAL HOME
 
-</h1>
+</div>
 
-<p class="sub">
+<div class="sub">
 
-عقارات المنيا والمنيا الجديدة
+تسويق وإشراف عقاري
+في المنيا والمنيا الجديدة
 
-</p>
+</div>
 
-<div class="heroBtns">
+<div class="actions">
 
 <a
 class="btn gold"
@@ -307,7 +441,7 @@ href="#list">
 class="btn dark"
 href="tel:01555086599">
 
-اتصال
+اتصل بنا
 
 </a>
 
@@ -358,7 +492,7 @@ class="grid">
 
 <div
 style="
-font-size:28px;
+font-size:26px;
 font-weight:800;
 ">
 
@@ -392,9 +526,11 @@ href="https://wa.me/201555086599"
 
 <script>
 
-const data=[
+const properties=[
 
 {
+
+cat:"شقق",
 
 title:
 
@@ -406,15 +542,25 @@ price:
 
 tags:
 
-["115م","3 غرف"],
+[
+
+"115م",
+
+"3 غرف",
+
+"جاردن"
+
+],
 
 details:
 
-"دور أول علوي • جاردن 30م • قريبة من جامعة دراية"
+"دور أول علوي • 30م جاردن • قريب جامعة دراية"
 
 },
 
 {
+
+cat:"شقق",
 
 title:
 
@@ -426,15 +572,49 @@ price:
 
 tags:
 
-["111م","سوبر لوكس"],
+[
+
+"111م",
+
+"سوبر لوكس"
+
+],
 
 details:
 
-"برج حديث • 2 أسانسير • غاز طبيعي"
+"واجهة بحرية • غاز طبيعي • برج حديث"
 
 },
 
 {
+
+cat:"شقق",
+
+title:
+
+"شقة عبير سيتي",
+
+price:
+
+"4.5 مليون",
+
+tags:[
+
+"170م",
+
+"فاخر"
+
+],
+
+details:
+
+"تشطيب ألترا • عدادات كاملة"
+
+},
+
+{
+
+cat:"فيلل",
 
 title:
 
@@ -444,17 +624,23 @@ price:
 
 "10.5 مليون",
 
-tags:
+tags:[
 
-["161م","حمام سباحة"],
+"161م",
+
+"حمام سباحة"
+
+],
 
 details:
 
-"تشطيب فاخر • موقع مميز"
+"فيو مفتوح • بدروم + أرضي + أول"
 
 },
 
 {
+
+cat:"محلات",
 
 title:
 
@@ -464,9 +650,11 @@ price:
 
 "850 ألف",
 
-tags:
+tags:[
 
-["28م"],
+"28م"
+
+],
 
 details:
 
@@ -479,58 +667,70 @@ details:
 const list=
 
 document
-
 .getElementById(
-
 "list"
-
 )
 
-function render(
+let current=
 
-arr=data
+"شقق"
 
-){
+function draw(){
 
 list.innerHTML=""
 
-arr.forEach(
+properties
 
-p=>{
+.filter(
+
+x=>
+
+x.cat===current
+
+)
+
+.forEach(
+
+x=>{
 
 list.innerHTML+=`
 
 <div
 class="card">
 
-<h2>
+<div
+class="title">
 
-${p.title}
+${x.title}
 
-</h2>
+</div>
 
 <div
 class="price">
 
-${p.price}
+${x.price}
 
 </div>
 
 <div
 class="tags">
 
-${p.tags
+${x.tags
 
 .map(
 
-x=>
+t=>
 
-`<span
+`
+
+<div
 class="tag">
 
-${x}
+${t}
 
-</span>`
+</div>
+
+`
 
 )
 
@@ -541,19 +741,18 @@ ${x}
 <div
 class="details">
 
-${p.details}
+${x.details}
 
 <a
-
 class="wa"
 
 href=
 
-"https://wa.me/201555086599"
+"https://wa.me/201555086599?text=${encodeURIComponent(x.title)}"
 
 >
 
-استفسار
+استفسر الآن
 
 </a>
 
@@ -567,6 +766,88 @@ href=
 
 )
 
+}
+
+draw()
+
+document
+
+.querySelectorAll(
+
+".tab"
+
+)
+
+.forEach(
+
+b=>{
+
+b.onclick=
+
+()=>{
+
+document
+
+.querySelectorAll(
+
+".tab"
+
+)
+
+.forEach(
+
+x=>
+
+x.classList
+
+.remove(
+
+"active"
+
+)
+
+)
+
+b.classList
+
+.add(
+
+"active"
+
+)
+
+current=
+
+b.innerText
+
+draw()
+
+}
+
+}
+
+)
+
+document
+
+.getElementById(
+
+"search"
+
+)
+
+.addEventListener(
+
+"input",
+
+e=>{
+
+let k=
+
+e.target.value
+
+.toLowerCase()
+
 document
 
 .querySelectorAll(
@@ -577,67 +858,35 @@ document
 
 .forEach(
 
-x=>
+c=>{
 
-x.onclick=
+c.style.display=
 
-()=>
+c.innerText
 
-x.classList.toggle(
+.toLowerCase()
 
-"open"
+.includes(
+
+k
 
 )
+
+?
+
+"block"
+
+:
+
+"none"
+
+}
 
 )
 
 }
 
-render()
-
-document
-
-.getElementById(
-
-"search"
-
 )
-
-.oninput=
-
-e=>{
-
-const v=
-
-e.target.value
-
-.toLowerCase()
-
-render(
-
-data.filter(
-
-x=>
-
-x.title
-
-.toLowerCase()
-
-.includes(v)
-
-||
-
-x.details
-
-.toLowerCase()
-
-.includes(v)
-
-)
-
-)
-
-}
 
 </script>
 

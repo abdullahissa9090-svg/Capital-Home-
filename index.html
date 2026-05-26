@@ -545,4 +545,62 @@
                 switchCategoryUI(cat);    
                 triggerDynamicRender();    
             } else {    
-                document.querySelectorAll('.nav
+                document.querySelectorAll('.nav-btn').forEach(b => {    
+                    b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                    b.classList.add('bg-transparent', 'border-transparent', 'text-zinc-400');    
+                });     
+                this.classList.add('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                this.classList.remove('bg-transparent', 'border-transparent', 'text-zinc-400');    
+                    
+                document.getElementById('propertiesWrapper').classList.add('hidden');     
+                document.getElementById('noResults').classList.add('hidden');    
+                document.getElementById('sell-property-sec').classList.remove('hidden');     
+                document.getElementById('sell-property-sec').scrollIntoView({ behavior: 'smooth' });    
+            }    
+        });    
+    });    
+        
+    function checkUrlParameters() {    
+        const urlParams = new URLSearchParams(window.location.search);    
+        const propertyId = urlParams.get('property');    
+        if (propertyId) {    
+            const targetProperty = propertiesData.find(item => item.id === propertyId);    
+            if (targetProperty) {    
+                switchCategoryUI(targetProperty.category);    
+                triggerDynamicRender();    
+                    
+                setTimeout(() => {    
+                    const card = document.querySelector(`.card[data-id="${propertyId}"]`);
+                    if (card) {    
+                        const summary = card.querySelector('.card-summary');
+                        if(summary) summary.click(); 
+                    }    
+                }, 500);    
+            }    
+        }    
+    }    
+
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+        
+    document.addEventListener("DOMContentLoaded", () => {     
+        const savedLead = localStorage.getItem('lastLead');
+        if(savedLead) {
+            try {
+                const leadData = JSON.parse(savedLead);
+                if(leadData.name) document.getElementById('clientName').value = leadData.name;
+                if(leadData.phone) document.getElementById('clientPhone').value = leadData.phone;
+            } catch(e) {}
+        }
+
+        triggerDynamicRender();     
+        checkUrlParameters();    
+    });    
+    </script>  
+</body>    
+</html>

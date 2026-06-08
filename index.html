@@ -642,4 +642,78 @@
                     triggerDynamicRender();    
                 } else {    
                     document.querySelectorAll('.nav-btn').forEach(b => {    
-                        b.classList.remove('active-btn', 'bg-bgCard', 'border-wh
+                        b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                        b.classList.add('bg-transparent', 'border-transparent', 'text-zinc-400');    
+                        b.setAttribute('aria-pressed', 'false');
+                    });     
+                    this.classList.add('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
+                    this.classList.remove('bg-transparent', 'border-transparent', 'text-zinc-400');    
+                    this.setAttribute('aria-pressed', 'true');
+                        
+                    const propWrap = document.getElementById('propertiesWrapper');
+                    if(propWrap) propWrap.classList.add('hidden');     
+                    
+                    const noRes = document.getElementById('noResults');
+                    if(noRes) noRes.classList.add('hidden');    
+                    
+                    const sellSec = document.getElementById('sell-property-sec');
+                    if(sellSec) {
+                        sellSec.classList.remove('hidden');     
+                        sellSec.scrollIntoView({ behavior: 'smooth' });    
+                    }
+                }    
+            });    
+        });    
+            
+        function checkUrlParameters() {    
+            const urlParams = new URLSearchParams(window.location.search);    
+            const propertyId = urlParams.get('property');    
+            if (propertyId) {    
+                const targetProperty = propertiesData.find(item => item.id === propertyId);    
+                if (targetProperty) {    
+                    switchCategoryUI(targetProperty.category);    
+                    triggerDynamicRender();    
+                        
+                    setTimeout(() => {    
+                        const card = document.querySelector(`.card[data-id="${propertyId}"]`);
+                        if (card) {    
+                            const summary = card.querySelector('.card-summary');
+                            if(summary) summary.click(); 
+                        }    
+                    }, 500);    
+                }    
+            }    
+        }    
+            
+        function initApp() {
+            try {
+                const savedLead = localStorage.getItem('lastLead');
+                if(savedLead) {
+                    const leadData = JSON.parse(savedLead);
+                    if(leadData.name) {
+                        const nameEl = document.getElementById('clientName');
+                        if(nameEl) nameEl.value = leadData.name;
+                    }
+                    if(leadData.phone) {
+                        const phoneEl = document.getElementById('clientPhone');
+                        if(phoneEl) phoneEl.value = leadData.phone;
+                    }
+                }
+            } catch(e) {
+                console.warn("Storage access is restricted.");
+            }
+
+            triggerDynamicRender();     
+            checkUrlParameters();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
+    })(); 
+    </script>  
+</body>    
+    </html>

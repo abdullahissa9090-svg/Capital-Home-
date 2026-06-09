@@ -2,7 +2,8 @@
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://capital-home.vercel.app/</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 </urlset>

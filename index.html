@@ -95,9 +95,6 @@
         .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
         
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
         @keyframes slideUpFade {
             0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
@@ -143,17 +140,27 @@
     
     <div class="w-[92%] max-w-[1100px] mx-auto mt-2">    
         
-        <div class="mb-8 w-full max-w-3xl mx-auto relative z-20 group">    
+        <div class="mb-6 w-full max-w-3xl mx-auto relative z-20 group">    
             <label for="propertySearch" class="sr-only">ابحث بالمنطقة، السعر، أو الميزة</label>
             <div class="absolute inset-0 bg-gradient-to-r from-goldCustom/20 to-transparent blur-xl rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
             <input type="text" id="propertySearch" class="w-full relative px-6 py-5 bg-bgCard/80 backdrop-blur-md border border-white/10 rounded-2xl text-base font-semibold text-white placeholder-zinc-500 outline-none shadow-[0_8px_30px_rgba(0,0,0,0.5)] focus:border-goldCustom focus:bg-bgCard transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو الميزة (مثال: المنيا الجديدة، تقسيط)...">    
         </div>    
+
+        <section class="add-property-banner bg-gradient-to-tr from-bgCard to-black border border-white/10 p-6 md:p-8 rounded-3xl mb-10 max-w-3xl mx-auto text-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-goldCustom/30 transition-colors duration-500">
+            <div class="absolute -top-16 -right-16 w-40 h-40 bg-goldCustom/10 rounded-full blur-3xl pointer-events-none group-hover:bg-goldCustom/20 transition-colors duration-500"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30"></div>
+            
+            <h2 class="text-xl md:text-2xl font-extrabold text-white mb-3 relative z-10">صاحب عقار في المنيا؟ اعرضه معنا باحترافية!</h2>
+            <p class="text-sm md:text-base text-zinc-400 mb-6 relative z-10">أضف عقارك الآن ليصل إلى آلاف المهتمين بالشراء أو الإيجار في المنيا والمنيا الجديدة عبر كابيتال هوم.</p>
+            <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D8%B3%D9%88%D9%8A%D9%82%20%D8%B9%D9%82%D8%A7%D8%B1%D9%8A%20%D9%85%D8%B9%D9%83%D9%85" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-goldCustom text-bgMain font-bold py-3.5 px-8 rounded-xl transition-all duration-300 hover:-translate-y-1 shadow-[0_5px_15px_rgba(212,175,55,0.2)] hover:shadow-[0_8px_20px_rgba(212,175,55,0.4)] relative z-10 w-full md:w-auto">
+                أضف عقارك الآن ✨
+            </a>
+        </section>
         
-        <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-start md:justify-center mb-10 max-w-2xl mx-auto shadow-lg overflow-x-auto hide-scrollbar snap-x" aria-label="أقسام العقارات">    
-            <button type="button" id="btnCat-شقة" class="nav-btn active-btn flex-1 min-w-[100px] md:min-w-[85px] py-3 px-4 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300 snap-center" data-target="properties-wrapper" data-cat="شقة" aria-pressed="true">🏢 الشقق</button>    
-            <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 min-w-[100px] md:min-w-[85px] py-3 px-4 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5 snap-center" data-target="properties-wrapper" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
-            <button type="button" id="btnCat-محل" class="nav-btn flex-1 min-w-[100px] md:min-w-[85px] py-3 px-4 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5 snap-center" data-target="properties-wrapper" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
-            <button type="button" class="nav-btn flex-1 min-w-[120px] md:min-w-[85px] py-3 px-4 bg-goldCustom/10 border border-goldCustom/50 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300 hover:bg-goldCustom hover:text-bgMain snap-center" data-target="sell-property-sec" aria-pressed="false">✨ اعرض عقارك</button>    
+        <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-between mb-10 max-w-lg mx-auto shadow-lg" aria-label="أقسام العقارات">    
+            <button type="button" id="btnCat-شقة" class="nav-btn active-btn flex-1 py-3 px-2 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300" data-target="properties-wrapper" data-cat="شقة" aria-pressed="true">🏢 الشقق</button>    
+            <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-target="properties-wrapper" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
+            <button type="button" id="btnCat-محل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-target="properties-wrapper" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
         </nav>    
 
         <main>    
@@ -194,18 +201,6 @@
                         <h3 class="text-lg font-bold text-goldCustom mb-2">🛡️ حماية مستقبلية</h3>    
                         <p class="text-sm text-zinc-400 leading-relaxed">نؤمن خطوات التعاقد والاستلام القانوني لتبدأ براحة بال مطلقة.</p>    
                     </div>    
-                </div>    
-            </section>    
-
-            <section id="sell-property-sec" class="static-section hidden bg-gradient-to-tr from-bgCard to-black p-10 rounded-3xl border border-white/5 my-10 shadow-2xl relative">    
-                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-50 rounded-3xl"></div>
-                <div class="empty-state text-center py-8 relative z-10">    
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">✨ سوّق لعقارك باحترافية مع كابيتال هوم</h2>    
-                    <p class="text-base text-zinc-400 mb-8 max-w-xl mx-auto">نساعدك في بيع أو تأجير عقارك في المنيا بأفضل سعر متاح وبطرق تسويق حديثة ومدروسة.</p>    
-                    <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D8%B3%D9%88%D9%8A%D9%82%20%D8%B9%D9%82%D8%A7%D8%B1%D9%8A%20%D9%85%D8%B9%D9%83%D9%85" target="_blank" rel="noopener noreferrer" class="act-btn inline-flex items-center gap-2 bg-whatsappGreen text-white font-bold py-4 px-10 rounded-xl transition-all hover:-translate-y-1 shadow-[0_10px_25px_rgba(34,197,94,0.3)]">
-                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        ارسل تفاصيل العقار عبر واتساب
-                    </a>    
                 </div>    
             </section>    
 
@@ -278,7 +273,7 @@
                 meta: ["📐 161م", "🏢 العاشر علوي", "🧭 بحرية شرقية", "💳 تقسيط"],     
                 bullets: [    
                     "الموقع والواجهة: بحرية شرقية (من أميز واجهات المشروع بتهوية وإضاءة ممتازة).",    
-                    "تفاصيل الوحدة: الدور العاشر علوي - الشقة رقم 1.",    
+                    "تفاصيل الوالوحدة: الدور العاشر علوي - الشقة رقم 1.",    
                     "ميزة السعر: سعر المتر بالعقد 18,500 ج (وفر 9,000 ج في المتر عن سعر الشركة الحالي).",    
                     "المطلوب للدخول: 350,000 جنيه (شاملة 200 ألف مدفوعات سابقة + 150 ألف أوفر).",    
                     "دفعات الاستكمال: 200,000 جنيه بعد 3 شهور، بالإضافة إلى دفعة الاستلام 200,000 جنيه."    
@@ -685,46 +680,18 @@
                 targetBtn.setAttribute('aria-pressed', 'true');
             }    
                 
-            currentCategory = categoryName;    
-            const sellSec = document.getElementById('sell-property-sec');
-            if(sellSec) sellSec.classList.add('hidden');     
-            const propWrap = document.getElementById('propertiesWrapper');
-            if(propWrap) propWrap.classList.remove('hidden');    
+            currentCategory = categoryName;     
         }    
             
         document.querySelectorAll('.nav-btn').forEach(button => {    
             button.addEventListener('click', function() {    
-                const target = this.getAttribute('data-target');     
                 const cat = this.getAttribute('data-cat');    
                     
                 const propSearch = document.getElementById('propertySearch');
                 if(propSearch) propSearch.value = '';
 
-                if (target === 'properties-wrapper') {    
-                    switchCategoryUI(cat);    
-                    triggerDynamicRender();    
-                } else {    
-                    document.querySelectorAll('.nav-btn').forEach(b => {    
-                        b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
-                        b.classList.add('bg-transparent', 'border-transparent', 'text-zinc-400');    
-                        b.setAttribute('aria-pressed', 'false');
-                    });     
-                    this.classList.add('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
-                    this.classList.remove('bg-transparent', 'border-transparent', 'text-zinc-400');    
-                    this.setAttribute('aria-pressed', 'true');
-                        
-                    const propWrap = document.getElementById('propertiesWrapper');
-                    if(propWrap) propWrap.classList.add('hidden');     
-                    
-                    const noRes = document.getElementById('noResults');
-                    if(noRes) noRes.classList.add('hidden');    
-                    
-                    const sellSec = document.getElementById('sell-property-sec');
-                    if(sellSec) {
-                        sellSec.classList.remove('hidden');     
-                        sellSec.scrollIntoView({ behavior: 'smooth' });    
-                    }
-                }    
+                switchCategoryUI(cat);    
+                triggerDynamicRender();      
             });    
         });    
             

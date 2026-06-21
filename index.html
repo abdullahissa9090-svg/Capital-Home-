@@ -274,6 +274,7 @@
     priceText: "778,392 جنيه + 100 ألف أوفر",
     locationCategory: "المنيا الجديدة",
     finishing: "نصف تشطيب",
+    image: "images/boulevard.webp",
     meta: ["📐 145م", "🏢 الدور الثاني", "📍 بوليفارد", "💳 تقسيط"],
     bullets: [
         "شقة بمشروع بوليفارد – المرحلة الثانية.",
@@ -362,7 +363,8 @@
                     remaining: "16 قسط",    
                     value: "55,750 جنيه / 3 شهور"    
                 },    
-                customContactText: "استفسر عن التنازل والتقسيط"    
+                customContactText: "استفسر عن التنازل والتقسيط",
+                status: "sold" // تم إضافة حالة العقار كمباع
             },
             { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", image: "images/a2.webp", meta: ["📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل", "الوضعية المالية: خالصة تماماً بدون أقساط"] },
             { id: "s1", category: "محل", title: "محل تجاري حيوي بشلبي القديمة", price: 850000, priceText: "850 ألف جنيه فقط", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/s1.webp", meta: ["📐 28م", "🏪 موقع استثماري"], bullets: ["الموقع: شلبي القديمة مساحة 28 متر مربع", "الحالة: تشطيب لوكس كامل، متوفر عداد كهرباء تجاري مستقل"] },
@@ -501,7 +503,16 @@
                 return true;    
             });    
 
-            filtered.sort((a, b) => Number(a.price) - Number(b.price));
+            // الترتيب: المباع ينزل أسفل القائمة، وبعدين الترتيب حسب السعر
+            filtered.sort((a, b) => {
+                const aSold = a.status === 'sold';
+                const bSold = b.status === 'sold';
+                
+                if (aSold && !bSold) return 1;
+                if (!aSold && bSold) return -1;
+                
+                return Number(a.price) - Number(b.price);
+            });
             
             const noResults = document.getElementById('noResults');    
             if (filtered.length === 0) {     
@@ -522,7 +533,10 @@
                 cardEl.setAttribute('aria-expanded', 'false');
                 cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + prop.title);
 
-                cardEl.className = 'card animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full focus:outline-none focus:border-goldCustom';     
+                const isSold = prop.status === 'sold';
+                const cardOpacityClass = isSold ? 'opacity-85 grayscale-[20%]' : '';
+
+                cardEl.className = `card animate-enter relative bg-bgCard rounded-3xl border ${isSold ? 'border-red-900/50' : 'border-white/5'} overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full focus:outline-none focus:border-goldCustom ${cardOpacityClass}`;     
                 cardEl.style.animationDelay = `${index * 50}ms`;
                 cardEl.setAttribute('data-id', prop.id);     
                 
@@ -538,10 +552,12 @@
                     return `<span class="${styleClasses} py-1.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center">${m}</span>`;    
                 }).join('') : '';    
                 
+                const badgeHTML = isSold ? `<div class="absolute top-4 left-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>` : '';
                 const imageHTML = prop.image ? `<img src="${prop.image}" onerror="this.remove()" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />` : '';
 
                 const summaryHTML = `
                     <div class="p-6 pb-5 cursor-pointer card-summary flex flex-col h-full z-10 relative group">
+                        ${badgeHTML}
                         ${imageHTML}
                         <div class="flex justify-between items-start mb-3">
                             <h3 itemprop="name" class="text-xl font-bold text-white leading-tight group-hover:text-goldCustom transition-colors">${prop.title}</h3>
@@ -550,7 +566,7 @@
                         <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                             <meta itemprop="priceCurrency" content="EGP" />
                             <meta itemprop="price" content="${prop.price}" />
-                            <meta itemprop="availability" content="https://schema.org/InStock" />
+                            <meta itemprop="availability" content="${isSold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'}" />
                             <div class="text-2xl font-extrabold text-priceBlue mb-4 tracking-tight">${prop.priceText}</div>
                         </div>
 
@@ -580,10 +596,17 @@
                     </div>`;    
                 }    
             
-                const contactBtnText = prop.customContactText ? prop.customContactText : "احجز معاينة مجانية";    
+                const contactBtnText = isSold ? "العقار مُباع" : (prop.customContactText ? prop.customContactText : "احجز معاينة مجانية");    
                 const waMessageInfo = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + prop.title);
                 const waMessageVideo = encodeURIComponent('مرحباً كابيتال هوم، أريد الحصول على فيديو المعاينة الواقعية لـ: ' + prop.title);
             
+                const waLink = isSold ? "javascript:void(0);" : `https://wa.me/201555086599?text=${waMessageInfo}`;
+                const waTarget = isSold ? "" : `target="_blank" rel="noopener noreferrer"`;
+                
+                const btnPrimaryClass = isSold 
+                    ? "w-full py-3.5 px-4 bg-red-900/40 text-white/50 cursor-not-allowed rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                    : "w-full py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg";
+
                 const detailHTML = `
                     <div class="details-box hidden px-6 pb-6 pt-2 bg-black/20 border-t border-white/5">
                         ${galleryHTML} 
@@ -592,7 +615,7 @@
                             ${bulletItems}
                         </div>
                         <div class="grid grid-cols-1 gap-2">
-                            <a class="w-full py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg" href="https://wa.me/201555086599?text=${waMessageInfo}" target="_blank" rel="noopener noreferrer">💬 ${contactBtnText}</a>
+                            <a class="${btnPrimaryClass}" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
                             <div class="flex gap-2">
                                 <a class="flex-1 py-3 px-2 bg-goldCustom text-bgMain rounded-xl font-bold text-sm flex items-center justify-center gap-1 transition-all hover:brightness-110" href="https://wa.me/201555086599?text=${waMessageVideo}" target="_blank" rel="noopener noreferrer">🎬 طلب فيديو</a>
                                 <a class="flex-1 py-3 px-2 bg-phoneBlue text-white rounded-xl font-bold text-sm flex items-center justify-center gap-1 transition-all hover:brightness-110" href="tel:01555086599">📞 اتصال</a>

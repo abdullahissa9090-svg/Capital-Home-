@@ -723,7 +723,9 @@
                 // صورة افتراضية تظهر إذا لم يكن للعقار صورة خاصة (أو فشل تحميلها)، حفاظاً على تناسق ارتفاع الكروت بالشبكة
                 const fallbackImage = 'images/placeholder.webp';
                 const currentImage = prop.image ? prop.image : fallbackImage;
-                const imageHTML = `<img src="${currentImage}" onerror="this.onerror=null;this.src='${fallbackImage}'" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
+                // عند فشل تحميل صورة العقار: نجرب الصورة الافتراضية أولاً، وإذا فشلت هي الأخرى
+                // (لأنها لم تُرفع بعد) نخفي مكان الصورة بالكامل بدل ظهور مربع فارغ مكسور.
+                const imageHTML = `<img src="${currentImage}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
 
                 const summaryHTML = `
                     <div class="p-6 pb-5 cursor-pointer card-summary flex flex-col h-full z-10 relative group">

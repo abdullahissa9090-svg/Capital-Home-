@@ -996,8 +996,19 @@
 
                 switchCategoryUI(cat);    
                 triggerDynamicRender();      
+                scrollToPropertiesTop();
             });    
         });    
+            
+        function scrollToPropertiesTop() {
+            const wrapper = document.getElementById('propertiesWrapper');
+            if (!wrapper) return;
+            // نطرح ارتفاع تقريبي لشريط التصنيفات الثابت (sticky-nav) عشان أول كارت
+            // يظهر تحت الشريط مباشرة، مش مخفي وراه.
+            const stickyOffset = 90;
+            const targetY = wrapper.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
+            window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
+        }
             
         function initApp() {
             try {

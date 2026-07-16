@@ -81,7 +81,8 @@
                         goldCustom: '#d4af37',    
                         priceBlue: '#38bdf8',    
                         whatsappGreen: '#22c55e',    
-                        phoneBlue: '#2563eb'    
+                        phoneBlue: '#2563eb',
+                        favRed: '#ef4444'
                     },    
                     fontFamily: {    
                         cairo: ['Cairo', 'sans-serif'],    
@@ -102,6 +103,17 @@
         .animate-enter {
             opacity: 0;
             animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .heart-pop { animation: heartPop 0.35s ease; }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
         }
 
         .bg-grid-pattern {
@@ -157,11 +169,15 @@
             </a>
         </section>
         
-        <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-between mb-10 max-w-lg mx-auto shadow-lg" aria-label="أقسام العقارات">    
+        <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-between mb-10 max-w-2xl mx-auto shadow-lg flex-wrap" aria-label="أقسام العقارات">    
             <button type="button" id="btnCat-شقة" class="nav-btn active-btn flex-1 py-3 px-2 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300" data-cat="شقة" aria-pressed="true">🏢 الشقق</button>    
             <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
             <button type="button" id="btnCat-محل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
-<button type="button" id="btnCat-أرض" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="أرض" aria-pressed="false">🌍 الأراضي</button>
+            <button type="button" id="btnCat-أرض" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="أرض" aria-pressed="false">🌍 الأراضي</button>
+            <button type="button" id="btnCat-المفضلة" class="nav-btn relative flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="المفضلة" aria-pressed="false">
+                ❤️ المفضلة
+                <span id="favCountBadge" class="hidden absolute -top-1.5 -left-1.5 bg-favRed text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+            </button>
         </nav>    
         <main>    
             <div id="noResults" class="hidden text-center py-16 text-zinc-500 font-semibold text-lg bg-bgCard/30 rounded-3xl border border-white/5" aria-live="polite">لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!</div>    
@@ -266,7 +282,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "a14_boulevard_145",
     category: "شقة",
     title: "شقة 145م بكمبوند بوليفارد – المرحلة الثانية",
@@ -296,129 +312,128 @@
     },
     customContactText: "استفسر عن التنازل والتقسيط"
 },
-            {
-        id: "a13_damaris_media_towers",     
-                category: "شقة",     
-                title: "شقة لقطة 122م مسجلة شهر عقاري بأبراج الإعلاميين (دماريس)",     
-                price: 2250000,     
-                priceText: "2 مليون و 250 ألف جنيه",     
-                locationCategory: "المنيا",     
-                finishing: "سوبر لوكس",     
-                image: "images/damaris_122m.webp",
-                meta: ["📐 122م", "🏢 الدور الثالث", "📜 مسجلة شهر عقاري"],     
-                bullets: [    
-                    "الموقع: أبراج الإعلاميين بدماريس، منطقة حيوية وقريبة من كافة الخدمات.",    
-                    "المساحة والتقسيم: 122 متر مربع (3 غرف نوم + صالة + مطبخ + حمام + 2 بلكونة).",    
-                    "التشطيب: سوبر لوكس، جاهزة للسكن الفوري.",    
-                    "المرافق: غاز طبيعي، عداد مياه، عداد كهرباء، والبرج مزود بأسانسير.",    
-                    "الوضع القانوني: عقد مسجل شهر عقاري مع حصة مثبتة في الأرض (أمان تام)."    
-                ],        
-                customContactText: "احجز المعاينة الآن"    
-            },    
-            {     
-                id: "a10_special_opportunity",     
-                category: "شقة",     
-                title: "فرصة استثنائية: شقة 161م (أقل من سعر الشركة بـ 9,000 ج/م)",     
-                price: 2978500,     
-                priceText: "المطلوب للدخول 350 ألف جنيه فقط",     
-                locationCategory: "المنيا الجديدة",     
-                finishing: "نصف تشطيب",     
-                image: "images/a10.webp",
-                meta: ["📐 161م", "🏢 العاشر علوي", "🧭 بحرية شرقية", "💳 تقسيط"],     
-                bullets: [    
-                    "الموقع والواجهة: بحرية شرقية (من أميز واجهات المشروع بتهوية وإضاءة ممتازة).",    
-                    "تفاصيل الوالوحدة: الدور العاشر علوي - الشقة رقم 1.",    
-                    "ميزة السعر: سعر المتر بالعقد 18,500 ج (وفر 9,000 ج في المتر عن سعر الشركة الحالي).",    
-                    "المطلوب للدخول: 350,000 جنيه (شاملة 200 ألف مدفوعات سابقة + 150 ألف أوفر).",    
-                    "دفعات الاستكمال: 200,000 جنيه بعد 3 شهور، بالإضافة إلى دفعة الاستلام 200,000 جنيه."    
-                ],    
-                paymentPlan: {    
-                    offer: "150 ألف جنيه",    
-                    paid: "200 ألف جنيه",    
-                    remaining: "16 قسط (4 سنوات)",    
-                    value: "148,656 ج / ربع سنوي"    
-                },    
-                customContactText: "احجز هذه الفرصة الآن"    
-            },
-            {     
-                id: "a1_installment",     
-                category: "شقة",     
-                title: "شقة دريم ڤالي الفاخرة (تقسيط وتنازل)",     
-                price: 864000,     
-                priceText: "أوفر 150 ألف + استكمال الأقساط",     
-                locationCategory: "المنيا الجديدة",     
-                finishing: "نصف تشطيب",     
-                image: "images/a1.webp",
-                meta: ["📐 135م", "🏢 دور أول علوي", "💳 تقسيط"],     
-                bullets: [    
-                    "الموقع: كمبوند دريم ڤالي بموقع استراتيجي بالمنيا الجديدة",    
-                    "المساحة: 135 متر مربع بتخطيط هندسي متميز للغرف والريسبشن",    
-                    "الدور: الأول علوي (أفضل وأرقى الأدوار السكنية المحببة للعملاء)",    
-                    "الوضع القانوني: الشقة جاهزة لإجراءات التنازل الفوري بمقر الشركة لضمان الأمان القانوني",    
-                    "المطلوب: دفع قيمة الأوفر 150,000 جنيه كاش كـ (أوفر ومقدم تنازل) والمشتري يستكمل الأقساط"    
-                ],    
-                paymentPlan: {    
-                    offer: "150 ألف جنيه",    
-                    paid: "714 ألف جنيه",    
-                    remaining: "16 قسط",    
-                    value: "55,750 جنيه / 3 شهور"    
-                },    
-                customContactText: "استفسر عن التنازل والتقسيط",
-                status: "sold" 
-            },
-            { id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", image: "images/a2.webp", meta: ["📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل", "الوضعية المالية: خالصة تماماً بدون أقساط"] },
-            { id: "s1", category: "محل", title: "محل تجاري حيوي بشلبي القديمة", price: 850000, priceText: "850 ألف جنيه فقط", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/s1.webp", meta: ["📐 28م", "🏪 موقع استثماري"], bullets: ["الموقع: شلبي القديمة مساحة 28 متر مربع", "الحالة: تشطيب لوكس كامل، متوفر عداد كهرباء تجاري مستقل"] },
-            { id: "a5", category: "شقة", title: "شقة ناصية بمنطقة أبو فليو", price: 1015000, priceText: "مليون و 15 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", image: "images/a5.webp", meta: ["📐 145م", "📐 ناصية صريحة"], bullets: ["المساحة: 145 متر", "الدور: السادس قريبة من مدرسة سمارت", "الحالة: على الطوب الأحمر ناصية بحرية غربية", "المرافق: متوفر عداد مياه رسمي مخصص للشقة"] },
-            { 
-                id: "a11_tanzim", 
-                category: "شقة", 
-                title: "شقة 140م بمنطقة التنظيم والإدارة (دبل فيس)", 
-                price: 1800000, 
-                priceText: "مليون و 800 ألف جنيه (قابل للتفاوض)", 
-                locationCategory: "المنيا", 
-                finishing: "نصف تشطيب", 
-                image: "images/a11.webp",
-                meta: ["📐 140م", "🏢 الدور السابع", "🌅 دبل فيس"], 
-                bullets: [
-                    "الموقع: منطقة التنظيم والإدارة مباشرة أمام أبراج الأطباء.",
-                    "المساحة والتقسيم: 140 متر مربع صافي (4 غرف نوم + صالة كبيرة + 2 حمام + مطبخ أمريكاني).",
-                    "المميزات: الدور السابع (الشقة تستحوذ على كامل الدور) - دبل فيس على شارعين - جميع الغرف تطل على الشارع بإضاءة طبيعية.",
-                    "المرافق والتأسيس: متأسسة كهرباء وسباكة وحلوق بالكامل - راكب عداد كهرباء ومياه.",
-                    "الوضع المالي والقانوني: تم سداد قيمة الواجهة والأسانسير بالكامل - خالصة التصالح.",
-                    "الاستخدام: مناسبة جداً للسكن الراقي أو الاستثمار طويل المدى."
-                ],
-                customContactText: "احجز المعاينة الآن"
-            },
-            { id: "a8", category: "شقة", title: "شقة استثمارية حي ديماريس", price: 1650000, priceText: "مليون و 650 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a8.webp", meta: ["📐 125م", "💰 عائد إيجاري"], bullets: ["المساحة: 125 متر مربع 4 غرف نوم ممتازة للتأجير", "الوضع الاستثماري: مؤجرة حالياً بـ 8,000 جنيه شهرياً"] },
-            { id: "a6", category: "شقة", title: "شقة أرضي بجاردن الحي السابع", price: 2400000, priceText: "2 مليون و 400 ألف جنيه", locationCategory: "المنيا الجديدة", finishing: "نصف تشطيب", image: "images/a6.webp", meta: ["📐 115م", "🏡 أرضي بجاردن"], bullets: ["المساحة الداخلية: 115 متر صافي", "المساحة الخارجية: حديقة خاصة مخصصة 30 متر", "عدد الغرف: 3 غرف نوم قريبة من جامعة دراية"] },
-            { 
-                id: "a12_awqaf_corniche", 
-                category: "شقة", 
-                title: "شقة أول سكن 105م بعمارات الأوقاف – كورنيش المنيا", 
-                price: 2500000, 
-                priceText: "2 مليون و 500 ألف جنيه", 
-                locationCategory: "المنيا", 
-                finishing: "ألترا سوبر لوكس", 
-                image: "images/a12.webp",
-                meta: ["📐 105م", "🏢 أول دور سكني", "✨ ألترا سوبر لوكس"], 
-                bullets: [
-                    "الموقع: عمارات الأوقاف بكورنيش المنيا (بجوار النساجون الشرقيون).",
-                    "المساحة والتقسيم: 105 متر مربع (غرفتين نوم + صالة + مطبخ + حمام).",
-                    "التشطيب: ألترا سوبر لوكس.",
-                    "الدور: الثالث بالأسانسير (يُعتبر أول دور سكني لأن الأدوار السفلية إدارية).",
-                    "الإطلالة: بلكونة الصالة ترى جزءًا صغيرًا من النيل، بينما بلكونتا غرف النوم على الواجهة الخلفية (غربية) وتوفران خصوصية جيدة.",
-                    "المميزات: تهوية وإضاءة طبيعيتين ممتازتين طوال اليوم.",
-                    "ملاحظة: الشقة بدون حصة في الأرض."
-                ],
-                customContactText: "احجز المعاينة الآن"
-            },
-            { id: "a7", category: "شقة", title: "شقة جاهزة للسكن بأبراج الري", price: 2700000, priceText: "2 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a7.webp", meta: ["📐 135م", "🌅 شرقية قبلية"], bullets: ["المساحة: 135 متر مربع تشطيب ألترا سوبر لوكس", "التقسيم: 3 غرف نوم + ريسبشن واسع شرقية قبلية", "البرج: مدخل فخم ومجهز بـ 2 أسانسير حديث شغالين"] },
-            { id: "v1", category: "فيلا", title: "فيلا مستقلة ابني بيتك", price: 3000000, priceText: "3 مليون جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "نصف تشطيب", image: "images/v1.webp", meta: ["📐 150م أرض", "🧱 المرحلة الثالثة"], bullets: ["الموقع: المنيا الجديدة ابني بيتك المرحلة الثالثة", "المواصفات: 150 متر واجهة بحرية أمام جامعة اللوتس"] },
-            { id: "a9", category: "شقة", title: "شقة بميدان الساعة (بجوار راية)", price: 3650000, priceText: "3 مليون و 650 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a9.webp", meta: ["📐 111م", "🌊 واجهة بحرية"], bullets: ["الموقع الإستراتيجي: بميدان الساعة مباشرة بجوار راية ماركت", "المواصفات: 111 متر صافي الدور السابع بحرية", "المميزات: عمارة بها 2 أسانسير • غاز طبيعي تشطيب سوبر لوكس"] },
-            { id: "a4", category: "شقة", title: "شقة عبير سيتي الفاخرة", price: 4500000, priceText: "4 مليون و 500 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a4.webp", meta: ["📐 170م", "✨ ألترا سوبر لوكس"], bullets: ["المساحة الصافية: 170 متر", "الدور: الأول علوي", "الواجهة: بحرية مفتوحة بالكامل وغير مجروحة", "الديكور: جبس بورد إيطالي وأرضيات باركيه فاخرة", "المرافق: عدادات كاملة (كهرباء • مياه • غاز)"], status: "sold" },
-            { id: "a3", category: "شقة", title: "شقة مرخصة بميدان الساعة", price: 4700000, priceText: "4 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", image: "images/a3.webp", meta: ["📐 200م", "🏢 برج مرخص"], bullets: ["المساحة: 200 متر مربع", "الترخيص: عمارة مرخصة ومسجلة قانونياً", "الدور: التاسع ببرج حديث", "التقسيم: 3 غرف + ليفنج + ريسبشن 3 قطع", "الوضعية: على العظم وجاهزة للتشطيب"] },
-            { id: "v2", category: "فيلا", title: "فيلا مشروع مراكش الفاخرة", price: 10550000, priceText: "10 مليون و 550 ألف جنيه", locationCategory: "المنيا", finishing: "نصف تشطيب", image: "images/v2.webp", meta: ["📍 بورتو المنيا", "🏊 حمام سباحة خاص"], bullets: ["الإطلالة: فيو مباشر على كمبوند بورتو المنيا الفخم", "التصميم: مساحة 161 متر بدروم + أرضي + أول وحمام سباحة"] }
-  ,
+{
+    id: "a13_damaris_media_towers",     
+    category: "شقة",     
+    title: "شقة لقطة 122م مسجلة شهر عقاري بأبراج الإعلاميين (دماريس)",     
+    price: 2250000,     
+    priceText: "2 مليون و 250 ألف جنيه",     
+    locationCategory: "المنيا",     
+    finishing: "سوبر لوكس",     
+    image: "images/damaris_122m.webp",
+    meta: ["📐 122م", "🏢 الدور الثالث", "📜 مسجلة شهر عقاري"],     
+    bullets: [    
+        "الموقع: أبراج الإعلاميين بدماريس، منطقة حيوية وقريبة من كافة الخدمات.",    
+        "المساحة والتقسيم: 122 متر مربع (3 غرف نوم + صالة + مطبخ + حمام + 2 بلكونة).",    
+        "التشطيب: سوبر لوكس، جاهزة للسكن الفوري.",    
+        "المرافق: غاز طبيعي، عداد مياه، عداد كهرباء، والبرج مزود بأسانسير.",    
+        "الوضع القانوني: عقد مسجل شهر عقاري مع حصة مثبتة في الأرض (أمان تام)."    
+    ],        
+    customContactText: "احجز المعاينة الآن"    
+},    
+{     
+    id: "a10_special_opportunity",     
+    category: "شقة",     
+    title: "فرصة استثنائية: شقة 161م (أقل من سعر الشركة بـ 9,000 ج/م)",     
+    price: 2978500,     
+    priceText: "المطلوب للدخول 350 ألف جنيه فقط",     
+    locationCategory: "المنيا الجديدة",     
+    finishing: "نصف تشطيب",     
+    image: "images/a10.webp",
+    meta: ["📐 161م", "🏢 العاشر علوي", "🧭 بحرية شرقية", "💳 تقسيط"],     
+    bullets: [    
+        "الموقع والواجهة: بحرية شرقية (من أميز واجهات المشروع بتهوية وإضاءة ممتازة).",    
+        "تفاصيل الوالوحدة: الدور العاشر علوي - الشقة رقم 1.",    
+        "ميزة السعر: سعر المتر بالعقد 18,500 ج (وفر 9,000 ج في المتر عن سعر الشركة الحالي).",    
+        "المطلوب للدخول: 350,000 جنيه (شاملة 200 ألف مدفوعات سابقة + 150 ألف أوفر).",    
+        "دفعات الاستكمال: 200,000 جنيه بعد 3 شهور، بالإضافة إلى دفعة الاستلام 200,000 جنيه."    
+    ],    
+    paymentPlan: {    
+        offer: "150 ألف جنيه",    
+        paid: "200 ألف جنيه",    
+        remaining: "16 قسط (4 سنوات)",    
+        value: "148,656 ج / ربع سنوي"    
+    },    
+    customContactText: "احجز هذه الفرصة الآن"    
+},
+{     
+    id: "a1_installment",     
+    category: "شقة",     
+    title: "شقة دريم ڤالي الفاخرة (تقسيط وتنازل)",     
+    price: 864000,     
+    priceText: "أوفر 150 ألف + استكمال الأقساط",     
+    locationCategory: "المنيا الجديدة",     
+    finishing: "نصف تشطيب",     
+    image: "images/a1.webp",
+    meta: ["📐 135م", "🏢 دور أول علوي", "💳 تقسيط"],     
+    bullets: [    
+        "الموقع: كمبوند دريم ڤالي بموقع استراتيجي بالمنيا الجديدة",    
+        "المساحة: 135 متر مربع بتخطيط هندسي متميز للغرف والريسبشن",    
+        "الدور: الأول علوي (أفضل وأرقى الأدوار السكنية المحببة للعملاء)",    
+        "الوضع القانوني: الشقة جاهزة لإجراءات التنازل الفوري بمقر الشركة لضمان الأمان القانوني",    
+        "المطلوب: دفع قيمة الأوفر 150,000 جنيه كاش كـ (أوفر ومقدم تنازل) والمشتري يستكمل الأقساط"    
+    ],    
+    paymentPlan: {    
+        offer: "150 ألف جنيه",    
+        paid: "714 ألف جنيه",    
+        remaining: "16 قسط",    
+        value: "55,750 جنيه / 3 شهور"    
+    },    
+    customContactText: "استفسر عن التنازل والتقسيط",
+    status: "sold" 
+},
+{ id: "a2", category: "شقة", title: "شقة عمارة كمين الصفا", price: 750000, priceText: "750 ألف جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "تشطيب جهاز", image: "images/a2.webp", meta: ["📐 90م", "📍 خلف كمبوند القضاء"], bullets: ["الموقع: خلف مصنع الكولا وأمام كمبوند القضاء", "المساحة: 90 متر صافي", "الدور: الخامس العلوي", "التشطيب: جهاز بالكامل", "الوضعية المالية: خالصة تماماً بدون أقساط"] },
+{ id: "s1", category: "محل", title: "محل تجاري حيوي بشلبي القديمة", price: 850000, priceText: "850 ألف جنيه فقط", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/s1.webp", meta: ["📐 28م", "🏪 موقع استثماري"], bullets: ["الموقع: شلبي القديمة مساحة 28 متر مربع", "الحالة: تشطيب لوكس كامل، متوفر عداد كهرباء تجاري مستقل"] },
+{ id: "a5", category: "شقة", title: "شقة ناصية بمنطقة أبو فليو", price: 1015000, priceText: "مليون و 15 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", image: "images/a5.webp", meta: ["📐 145م", "📐 ناصية صريحة"], bullets: ["المساحة: 145 متر", "الدور: السادس قريبة من مدرسة سمارت", "الحالة: على الطوب الأحمر ناصية بحرية غربية", "المرافق: متوفر عداد مياه رسمي مخصص للشقة"] },
+{ 
+    id: "a11_tanzim", 
+    category: "شقة", 
+    title: "شقة 140م بمنطقة التنظيم والإدارة (دبل فيس)", 
+    price: 1800000, 
+    priceText: "مليون و 800 ألف جنيه (قابل للتفاوض)", 
+    locationCategory: "المنيا", 
+    finishing: "نصف تشطيب", 
+    image: "images/a11.webp",
+    meta: ["📐 140م", "🏢 الدور السابع", "🌅 دبل فيس"], 
+    bullets: [
+        "الموقع: منطقة التنظيم والإدارة مباشرة أمام أبراج الأطباء.",
+        "المساحة والتقسيم: 140 متر مربع صافي (4 غرف نوم + صالة كبيرة + 2 حمام + مطبخ أمريكاني).",
+        "المميزات: الدور السابع (الشقة تستحوذ على كامل الدور) - دبل فيس على شارعين - جميع الغرف تطل على الشارع بإضاءة طبيعية.",
+        "المرافق والتأسيس: متأسسة كهرباء وسباكة وحلوق بالكامل - راكب عداد كهرباء ومياه.",
+        "الوضع المالي والقانوني: تم سداد قيمة الواجهة والأسانسير بالكامل - خالصة التصالح.",
+        "الاستخدام: مناسبة جداً للسكن الراقي أو الاستثمار طويل المدى."
+    ],
+    customContactText: "احجز المعاينة الآن"
+},
+{ id: "a8", category: "شقة", title: "شقة استثمارية حي ديماريس", price: 1650000, priceText: "مليون و 650 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a8.webp", meta: ["📐 125م", "💰 عائد إيجاري"], bullets: ["المساحة: 125 متر مربع 4 غرف نوم ممتازة للتأجير", "الوضع الاستثماري: مؤجرة حالياً بـ 8,000 جنيه شهرياً"] },
+{ id: "a6", category: "شقة", title: "شقة أرضي بجاردن الحي السابع", price: 2400000, priceText: "2 مليون و 400 ألف جنيه", locationCategory: "المنيا الجديدة", finishing: "نصف تشطيب", image: "images/a6.webp", meta: ["📐 115م", "🏡 أرضي بجاردن"], bullets: ["المساحة الداخلية: 115 متر صافي", "المساحة الخارجية: حديقة خاصة مخصصة 30 متر", "عدد الغرف: 3 غرف نوم قريبة من جامعة دراية"] },
+{ 
+    id: "a12_awqaf_corniche", 
+    category: "شقة", 
+    title: "شقة أول سكن 105م بعمارات الأوقاف – كورنيش المنيا", 
+    price: 2500000, 
+    priceText: "2 مليون و 500 ألف جنيه", 
+    locationCategory: "المنيا", 
+    finishing: "ألترا سوبر لوكس", 
+    image: "images/a12.webp",
+    meta: ["📐 105م", "🏢 أول دور سكني", "✨ ألترا سوبر لوكس"], 
+    bullets: [
+        "الموقع: عمارات الأوقاف بكورنيش المنيا (بجوار النساجون الشرقيون).",
+        "المساحة والتقسيم: 105 متر مربع (غرفتين نوم + صالة + مطبخ + حمام).",
+        "التشطيب: ألترا سوبر لوكس.",
+        "الدور: الثالث بالأسانسير (يُعتبر أول دور سكني لأن الأدوار السفلية إدارية).",
+        "الإطلالة: بلكونة الصالة ترى جزءًا صغيرًا من النيل، بينما بلكونتا غرف النوم على الواجهة الخلفية (غربية) وتوفران خصوصية جيدة.",
+        "المميزات: تهوية وإضاءة طبيعيتين ممتازتين طوال اليوم.",
+        "ملاحظة: الشقة بدون حصة في الأرض."
+    ],
+    customContactText: "احجز المعاينة الآن"
+},
+{ id: "a7", category: "شقة", title: "شقة جاهزة للسكن بأبراج الري", price: 2700000, priceText: "2 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a7.webp", meta: ["📐 135م", "🌅 شرقية قبلية"], bullets: ["المساحة: 135 متر مربع تشطيب ألترا سوبر لوكس", "التقسيم: 3 غرف نوم + ريسبشن واسع شرقية قبلية", "البرج: مدخل فخم ومجهز بـ 2 أسانسير حديث شغالين"] },
+{ id: "v1", category: "فيلا", title: "فيلا مستقلة ابني بيتك", price: 3000000, priceText: "3 مليون جنيه فقط", locationCategory: "المنيا الجديدة", finishing: "نصف تشطيب", image: "images/v1.webp", meta: ["📐 150م أرض", "🧱 المرحلة الثالثة"], bullets: ["الموقع: المنيا الجديدة ابني بيتك المرحلة الثالثة", "المواصفات: 150 متر واجهة بحرية أمام جامعة اللوتس"] },
+{ id: "a9", category: "شقة", title: "شقة بميدان الساعة (بجوار راية)", price: 3650000, priceText: "3 مليون و 650 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a9.webp", meta: ["📐 111م", "🌊 واجهة بحرية"], bullets: ["الموقع الإستراتيجي: بميدان الساعة مباشرة بجوار راية ماركت", "المواصفات: 111 متر صافي الدور السابع بحرية", "المميزات: عمارة بها 2 أسانسير • غاز طبيعي تشطيب سوبر لوكس"] },
+{ id: "a4", category: "شقة", title: "شقة عبير سيتي الفاخرة", price: 4500000, priceText: "4 مليون و 500 ألف جنيه", locationCategory: "المنيا", finishing: "سوبر لوكس", image: "images/a4.webp", meta: ["📐 170م", "✨ ألترا سوبر لوكس"], bullets: ["المساحة الصافية: 170 متر", "الدور: الأول علوي", "الواجهة: بحرية مفتوحة بالكامل وغير مجروحة", "الديكور: جبس بورد إيطالي وأرضيات باركيه فاخرة", "المرافق: عدادات كاملة (كهرباء • مياه • غاز)"], status: "sold" },
+{ id: "a3", category: "شقة", title: "شقة مرخصة بميدان الساعة", price: 4700000, priceText: "4 مليون و 700 ألف جنيه", locationCategory: "المنيا", finishing: "على الطوب", image: "images/a3.webp", meta: ["📐 200م", "🏢 برج مرخص"], bullets: ["المساحة: 200 متر مربع", "الترخيص: عمارة مرخصة ومسجلة قانونياً", "الدور: التاسع ببرج حديث", "التقسيم: 3 غرف + ليفنج + ريسبشن 3 قطع", "الوضعية: على العظم وجاهزة للتشطيب"] },
+{ id: "v2", category: "فيلا", title: "فيلا مشروع مراكش الفاخرة", price: 10550000, priceText: "10 مليون و 550 ألف جنيه", locationCategory: "المنيا", finishing: "نصف تشطيب", image: "images/v2.webp", meta: ["📍 بورتو المنيا", "🏊 حمام سباحة خاص"], bullets: ["الإطلالة: فيو مباشر على كمبوند بورتو المنيا الفخم", "التصميم: مساحة 161 متر بدروم + أرضي + أول وحمام سباحة"] },
 {
     id: "l1_khashaba",
     category: "أرض",
@@ -438,26 +453,26 @@
     customContactText: "استفسر عن الأرض"
 },
 {
-  id: "l2_dispasito",
-  category: "أرض",
-  title: "بيت 180م بجوار ديسباسيتو – تاني نمرة من الكورنيش",
-  price: 26000000,
-  priceText: "26 مليون جنيه",
-  locationCategory: "المنيا",
-  meta: ["📐 180م", "🧭 واجهة غربية", "🌊 تاني نمرة من الكورنيش"],
-  bullets: [
-    "الموقع: بجوار ديسباسيتو عند البنك الأهلي",
-    "تاني نمرة من الكورنيش",
-    "بجوار فندق مشهور",
-    "المساحة: 180 متر مربع",
-    "واجهة غربية",
-    "مكون من 3 أدوار",
-    "مناسب لإعادة البناء أو مشروع استثماري",
-    "المطلوب: 26 مليون جنيه"
-  ],
-  customContactText: "استفسر عن العقار"
+    id: "l2_dispasito",
+    category: "أرض",
+    title: "بيت 180م بجوار ديسباسيتو – تاني نمرة من الكورنيش",
+    price: 26000000,
+    priceText: "26 مليون جنيه",
+    locationCategory: "المنيا",
+    meta: ["📐 180م", "🧭 واجهة غربية", "🌊 تاني نمرة من الكورنيش"],
+    bullets: [
+        "الموقع: بجوار ديسباسيتو عند البنك الأهلي",
+        "تاني نمرة من الكورنيش",
+        "بجوار فندق مشهور",
+        "المساحة: 180 متر مربع",
+        "واجهة غربية",
+        "مكون من 3 أدوار",
+        "مناسب لإعادة البناء أو مشروع استثماري",
+        "المطلوب: 26 مليون جنيه"
+    ],
+    customContactText: "استفسر عن العقار"
 },
-            {
+{
     id: "s2_taha_hussein_mall",
     category: "محل",
     title: "محل استثماري في طه حسين أمام فندق كليوباترا",
@@ -480,7 +495,7 @@
     ], 
     customContactText: "استفسر عن المحل"
 },
-            {
+{
     id: "a16_boulevard_phase1",
     category: "شقة",
     title: "شقة 145م بكمبوند بوليفارد – المرحلة الأولى | استلام أقل من سنة",
@@ -517,8 +532,8 @@
     },
     customContactText: "استفسر عن التنازل والتقسيط",
     status: "sold"
-            }, 
-            {
+}, 
+{
     id: "a18_dream_valley_165",
     category: "شقة",
     title: "شقة 165م بدريم فالي – المنيا الجديدة",
@@ -593,7 +608,7 @@
     ],
     customContactText: "استفسر عن المحل"
 }, 
-     {
+{
     id: "a19_abeer_paradise_170",
     category: "شقة",
     title: "شقة 170م بكمبوند عبير برادايس – تشطيب ألترا سوبر لوكس",
@@ -617,7 +632,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "s5_hay1_quba",
     category: "محل",
     title: "محل 18.5م بالحي الأول – أمام مسجد قباء",
@@ -640,7 +655,7 @@
     ],
     customContactText: "استفسر عن المحل"
 }, 
-            {
+{
     id: "a20_prime_diar_office",
     category: "شقة",
     title: "وحدة إدارية 96م مؤجرة لشركة اتصالات مصر – برج برايم ديار",
@@ -666,7 +681,7 @@
     ],
     customContactText: "استفسر عن الوحدة الإدارية"
 }, 
-            {
+{
     id: "a21_media_towers_138",
     category: "شقة",
     title: "شقة 138م دور أخير – فيو مباشر على النيل | أبراج الإعلاميين",
@@ -694,7 +709,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "a21_adnan_160",
     category: "شقة",
     title: "شقة 160م بعدنان – أول سكن | تشطيب إكسترا سوبر لوكس",
@@ -723,7 +738,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "a22_adnan_malaky_125",
     category: "شقة",
     title: "شقة 125م بعدنان المالكي – واجهة شرقية على الشارع الرئيسي",
@@ -749,7 +764,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "a24_adnan_malaky_150",
     category: "شقة",
     title: "شقة 150م بعدنان المالكي – أرض سلطان",
@@ -775,7 +790,7 @@
     ],
     customContactText: "احجز المعاينة الآن"
 }, 
-            {
+{
     id: "l3_shelby_building_375",
     category: "أرض",
     title: "عمارة 375م بشلبي القديمة – ثاني نمرة من الميدان",
@@ -827,9 +842,52 @@
         "المطلوب: 1 مليون و250 ألف جنيه."
     ],
     customContactText: "احجز المعاينة الآن"
-} 
+}
         ];    
-            
+        
+        // ---------- المفضلة (Favorites) ----------
+        const FAV_STORAGE_KEY = 'capitalHomeFavorites';
+        function getFavorites() {
+            try {
+                const raw = localStorage.getItem(FAV_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+        function saveFavorites(arr) {
+            try {
+                localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(arr));
+            } catch (e) {
+                console.warn('Storage not available');
+            }
+        }
+        function isFavorite(id) {
+            return getFavorites().includes(id);
+        }
+        function toggleFavorite(id) {
+            let favs = getFavorites();
+            if (favs.includes(id)) {
+                favs = favs.filter(f => f !== id);
+            } else {
+                favs.push(id);
+            }
+            saveFavorites(favs);
+            updateFavCountBadge();
+            return favs.includes(id);
+        }
+        function updateFavCountBadge() {
+            const badge = document.getElementById('favCountBadge');
+            if (!badge) return;
+            const count = getFavorites().length;
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : String(count);
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
         let currentCategory = "شقة";    
         let isEventsBound = false;    
         let renderTimeout; 
@@ -858,9 +916,15 @@
             
             const searchInput = document.getElementById('propertySearch');
             const keyword = searchInput ? normalizeArabic(searchInput.value) : '';    
+            const isFavoritesView = currentCategory === "المفضلة";
+            const favIds = isFavoritesView ? getFavorites() : null;
             
             let filtered = propertiesData.filter(item => {    
-                if (item.category !== currentCategory) return false;    
+                if (isFavoritesView) {
+                    if (!favIds.includes(item.id)) return false;
+                } else if (item.category !== currentCategory) {
+                    return false;
+                }
                 if (keyword) {    
                     const matchTitle = normalizeArabic(item.title).includes(keyword);    
                     const matchPriceText = normalizeArabic(item.priceText).includes(keyword);    
@@ -887,7 +951,12 @@
             
             const noResults = document.getElementById('noResults');    
             if (filtered.length === 0) {     
-                if (noResults) noResults.classList.remove('hidden');    
+                if (noResults) {
+                    noResults.classList.remove('hidden');
+                    noResults.textContent = isFavoritesView
+                        ? 'لسه معندكش عقارات في المفضلة. اضغط على ❤️ داخل أي عقار عشان تحفظه هنا.'
+                        : 'لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!';
+                }
                 return;     
             }    
             if (noResults) noResults.classList.add('hidden');    
@@ -897,7 +966,6 @@
                 cardEl.setAttribute('itemscope', '');
                 
                 // ملحوظة: schema.org/Product هو النوع الصحيح الذي يدعم خاصية "offers" المتداخلة
-                // (الأنواع السابقة Apartment/SingleFamilyResidence/Offer لا تمتلك هذه الخاصية رسمياً)
                 const schemaType = 'https://schema.org/Product';
                 cardEl.setAttribute('itemtype', schemaType);
                 
@@ -915,8 +983,6 @@
                 
                 const hiddenSEOUrl = `<a itemprop="url" href="?property=${prop.id}" class="hidden">رابط الوحدة</a>`;
                 const seoCategory = `<meta itemprop="category" content="${prop.category}" />`;
-                // وصف مختصر وموجز يُولَّد تلقائياً من بيانات العقار الفعلية (دون اختلاق أي محتوى)
-                // لإفادة جوجل بمحتوى schema.org/description واضح بدلاً من الاعتماد على العنوان فقط.
                 const itemDescription = prop.description
                     ? prop.description
                     : `${prop.title} - ${prop.priceText} - ${prop.locationCategory}${prop.finishing ? ' - تشطيب ' + prop.finishing : ''}`;
@@ -932,16 +998,26 @@
                 }).join('') : '';    
                 
                 const badgeHTML = isSold ? `<div class="absolute top-4 left-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>` : '';
-                // صورة افتراضية تظهر إذا لم يكن للعقار صورة خاصة (أو فشل تحميلها)، حفاظاً على تناسق ارتفاع الكروت بالشبكة
+
+                // زر المفضلة (❤️) — يظهر أعلى يمين الكارت (مقابل شارة "تم البيع" في أعلى يسار الكارت)
+                const favActive = isFavorite(prop.id);
+                const favBtnHTML = `
+                    <button type="button"
+                        class="fav-btn absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300 shadow-lg ${favActive ? 'bg-favRed text-white' : 'bg-black/50 text-white/70 hover:text-favRed'}"
+                        data-id="${prop.id}"
+                        aria-pressed="${favActive}"
+                        aria-label="${favActive ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}">
+                        ${favActive ? '❤️' : '🤍'}
+                    </button>`;
+
                 const fallbackImage = 'images/placeholder.webp';
                 const currentImage = prop.image ? prop.image : fallbackImage;
-                // عند فشل تحميل صورة العقار: نجرب الصورة الافتراضية أولاً، وإذا فشلت هي الأخرى
-                // (لأنها لم تُرفع بعد) نخفي مكان الصورة بالكامل بدل ظهور مربع فارغ مكسور.
                 const imageHTML = `<img src="${currentImage}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
 
                 const summaryHTML = `
                     <div class="p-6 pb-5 cursor-pointer card-summary flex flex-col h-full z-10 relative group">
                         ${badgeHTML}
+                        ${favBtnHTML}
                         ${imageHTML}
                         <div class="flex justify-between items-start mb-3">
                             <h3 itemprop="name" class="text-xl font-bold text-white leading-tight group-hover:text-goldCustom transition-colors">${prop.title}</h3>
@@ -1060,8 +1136,6 @@
         }    
 
         function triggerDebouncedRender() {    
-            // يُستخدم فقط مع مربع البحث: ننتظر حتى يتوقف العميل عن الكتابة
-            // قبل إظهار تأثير التحميل، لتفادي وميض الشاشة مع كل حرف يُكتب.
             clearTimeout(renderTimeout);    
             renderTimeout = setTimeout(() => {    
                 renderSkeletons();    
@@ -1075,12 +1149,6 @@
             const wrapper = document.getElementById('propertiesWrapper');    
             if (!wrapper) return;
             
-            // ملاحظة: تم تقييد هذا المعالج بحيث يعمل فقط عندما يكون التركيز (focus)
-            // على بطاقة العقار نفسها (.card)، وليس على أي رابط أو زر فرعي بداخلها.
-            // هذا يمنع "التفعيل المزدوج" الذي كان يحدث سابقاً: عند الضغط على Enter
-            // فوق رابط واتساب أو زر المشاركة، كان المتصفح يُطلق حدث click تلقائياً
-            // (السلوك الافتراضي)، وفي نفس الوقت كان الكود يستدعي e.target.click()
-            // يدوياً، فيتكرر الإجراء مرتين (فتح واتساب مرتين، أو ظهور تنبيه النسخ مرتين).
             wrapper.addEventListener('keydown', function(e) {
                 if (e.key !== 'Enter' && e.key !== ' ') return;
                 if (!e.target.classList || !e.target.classList.contains('card')) return;
@@ -1090,6 +1158,32 @@
             });
                 
             wrapper.addEventListener('click', function(e) {    
+                const favBtn = e.target.closest('.fav-btn');
+                if (favBtn && wrapper.contains(favBtn)) {
+                    e.stopPropagation();
+                    const id = favBtn.getAttribute('data-id');
+                    const nowActive = toggleFavorite(id);
+
+                    favBtn.classList.add('heart-pop');
+                    favBtn.textContent = nowActive ? '❤️' : '🤍';
+                    favBtn.setAttribute('aria-pressed', String(nowActive));
+                    favBtn.setAttribute('aria-label', nowActive ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة');
+                    if (nowActive) {
+                        favBtn.classList.remove('bg-black/50', 'text-white/70');
+                        favBtn.classList.add('bg-favRed', 'text-white');
+                    } else {
+                        favBtn.classList.remove('bg-favRed', 'text-white');
+                        favBtn.classList.add('bg-black/50', 'text-white/70');
+                    }
+                    setTimeout(() => favBtn.classList.remove('heart-pop'), 350);
+
+                    // لو الكارت مفتوح في تبويب "المفضلة" وشيلها، اختفيها فوراً من الشبكة
+                    if (currentCategory === "المفضلة" && !nowActive) {
+                        triggerDynamicRender();
+                    }
+                    return;
+                }
+
                 const shareBtn = e.target.closest('.btn-sh');    
                 if (shareBtn && wrapper.contains(shareBtn)) {    
                     e.stopPropagation();     
@@ -1215,8 +1309,6 @@
         function scrollToPropertiesTop() {
             const wrapper = document.getElementById('propertiesWrapper');
             if (!wrapper) return;
-            // نطرح ارتفاع تقريبي لشريط التصنيفات الثابت (sticky-nav) عشان أول كارت
-            // يظهر تحت الشريط مباشرة، مش مخفي وراه.
             const stickyOffset = 90;
             const targetY = wrapper.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
             window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
@@ -1239,6 +1331,8 @@
             } catch(e) {
                 console.warn("Storage access is restricted.");
             }
+
+            updateFavCountBadge();
 
             if (initialPropertyToOpen) {    
                 const targetProperty = propertiesData.find(item => item.id === initialPropertyToOpen);    

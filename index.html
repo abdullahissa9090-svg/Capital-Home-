@@ -997,13 +997,13 @@
                     return `<span class="${styleClasses} py-1.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center">${m}</span>`;    
                 }).join('') : '';    
                 
-                const badgeHTML = isSold ? `<div class="absolute top-4 left-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>` : '';
+                const badgeHTML = isSold ? `<div class="absolute top-4 right-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>` : '';
 
-                // زر المفضلة (❤️) — يظهر أعلى يمين الكارت (مقابل شارة "تم البيع" في أعلى يسار الكارت)
+                // زر المفضلة (❤️) — يظهر أعلى يسار الكارت (بعيداً عن بداية عنوان العقار في وضع RTL، وبعيداً عن شارة "تم البيع" اللي بقت أعلى اليمين)
                 const favActive = isFavorite(prop.id);
                 const favBtnHTML = `
                     <button type="button"
-                        class="fav-btn absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300 shadow-lg ${favActive ? 'bg-favRed text-white' : 'bg-black/50 text-white/70 hover:text-favRed'}"
+                        class="fav-btn absolute top-4 left-4 z-20 w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300 shadow-lg ${favActive ? 'bg-favRed text-white' : 'bg-black/50 text-white/70 hover:text-favRed'}"
                         data-id="${prop.id}"
                         aria-pressed="${favActive}"
                         aria-label="${favActive ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}">
@@ -1019,7 +1019,7 @@
                         ${badgeHTML}
                         ${favBtnHTML}
                         ${imageHTML}
-                        <div class="flex justify-between items-start mb-3">
+                        <div class="flex justify-between items-start mb-3 pl-12">
                             <h3 itemprop="name" class="text-xl font-bold text-white leading-tight group-hover:text-goldCustom transition-colors">${prop.title}</h3>
                         </div>
                         

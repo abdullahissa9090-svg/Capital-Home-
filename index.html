@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#0c0c0e">
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
@@ -147,7 +147,7 @@
     <header class="relative flex flex-col items-center justify-center pt-16 pb-12 px-4 text-center overflow-hidden">    
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-goldCustom/20 rounded-full blur-[80px] z-[-1]"></div>
         
-        <img src="brand-og-image.jpg" alt="لوجو مكتب كابيتال هوم للعقارات" width="176" height="176" class="w-44 h-44 object-contain mb-4 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] relative z-10">    
+        <img src="/brand-og-image.jpg" alt="لوجو مكتب كابيتال هوم للعقارات" width="176" height="176" class="w-44 h-44 object-contain mb-4 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] relative z-10">    
         
         <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 relative z-10 tracking-tight">عقارات كابيتال هوم بالمنيا</h1>
         <p class="text-lg text-zinc-300 font-medium max-w-lg mx-auto relative z-10 leading-relaxed">نساعدك في اختيار العقار المناسب بأمان قانوني وثقة كاملة في المنيا والمنيا الجديدة.</p>    
@@ -519,6 +519,17 @@
 
         // روابط نظيفة /property/id هي الأساس الآن، مع الحفاظ الكامل على
         // الروابط القديمة ?property=id عشان أي رابط اتشارك قبل كده يفضل شغال.
+        // أي مسار ملف نسبي (زي صور العقارات المكتوبة في الشيت بصيغة
+        // "images/xxx.webp") لازم يتحول لمسار مطلق من جذر الموقع، لأن
+        // الصفحة دلوقتي ممكن تُفتح من مسار /property/id مش من الجذر "/"
+        // بس، والمسارات النسبية بتتحسب بالنسبة للمسار الحالي مش الجذر.
+        function resolveAssetPath(path) {
+            const clean = String(path || '').trim();
+            if (!clean) return '';
+            if (/^(https?:)?\/\//i.test(clean) || clean.startsWith('/')) return clean;
+            return '/' + clean;
+        }
+
         function buildPropertyPath(id) {
             return '/property/' + encodeURIComponent(id);
         }
@@ -553,7 +564,7 @@
             };
 
             if (prop.image) {
-                jsonLd.image = window.location.origin + '/' + String(prop.image).replace(/^\/+/, '');
+                jsonLd.image = window.location.origin + resolveAssetPath(prop.image);
             }
 
             const offer = {
@@ -699,8 +710,8 @@
                         ${favActive ? '❤️' : '🤍'}
                     </button>`;
 
-                const fallbackImage = 'images/placeholder.webp';
-                const currentImage = prop.image ? prop.image : fallbackImage;
+                const fallbackImage = '/images/placeholder.webp';
+                const currentImage = prop.image ? resolveAssetPath(prop.image) : fallbackImage;
                 const imageHTML = `<img src="${currentImage}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
 
                 const summaryHTML = `

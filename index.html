@@ -574,10 +574,10 @@
                 };
             }
 
-            // حماية بسيطة: منع أي نص داخل البيانات (مثلاً وصف فيه "</script>")
+            // حماية بسيطة: منع أي نص داخل البيانات (مثلاً وصف فيه وسم إغلاق سكريبت)
             // من كسر وسم السكريبت نفسه.
             const safeJson = JSON.stringify(jsonLd).replace(/<\/script/gi, '<\\/script');
-            return `<script type="application/ld+json">${safeJson}</script>`;
+            return `<script type="application/ld+json">${safeJson}<\/script>`;
         }
 
         function normalizeArabic(str) {    

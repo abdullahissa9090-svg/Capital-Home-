@@ -387,13 +387,59 @@
             return JSON.parse(text.substring(start, end + 1));
         }
 
-        async function loadPropertiesFromSheet() {
+        const FETCH_TIMEOUT_MS = 8000; // مهلة قصوى لكل محاولة
+        const MAX_RETRIES = 2;         // عدد إعادة المحاولات بعد المحاولة الأولى
+        const RETRY_DELAY_MS = 1200;   // فاصل بسيط قبل كل إعادة محاولة
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // طلب واحد بحد أقصى للوقت (Timeout) عبر AbortController، حتى لا يظل
+        // المستخدم ينتظر إلى ما لا نهاية عند تعثر الاتصال بجوجل شيت.
+        async function fetchSheetOnce() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
             try {
-                const response = await fetch(SHEET_GVIZ_URL, { credentials: 'omit' });
+                const response = await fetch(SHEET_GVIZ_URL, {
+                    credentials: 'omit',
+                    signal: controller.signal
+                });
                 if (!response.ok) {
                     throw new Error('HTTP ' + response.status);
                 }
-                const text = await response.text();
+                return await response.text();
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        // يحاول تحميل بيانات الشيت مع إعادة المحاولة تلقائياً عند الفشل
+        // (نت متقطع، انقطاع مؤقت، مهلة انتهت...) قبل عرض رسالة الخطأ النهائية.
+        async function fetchSheetWithRetry() {
+            let lastError = null;
+            for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+                try {
+                    return await fetchSheetOnce();
+                } catch (err) {
+                    lastError = err;
+                    const isLastAttempt = attempt === MAX_RETRIES;
+                    console.warn(
+                        `محاولة تحميل الشيت رقم ${attempt + 1} فشلت` +
+                        (isLastAttempt ? ' (آخر محاولة)' : '، جاري إعادة المحاولة...'),
+                        err
+                    );
+                    if (!isLastAttempt) {
+                        await sleep(RETRY_DELAY_MS);
+                    }
+                }
+            }
+            throw lastError;
+        }
+
+        async function loadPropertiesFromSheet() {
+            try {
+                const text = await fetchSheetWithRetry();
                 const data = parseGvizResponse(text);
 
                 const cols = (data && data.table && data.table.cols) || [];
@@ -411,7 +457,7 @@
 
                 dataLoadError = propertiesData.length === 0;
             } catch (err) {
-                console.error('تعذر تحميل بيانات الشيت:', err);
+                console.error('تعذر تحميل بيانات الشيت بعد كل المحاولات:', err);
                 dataLoadError = true;
             }
         }

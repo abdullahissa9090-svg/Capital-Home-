@@ -9,10 +9,18 @@
     <meta name="keywords" content="عقارات المنيا, شقق للبيع في المنيا, عقارات المنيا الجديدة, مكتب عقارات في المنيا, فلل للبيع بالمنيا, شقة للبيع كورنيش المنيا">  
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#0c0c0e">
-    
+
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
-    <link rel="canonical" href="https://capital-home.vercel.app/">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="كابيتال هوم">
+
+    <link rel="canonical" href="https://capital-home.vercel.app/" id="canonicalLink">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="عقارات المنيا | شقق للبيع بالمنيا والمنيا الجديدة | كابيتال هوم">
@@ -508,8 +516,70 @@
         let currentCategory = "شقة";    
         let isEventsBound = false;    
         let renderTimeout; 
-        let initialPropertyToOpen = new URLSearchParams(window.location.search).get('property');
+
+        // روابط نظيفة /property/id هي الأساس الآن، مع الحفاظ الكامل على
+        // الروابط القديمة ?property=id عشان أي رابط اتشارك قبل كده يفضل شغال.
+        function buildPropertyPath(id) {
+            return '/property/' + encodeURIComponent(id);
+        }
+        function buildPropertyAbsoluteUrl(id) {
+            return window.location.origin + buildPropertyPath(id);
+        }
+        function getPropertyIdFromLocation() {
+            const params = new URLSearchParams(window.location.search);
+            const fromQuery = params.get('property');
+            if (fromQuery) return fromQuery;
+            const match = window.location.pathname.match(/^\/property\/([^/?#]+)\/?$/);
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+        function setCanonicalUrl(url) {
+            const link = document.getElementById('canonicalLink');
+            if (link) link.setAttribute('href', url);
+        }
+
+        let initialPropertyToOpen = getPropertyIdFromLocation();
             
+        // يبني بيانات JSON-LD (Structured Data) لكل عقار منفرد: الاسم، السعر،
+        // الفئة، الحالة (متاح/مباع)، والموقع (لو متوفر). ده منفصل عن أي
+        // بيانات microdata موجودة أصلاً في الكارت ومكمّل ليها.
+        function buildPropertyJsonLdScript(prop, isSold, absoluteUrl, description) {
+            const jsonLd = {
+                "@context": "https://schema.org",
+                "@type": "Product",
+                "name": prop.title,
+                "category": prop.category,
+                "url": absoluteUrl,
+                "description": description
+            };
+
+            if (prop.image) {
+                jsonLd.image = window.location.origin + '/' + String(prop.image).replace(/^\/+/, '');
+            }
+
+            const offer = {
+                "@type": "Offer",
+                "priceCurrency": "EGP",
+                "price": prop.price || 0,
+                "availability": isSold ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+                "url": absoluteUrl
+            };
+            jsonLd.offers = offer;
+
+            if (prop.locationCategory) {
+                jsonLd.address = {
+                    "@type": "PostalAddress",
+                    "addressLocality": prop.locationCategory,
+                    "addressRegion": "محافظة المنيا",
+                    "addressCountry": "EG"
+                };
+            }
+
+            // حماية بسيطة: منع أي نص داخل البيانات (مثلاً وصف فيه "</script>")
+            // من كسر وسم السكريبت نفسه.
+            const safeJson = JSON.stringify(jsonLd).replace(/<\/script/gi, '<\\/script');
+            return `<script type="application/ld+json">${safeJson}</script>`;
+        }
+
         function normalizeArabic(str) {    
             if (!str) return '';
             return String(str)    
@@ -598,12 +668,14 @@
                 cardEl.style.animationDelay = `${index * 50}ms`;
                 cardEl.setAttribute('data-id', prop.id);     
                 
-                const hiddenSEOUrl = `<a itemprop="url" href="?property=${prop.id}" class="hidden">رابط الوحدة</a>`;
+                const propertyAbsoluteUrl = buildPropertyAbsoluteUrl(prop.id);
+                const hiddenSEOUrl = `<a itemprop="url" href="${buildPropertyPath(prop.id)}" class="hidden">رابط الوحدة</a>`;
                 const seoCategory = `<meta itemprop="category" content="${prop.category}" />`;
                 const itemDescription = prop.description
                     ? prop.description
                     : `${prop.title} - ${prop.priceText} - ${prop.locationCategory}${prop.finishing ? ' - تشطيب ' + prop.finishing : ''}`;
                 const seoDescription = `<meta itemprop="description" content="${itemDescription.replace(/"/g, '&quot;')}" />`;
+                const jsonLdHTML = buildPropertyJsonLdScript(prop, isSold, propertyAbsoluteUrl, itemDescription);
                 const bgDecorative = `<div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-goldCustom/10 to-transparent rounded-full blur-3xl pointer-events-none transition-all duration-500 group-hover:from-goldCustom/20"></div>`;
 
                 let metaBadges = prop.meta ? prop.meta.map(m => {    
@@ -702,7 +774,7 @@
                     </div>
                 `;    
                 
-                cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + bgDecorative + summaryHTML + detailHTML;
+                cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + jsonLdHTML + bgDecorative + summaryHTML + detailHTML;
                 wrapper.appendChild(cardEl);     
             });    
 
@@ -720,6 +792,14 @@
                         
                         const titleText = card.querySelector('[itemprop="name"]').innerText;
                         document.title = titleText + ' | كابيتال هوم';
+
+                        // لو الرابط اللي دخل بيه الزائر كان بالصيغة القديمة
+                        // ?property=id، نستبدله في شريط العنوان بالصيغة النظيفة
+                        // الجديدة /property/id من غير ما نعمل إعادة تحميل للصفحة.
+                        const propId = card.getAttribute('data-id');
+                        const cleanUrl = buildPropertyAbsoluteUrl(propId);
+                        window.history.replaceState({ path: cleanUrl }, '', buildPropertyPath(propId));
+                        setCanonicalUrl(cleanUrl);
                         
                         setTimeout(() => {
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -819,7 +899,7 @@
                     e.stopPropagation();     
                     const title = shareBtn.getAttribute('data-title');     
                     const id = shareBtn.getAttribute('data-id');    
-                    const targetUrl = window.location.href.split('?')[0] + '?property=' + id;    
+                    const targetUrl = buildPropertyAbsoluteUrl(id);    
                     const text = 'معاينة وتفاصيل: [ ' + title + ' ] بمحافظة المنيا. تفضل بزيارة الرابط المباشر للعقار: ' + targetUrl;    
                     if (navigator.share) {     
                         navigator.share({ title: 'كابيتال هوم', text: text, url: targetUrl }).catch(err => console.error(err));     
@@ -853,8 +933,10 @@
                         const svg = card.querySelector('svg');
                         if(svg) svg.classList.add('rotate-180');
                         
-                        const newUrl = window.location.href.split('?')[0] + '?property=' + card.getAttribute('data-id');
-                        window.history.replaceState({ path: newUrl }, '', newUrl);
+                        const propId = card.getAttribute('data-id');
+                        const newUrl = buildPropertyAbsoluteUrl(propId);
+                        window.history.replaceState({ path: newUrl }, '', buildPropertyPath(propId));
+                        setCanonicalUrl(newUrl);
                         
                         const titleText = card.querySelector('[itemprop="name"]').innerText;
                         document.title = titleText + ' | كابيتال هوم';
@@ -863,9 +945,8 @@
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
                         }, 100);     
                     } else {
-                        const url = new URL(window.location.href);
-                        url.searchParams.delete('property');
-                        window.history.replaceState({}, '', url.toString());
+                        window.history.replaceState({}, '', '/');
+                        setCanonicalUrl(window.location.origin + '/');
                         document.title = 'عقارات المنيا | شقق للبيع بالمنيا والمنيا الجديدة | كابيتال هوم';
                     }
                     return;    
@@ -989,6 +1070,19 @@
         }
 
     })(); 
-    </script>  
+    </script>
+
+    <script>
+        // تسجيل الـ Service Worker لدعم التثبيت (PWA) والعمل حتى مع ضعف/انقطاع
+        // الإنترنت. مفصول عن المنطق الرئيسي عشان لو فشل التسجيل لأي سبب
+        // (متصفح قديم، وضع خاص...) الموقع يفضل شغال عادي بدون أي تأثير.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch((err) => {
+                    console.warn('تعذر تسجيل Service Worker:', err);
+                });
+            });
+        }
+    </script>
 </body>    
 </html>

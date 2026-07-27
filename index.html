@@ -182,6 +182,7 @@
             <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
             <button type="button" id="btnCat-محل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
             <button type="button" id="btnCat-أرض" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="أرض" aria-pressed="false">🌍 الأراضي</button>
+            <button type="button" id="btnCat-الكمباوندات" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="الكمباوندات" aria-pressed="false">🏘️ الكمباوندات</button>
             <button type="button" id="btnCat-المفضلة" class="nav-btn relative flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="المفضلة" aria-pressed="false">
                 ❤️ المفضلة
                 <span id="favCountBadge" class="hidden absolute -top-1.5 -left-1.5 bg-favRed text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
@@ -405,11 +406,11 @@
 
         // طلب واحد بحد أقصى للوقت (Timeout) عبر AbortController، حتى لا يظل
         // المستخدم ينتظر إلى ما لا نهاية عند تعثر الاتصال بجوجل شيت.
-        async function fetchSheetOnce() {
+        async function fetchSheetOnce(url) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
             try {
-                const response = await fetch(SHEET_GVIZ_URL, {
+                const response = await fetch(url, {
                     credentials: 'omit',
                     signal: controller.signal
                 });
@@ -422,13 +423,14 @@
             }
         }
 
-        // يحاول تحميل بيانات الشيت مع إعادة المحاولة تلقائياً عند الفشل
-        // (نت متقطع، انقطاع مؤقت، مهلة انتهت...) قبل عرض رسالة الخطأ النهائية.
-        async function fetchSheetWithRetry() {
+        // يحاول تحميل بيانات أي شيت (عقارات أو كمباوندات) مع إعادة المحاولة
+        // تلقائياً عند الفشل (نت متقطع، انقطاع مؤقت، مهلة انتهت...) قبل
+        // الاستسلام. مشتركة بين كل مصادر البيانات في الموقع.
+        async function fetchSheetWithRetry(url) {
             let lastError = null;
             for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
                 try {
-                    return await fetchSheetOnce();
+                    return await fetchSheetOnce(url);
                 } catch (err) {
                     lastError = err;
                     const isLastAttempt = attempt === MAX_RETRIES;
@@ -447,7 +449,7 @@
 
         async function loadPropertiesFromSheet() {
             try {
-                const text = await fetchSheetWithRetry();
+                const text = await fetchSheetWithRetry(SHEET_GVIZ_URL);
                 const data = parseGvizResponse(text);
 
                 const cols = (data && data.table && data.table.cols) || [];
@@ -467,6 +469,120 @@
             } catch (err) {
                 console.error('تعذر تحميل بيانات الشيت بعد كل المحاولات:', err);
                 dataLoadError = true;
+            }
+        }
+
+        // ==========================================================
+        // قسم الكمباوندات — مصدر بيانات منفصل تماماً (شيتين إضافيين في
+        // نفس ملف Google Sheets)، ومحمّل بشكل كسول (Lazy) أول ما المستخدم
+        // يدخل تاب "الكمباوندات" فقط، عشان الأداء العادي للموقع (شقق/فيلل/
+        // محلات/أراضي) ميتأثرش بيها خالص. لو الشيتين لسه فاضيين أو غير
+        // موجودين، الموقع بيعرض رسالة ودّية بدل ما يتعطل.
+        // ==========================================================
+        const COMPOUNDS_SHEET_NAME = 'الكمباوندات';
+        const COMPOUND_UNITS_SHEET_NAME = 'وحدات الكمباوندات';
+
+        function buildGvizUrlBySheetName(sheetName) {
+            return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+        }
+        const COMPOUNDS_GVIZ_URL = buildGvizUrlBySheetName(COMPOUNDS_SHEET_NAME);
+        const COMPOUND_UNITS_GVIZ_URL = buildGvizUrlBySheetName(COMPOUND_UNITS_SHEET_NAME);
+
+        let compoundsData = [];
+        let compoundUnitsData = [];
+        let compoundsLoaded = false;
+        let compoundsLoadError = false;
+        let currentCompoundId = null;
+
+        function rowToCompound(cells, colIndexMap) {
+            const id = getCell(cells, colIndexMap, 'id');
+            const name = getCell(cells, colIndexMap, 'name');
+            if (!String(id).trim() || !String(name).trim()) return null;
+
+            const servicesRaw = getCell(cells, colIndexMap, 'services');
+            const unitTypesRaw = getCell(cells, colIndexMap, 'unittypes');
+            const spacesRaw = getCell(cells, colIndexMap, 'spaces');
+
+            return {
+                id: String(id).trim(),
+                name: String(name).trim(),
+                image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
+                location: String(getCell(cells, colIndexMap, 'location') || '').trim(),
+                priceFromText: String(getCell(cells, colIndexMap, 'pricefromtext') || '').trim(),
+                developer: String(getCell(cells, colIndexMap, 'developer') || '').trim(),
+                about: String(getCell(cells, colIndexMap, 'about') || '').trim(),
+                services: servicesRaw ? String(servicesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
+                unitTypes: unitTypesRaw ? String(unitTypesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
+                spaces: spacesRaw ? String(spacesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
+                paymentSystems: String(getCell(cells, colIndexMap, 'paymentsystems') || '').trim()
+            };
+        }
+
+        function rowToCompoundUnit(cells, colIndexMap) {
+            const compoundId = getCell(cells, colIndexMap, 'compoundid');
+            const title = getCell(cells, colIndexMap, 'title');
+            if (!String(compoundId).trim() || !String(title).trim()) return null;
+
+            const bulletsRaw = getCell(cells, colIndexMap, 'bullets');
+            const offer = getCell(cells, colIndexMap, 'offer');
+            const paid = getCell(cells, colIndexMap, 'paid');
+            const remaining = getCell(cells, colIndexMap, 'remaining');
+            const value = getCell(cells, colIndexMap, 'value');
+
+            const unit = {
+                compoundId: String(compoundId).trim(),
+                title: String(title).trim(),
+                unitType: String(getCell(cells, colIndexMap, 'unittype') || '').trim(),
+                space: String(getCell(cells, colIndexMap, 'space') || '').trim(),
+                price: parsePrice(getCell(cells, colIndexMap, 'price')),
+                priceText: String(getCell(cells, colIndexMap, 'pricetext') || '').trim(),
+                bullets: bulletsRaw ? String(bulletsRaw).split('\n').map(s => s.trim()).filter(Boolean) : []
+            };
+
+            const hasPaymentPlan = [offer, paid, remaining, value].some(v => String(v).trim());
+            if (hasPaymentPlan) {
+                unit.paymentPlan = {
+                    offer: String(offer || '').trim(),
+                    paid: String(paid || '').trim(),
+                    remaining: String(remaining || '').trim(),
+                    value: String(value || '').trim()
+                };
+            }
+
+            return unit;
+        }
+
+        async function loadCompoundsFromSheet() {
+            try {
+                const [compoundsText, unitsText] = await Promise.all([
+                    fetchSheetWithRetry(COMPOUNDS_GVIZ_URL),
+                    fetchSheetWithRetry(COMPOUND_UNITS_GVIZ_URL)
+                ]);
+
+                const compoundsJson = parseGvizResponse(compoundsText);
+                const unitsJson = parseGvizResponse(unitsText);
+
+                const compoundsCols = (compoundsJson && compoundsJson.table && compoundsJson.table.cols) || [];
+                const compoundsRows = (compoundsJson && compoundsJson.table && compoundsJson.table.rows) || [];
+                const compoundsColMap = buildColumnIndexMap(compoundsCols);
+
+                const unitsCols = (unitsJson && unitsJson.table && unitsJson.table.cols) || [];
+                const unitsRows = (unitsJson && unitsJson.table && unitsJson.table.rows) || [];
+                const unitsColMap = buildColumnIndexMap(unitsCols);
+
+                compoundsData = compoundsRows.map(r => rowToCompound(r && r.c, compoundsColMap)).filter(Boolean);
+                compoundUnitsData = unitsRows.map(r => rowToCompoundUnit(r && r.c, unitsColMap)).filter(Boolean);
+
+                compoundsLoadError = false;
+            } catch (err) {
+                // فشل التحميل هنا (سواء الشيت لسه مش موجود، أو فاضي، أو
+                // مشكلة نت) لا يؤثر إطلاقاً على باقي أقسام الموقع.
+                console.warn('تعذر تحميل بيانات الكمباوندات (ده طبيعي لو لسه مفيش بيانات مضافة):', err);
+                compoundsData = [];
+                compoundUnitsData = [];
+                compoundsLoadError = true;
+            } finally {
+                compoundsLoaded = true;
             }
         }
 
@@ -849,18 +965,231 @@
             errEl.innerHTML = 'تعذر تحميل بيانات العقارات حالياً. برجاء تحديث الصفحة بعد قليل، أو التواصل معنا مباشرة.<br><a href="https://wa.me/201555086599" target="_blank" rel="noopener noreferrer" class="inline-block mt-4 bg-whatsappGreen text-white px-6 py-3 rounded-xl font-bold text-sm">💬 تواصل معنا</a>';
             wrapper.appendChild(errEl);
         }
-            
+
+        // ---------- عرض قسم الكمباوندات ----------
+
+        function showEmptyCompoundsMessage(message) {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.classList.add('hidden');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+            const msgEl = document.createElement('div');
+            msgEl.className = 'col-span-full text-center py-16 text-zinc-400 font-semibold text-base bg-bgCard/30 rounded-3xl border border-white/5';
+            msgEl.setAttribute('aria-live', 'polite');
+            msgEl.textContent = message;
+            wrapper.appendChild(msgEl);
+        }
+
+        function renderCompoundBadges(items) {
+            if (!items || items.length === 0) return '';
+            return `<div class="flex flex-wrap gap-2 mt-3">${items.map(i =>
+                `<span class="bg-white/5 text-zinc-300 border border-white/5 py-1.5 px-3.5 rounded-xl text-xs font-bold">${i}</span>`
+            ).join('')}</div>`;
+        }
+
+        function buildCompoundUnitCard(unit, index) {
+            const cardEl = document.createElement('article');
+            cardEl.className = 'compound-unit-card animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-goldCustom/30 flex flex-col h-full';
+            cardEl.style.animationDelay = `${index * 50}ms`;
+
+            const metaParts = [unit.unitType, unit.space ? '📐 ' + unit.space : ''].filter(Boolean);
+            const metaBadges = metaParts.map(m =>
+                `<span class="bg-white/5 text-zinc-300 border border-white/5 py-1.5 px-3.5 rounded-xl text-xs font-bold">${m}</span>`
+            ).join('');
+
+            let paymentPlanHTML = '';
+            if (unit.paymentPlan) {
+                paymentPlanHTML = `
+                <div class="mb-4 bg-gradient-to-l from-goldCustom/10 to-transparent border border-goldCustom/20 p-4 rounded-xl">
+                    <h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 خطة السداد المالية</h4>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💰 الأوفر المطلوب:</span><strong class="text-white text-sm block">${unit.paymentPlan.offer}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💳 إجمالي المدفوع:</span><strong class="text-white text-sm block">${unit.paymentPlan.paid}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">📅 الأقساط المتبقية:</span><strong class="text-white text-sm block">${unit.paymentPlan.remaining}</strong></div>
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💵 قيمة القسط:</span><strong class="text-priceBlue text-sm block">${unit.paymentPlan.value}</strong></div>
+                    </div>
+                </div>`;
+            }
+
+            const bulletItems = unit.bullets.map(b =>
+                `<div class="text-sm text-zinc-300 font-medium flex items-start gap-2 before:content-['✓'] before:text-goldCustom before:text-base before:font-bold before:mt-[-2px]">${b}</div>`
+            ).join('');
+
+            const waMessage = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + unit.title);
+
+            cardEl.innerHTML = `
+                <div class="p-6 flex flex-col h-full">
+                    <h3 class="text-lg font-bold text-white leading-tight mb-2">${unit.title}</h3>
+                    ${unit.priceText ? `<div class="text-xl font-extrabold text-priceBlue mb-3 tracking-tight">${unit.priceText}</div>` : ''}
+                    <div class="flex flex-wrap gap-2 mb-4">${metaBadges}</div>
+                    ${paymentPlanHTML}
+                    ${bulletItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${bulletItems}</div>` : ''}
+                    <a href="https://wa.me/201555086599?text=${waMessage}" target="_blank" rel="noopener noreferrer" class="mt-auto w-full py-3 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg">💬 استفسر عن هذه الوحدة</a>
+                </div>
+            `;
+            return cardEl;
+        }
+
+        function renderCompoundDetail(compoundId) {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.classList.add('hidden');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            const compound = compoundsData.find(c => c.id === compoundId);
+            if (!compound) {
+                currentCompoundId = null;
+                renderCompoundsList();
+                return;
+            }
+
+            const units = compoundUnitsData.filter(u => u.compoundId === compoundId);
+
+            const detailWrap = document.createElement('div');
+            detailWrap.className = 'col-span-full';
+
+            const fallbackImage = '/images/placeholder.webp';
+            const imageSrc = compound.image ? resolveAssetPath(compound.image) : fallbackImage;
+
+            const unitsHTML = units.length > 0
+                ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`
+                : `<div class="text-center py-10 text-zinc-500 font-semibold bg-bgCard/30 rounded-2xl border border-white/5">لسه مفيش وحدات مضافة لهذا الكمباوند حالياً.</div>`;
+
+            detailWrap.innerHTML = `
+                <button type="button" class="compound-back-btn mb-6 inline-flex items-center gap-2 text-zinc-400 hover:text-goldCustom font-bold text-sm transition-colors">
+                    <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    رجوع لكل الكمباوندات
+                </button>
+                <div class="bg-bgCard rounded-3xl border border-white/5 overflow-hidden mb-8">
+                    <img src="${imageSrc}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${compound.name}" class="w-full aspect-[16/9] object-cover bg-zinc-800">
+                    <div class="p-6 md:p-8">
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">${compound.name}</h2>
+                        ${compound.location ? `<div class="text-zinc-400 mb-1">📍 ${compound.location}</div>` : ''}
+                        ${compound.developer ? `<div class="text-zinc-400 mb-4">🏢 المطور: ${compound.developer}</div>` : ''}
+                        ${compound.priceFromText ? `<div class="text-xl font-extrabold text-priceBlue mb-4">يبدأ سعر المتر من ${compound.priceFromText}</div>` : ''}
+                        ${compound.about ? `<p class="text-sm text-zinc-300 leading-relaxed mb-4">${compound.about}</p>` : ''}
+                        ${compound.services.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🛎️ الخدمات</h4>${renderCompoundBadges(compound.services)}` : ''}
+                        ${compound.unitTypes.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🏠 أنواع الوحدات</h4>${renderCompoundBadges(compound.unitTypes)}` : ''}
+                        ${compound.spaces.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">📐 المساحات المتاحة</h4>${renderCompoundBadges(compound.spaces)}` : ''}
+                        ${compound.paymentSystems ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">💳 أنظمة السداد</h4><p class="text-sm text-zinc-300 leading-relaxed">${compound.paymentSystems}</p>` : ''}
+                    </div>
+                </div>
+                <h3 class="text-xl font-extrabold text-white mb-4">الوحدات المتاحة${units.length ? ' (' + units.length + ')' : ''}</h3>
+                ${unitsHTML}
+            `;
+
+            wrapper.appendChild(detailWrap);
+
+            if (units.length > 0) {
+                const unitsGrid = detailWrap.querySelector('.grid');
+                units.forEach((unit, index) => {
+                    unitsGrid.appendChild(buildCompoundUnitCard(unit, index));
+                });
+            }
+
+            bindEvents();
+        }
+
+        function renderCompoundsList() {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            const searchInput = document.getElementById('propertySearch');
+            const keyword = searchInput ? normalizeArabic(searchInput.value) : '';
+
+            const filtered = compoundsData.filter(c => {
+                if (!keyword) return true;
+                return normalizeArabic(c.name).includes(keyword) ||
+                       normalizeArabic(c.location).includes(keyword) ||
+                       normalizeArabic(c.developer).includes(keyword);
+            });
+
+            if (filtered.length === 0) {
+                if (noResults) {
+                    noResults.classList.remove('hidden');
+                    noResults.textContent = compoundsData.length === 0
+                        ? 'لسه مفيش كمباوندات مضافة. تابعنا قريباً!'
+                        : 'لم نجد كمباوندات تطابق بحثك.';
+                }
+                return;
+            }
+            if (noResults) noResults.classList.add('hidden');
+
+            filtered.forEach((compound, index) => {
+                const cardEl = document.createElement('article');
+                cardEl.className = 'compound-card-summary animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full cursor-pointer';
+                cardEl.style.animationDelay = `${index * 50}ms`;
+                cardEl.setAttribute('data-compound-id', compound.id);
+                cardEl.tabIndex = 0;
+                cardEl.setAttribute('role', 'button');
+                cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + compound.name);
+
+                const fallbackImage = '/images/placeholder.webp';
+                const imageSrc = compound.image ? resolveAssetPath(compound.image) : fallbackImage;
+
+                cardEl.innerHTML = `
+                    <div class="p-6 pb-5 flex flex-col h-full group">
+                        <img src="${imageSrc}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${compound.name}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800">
+                        <h3 class="text-xl font-bold text-white leading-tight mb-2 group-hover:text-goldCustom transition-colors">${compound.name}</h3>
+                        ${compound.location ? `<div class="text-sm text-zinc-400 mb-2">📍 ${compound.location}</div>` : ''}
+                        ${compound.priceFromText ? `<div class="text-lg font-extrabold text-priceBlue mb-4">يبدأ سعر المتر من ${compound.priceFromText}</div>` : ''}
+                        <div class="w-full flex items-center justify-center gap-2 mt-auto pt-4 border-t border-white/5 text-xs text-zinc-500 font-bold uppercase tracking-wider group-hover:text-goldCustom transition-colors">
+                            عرض التفاصيل
+                            <svg class="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                `;
+                wrapper.appendChild(cardEl);
+            });
+
+            bindEvents();
+        }
+
+        // النقطة المشتركة اللي بتقرر تعرض العقارات ولا الكمباوندات، حسب
+        // التاب المختار حالياً. الكمباوندات بيتحمّلوا كسولاً (Lazy) أول
+        // مرة بس المستخدم يدخل التاب، عشان الأداء العادي للموقع ميتأثرش.
+        function renderCurrentView() {
+            if (currentCategory !== "الكمباوندات") {
+                renderProperties();
+                return;
+            }
+
+            if (!compoundsLoaded) {
+                loadCompoundsFromSheet().then(() => {
+                    if (currentCategory === "الكمباوندات") {
+                        renderCurrentView();
+                    }
+                });
+                return;
+            }
+
+            if (compoundsLoadError && compoundsData.length === 0) {
+                showEmptyCompoundsMessage('لسه مفيش كمباوندات مضافة. تابعنا قريباً!');
+                return;
+            }
+
+            if (currentCompoundId) {
+                renderCompoundDetail(currentCompoundId);
+            } else {
+                renderCompoundsList();
+            }
+        }
+
         function triggerDynamicRender() {    
             clearTimeout(renderTimeout);    
             renderSkeletons();    
-            renderTimeout = setTimeout(renderProperties, 300);    
+            renderTimeout = setTimeout(renderCurrentView, 300);    
         }    
 
         function triggerDebouncedRender() {    
             clearTimeout(renderTimeout);    
             renderTimeout = setTimeout(() => {    
                 renderSkeletons();    
-                setTimeout(renderProperties, 150);    
+                setTimeout(renderCurrentView, 150);    
             }, 250);    
         }    
             
@@ -872,6 +1201,11 @@
             
             wrapper.addEventListener('keydown', function(e) {
                 if (e.key !== 'Enter' && e.key !== ' ') return;
+                if (e.target.classList && e.target.classList.contains('compound-card-summary')) {
+                    e.preventDefault();
+                    e.target.click();
+                    return;
+                }
                 if (!e.target.classList || !e.target.classList.contains('card')) return;
                 e.preventDefault();
                 const summary = e.target.querySelector('.card-summary');
@@ -879,6 +1213,24 @@
             });
                 
             wrapper.addEventListener('click', function(e) {    
+                const compoundBackBtn = e.target.closest('.compound-back-btn');
+                if (compoundBackBtn && wrapper.contains(compoundBackBtn)) {
+                    e.stopPropagation();
+                    currentCompoundId = null;
+                    renderCompoundsList();
+                    scrollToPropertiesTop();
+                    return;
+                }
+
+                const compoundCard = e.target.closest('.compound-card-summary');
+                if (compoundCard && wrapper.contains(compoundCard)) {
+                    e.stopPropagation();
+                    currentCompoundId = compoundCard.getAttribute('data-compound-id');
+                    renderCompoundDetail(currentCompoundId);
+                    scrollToPropertiesTop();
+                    return;
+                }
+
                 const favBtn = e.target.closest('.fav-btn');
                 if (favBtn && wrapper.contains(favBtn)) {
                     e.stopPropagation();
@@ -1021,6 +1373,10 @@
                     
                 const propSearch = document.getElementById('propertySearch');
                 if(propSearch) propSearch.value = '';
+
+                if (cat === "الكمباوندات") {
+                    currentCompoundId = null; // الدخول من التاب دايماً يبدأ بقائمة الكمباوندات
+                }
 
                 switchCategoryUI(cat);    
                 triggerDynamicRender();      

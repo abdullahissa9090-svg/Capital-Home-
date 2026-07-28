@@ -479,14 +479,23 @@
         // محلات/أراضي) ميتأثرش بيها خالص. لو الشيتين لسه فاضيين أو غير
         // موجودين، الموقع بيعرض رسالة ودّية بدل ما يتعطل.
         // ==========================================================
-        const COMPOUNDS_SHEET_NAME = 'الكمباوندات';
-        const COMPOUND_UNITS_SHEET_NAME = 'وحدات الكمباوندات';
+        // ==========================================================
+        // قسم الكمباوندات — ملف Google Sheets مستقل تماماً عن ملف
+        // العقارات (Capital Home)، فيه شيتين: Compounds و CompoundUnits.
+        // محمّل بشكل كسول (Lazy) أول ما المستخدم يدخل تاب "الكمباوندات"
+        // فقط، عشان الأداء العادي للموقع (شقق/فيلل/محلات/أراضي) ميتأثرش
+        // بيها خالص. لو الشيتين لسه فاضيين أو غير موجودين، الموقع بيعرض
+        // رسالة ودّية بدل ما يتعطل.
+        // ==========================================================
+        const COMPOUNDS_SHEET_ID = '1C_hv-dtuI4hBhfP9n0K4C3cATAFACdHcYrKNJfud3BM';
+        const COMPOUNDS_SHEET_NAME = 'Compounds';
+        const COMPOUND_UNITS_SHEET_NAME = 'CompoundUnits';
 
-        function buildGvizUrlBySheetName(sheetName) {
-            return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+        function buildCompoundsGvizUrl(sheetName) {
+            return `https://docs.google.com/spreadsheets/d/${COMPOUNDS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
         }
-        const COMPOUNDS_GVIZ_URL = buildGvizUrlBySheetName(COMPOUNDS_SHEET_NAME);
-        const COMPOUND_UNITS_GVIZ_URL = buildGvizUrlBySheetName(COMPOUND_UNITS_SHEET_NAME);
+        const COMPOUNDS_GVIZ_URL = buildCompoundsGvizUrl(COMPOUNDS_SHEET_NAME);
+        const COMPOUND_UNITS_GVIZ_URL = buildCompoundsGvizUrl(COMPOUND_UNITS_SHEET_NAME);
 
         let compoundsData = [];
         let compoundUnitsData = [];
@@ -506,15 +515,17 @@
             return {
                 id: String(id).trim(),
                 name: String(name).trim(),
-                image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
-                location: String(getCell(cells, colIndexMap, 'location') || '').trim(),
-                priceFromText: String(getCell(cells, colIndexMap, 'pricefromtext') || '').trim(),
                 developer: String(getCell(cells, colIndexMap, 'developer') || '').trim(),
-                about: String(getCell(cells, colIndexMap, 'about') || '').trim(),
+                location: String(getCell(cells, colIndexMap, 'location') || '').trim(),
+                image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
+                description: String(getCell(cells, colIndexMap, 'description') || '').trim(),
                 services: servicesRaw ? String(servicesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
                 unitTypes: unitTypesRaw ? String(unitTypesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
                 spaces: spacesRaw ? String(spacesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
-                paymentSystems: String(getCell(cells, colIndexMap, 'paymentsystems') || '').trim()
+                priceFromText: String(getCell(cells, colIndexMap, 'pricefromtext') || '').trim(),
+                paymentSystems: String(getCell(cells, colIndexMap, 'paymentsystems') || '').trim(),
+                mapUrl: String(getCell(cells, colIndexMap, 'mapurl') || '').trim(),
+                status: String(getCell(cells, colIndexMap, 'status') || '').trim()
             };
         }
 
@@ -523,33 +534,36 @@
             const title = getCell(cells, colIndexMap, 'title');
             if (!String(compoundId).trim() || !String(title).trim()) return null;
 
-            const bulletsRaw = getCell(cells, colIndexMap, 'bullets');
-            const offer = getCell(cells, colIndexMap, 'offer');
-            const paid = getCell(cells, colIndexMap, 'paid');
-            const remaining = getCell(cells, colIndexMap, 'remaining');
-            const value = getCell(cells, colIndexMap, 'value');
+            const featuresRaw = getCell(cells, colIndexMap, 'features');
+            const statusRaw = String(getCell(cells, colIndexMap, 'status') || '').trim();
 
-            const unit = {
+            return {
+                id: String(getCell(cells, colIndexMap, 'id') || '').trim(),
                 compoundId: String(compoundId).trim(),
                 title: String(title).trim(),
                 unitType: String(getCell(cells, colIndexMap, 'unittype') || '').trim(),
+                phase: String(getCell(cells, colIndexMap, 'phase') || '').trim(),
                 space: String(getCell(cells, colIndexMap, 'space') || '').trim(),
-                price: parsePrice(getCell(cells, colIndexMap, 'price')),
-                priceText: String(getCell(cells, colIndexMap, 'pricetext') || '').trim(),
-                bullets: bulletsRaw ? String(bulletsRaw).split('\n').map(s => s.trim()).filter(Boolean) : []
+                floor: String(getCell(cells, colIndexMap, 'floor') || '').trim(),
+                view: String(getCell(cells, colIndexMap, 'view') || '').trim(),
+                finishing: String(getCell(cells, colIndexMap, 'finishing') || '').trim(),
+                deliveryDate: String(getCell(cells, colIndexMap, 'deliverydate') || '').trim(),
+                pricePerMeter: String(getCell(cells, colIndexMap, 'pricepermeter') || '').trim(),
+                price: parsePrice(getCell(cells, colIndexMap, 'totalprice')),
+                totalPriceText: String(getCell(cells, colIndexMap, 'totalprice') || '').trim(),
+                downPayment: String(getCell(cells, colIndexMap, 'downpayment') || '').trim(),
+                downPaymentPercent: String(getCell(cells, colIndexMap, 'downpaymentpercent') || '').trim(),
+                installmentPeriod: String(getCell(cells, colIndexMap, 'installmentperiod') || '').trim(),
+                paymentSystem: String(getCell(cells, colIndexMap, 'paymentsystem') || '').trim(),
+                maintenanceDeposit: String(getCell(cells, colIndexMap, 'maintenancedeposit') || '').trim(),
+                garage: String(getCell(cells, colIndexMap, 'garage') || '').trim(),
+                image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
+                features: featuresRaw ? String(featuresRaw).split('\n').map(s => s.trim()).filter(Boolean) : [],
+                status: statusRaw,
+                isSold: statusRaw.includes('مباع'),
+                isReserved: statusRaw.includes('محجوز'),
+                lastUpdated: String(getCell(cells, colIndexMap, 'lastupdated') || '').trim()
             };
-
-            const hasPaymentPlan = [offer, paid, remaining, value].some(v => String(v).trim());
-            if (hasPaymentPlan) {
-                unit.paymentPlan = {
-                    offer: String(offer || '').trim(),
-                    paid: String(paid || '').trim(),
-                    remaining: String(remaining || '').trim(),
-                    value: String(value || '').trim()
-                };
-            }
-
-            return unit;
         }
 
         async function loadCompoundsFromSheet() {
@@ -990,42 +1004,70 @@
 
         function buildCompoundUnitCard(unit, index) {
             const cardEl = document.createElement('article');
-            cardEl.className = 'compound-unit-card animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-goldCustom/30 flex flex-col h-full';
+            const statusBorder = unit.isSold ? 'border-red-900/50' : (unit.isReserved ? 'border-amber-700/50' : 'border-white/5');
+            cardEl.className = `compound-unit-card animate-enter relative bg-bgCard rounded-3xl border ${statusBorder} overflow-hidden transition-all duration-300 hover:border-goldCustom/30 flex flex-col h-full ${unit.isSold ? 'opacity-80 grayscale-[15%]' : ''}`;
             cardEl.style.animationDelay = `${index * 50}ms`;
 
-            const metaParts = [unit.unitType, unit.space ? '📐 ' + unit.space : ''].filter(Boolean);
+            const metaParts = [
+                unit.unitType,
+                unit.space ? '📐 ' + unit.space + 'م' : '',
+                unit.floor ? '🏢 ' + unit.floor : '',
+                unit.view ? '🌅 ' + unit.view : '',
+                unit.finishing ? '✨ ' + unit.finishing : '',
+                unit.phase ? '🧱 ' + unit.phase : ''
+            ].filter(Boolean);
             const metaBadges = metaParts.map(m =>
                 `<span class="bg-white/5 text-zinc-300 border border-white/5 py-1.5 px-3.5 rounded-xl text-xs font-bold">${m}</span>`
             ).join('');
 
-            let paymentPlanHTML = '';
-            if (unit.paymentPlan) {
-                paymentPlanHTML = `
-                <div class="mb-4 bg-gradient-to-l from-goldCustom/10 to-transparent border border-goldCustom/20 p-4 rounded-xl">
-                    <h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 خطة السداد المالية</h4>
-                    <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💰 الأوفر المطلوب:</span><strong class="text-white text-sm block">${unit.paymentPlan.offer}</strong></div>
-                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💳 إجمالي المدفوع:</span><strong class="text-white text-sm block">${unit.paymentPlan.paid}</strong></div>
-                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">📅 الأقساط المتبقية:</span><strong class="text-white text-sm block">${unit.paymentPlan.remaining}</strong></div>
-                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💵 قيمة القسط:</span><strong class="text-priceBlue text-sm block">${unit.paymentPlan.value}</strong></div>
-                    </div>
-                </div>`;
-            }
+            const statusBadgeHTML = unit.isSold
+                ? `<div class="absolute top-4 right-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-xs font-extrabold z-10 shadow-lg">تم البيع</div>`
+                : (unit.isReserved
+                    ? `<div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-extrabold z-10 shadow-lg">محجوز</div>`
+                    : '');
 
-            const bulletItems = unit.bullets.map(b =>
-                `<div class="text-sm text-zinc-300 font-medium flex items-start gap-2 before:content-['✓'] before:text-goldCustom before:text-base before:font-bold before:mt-[-2px]">${b}</div>`
+            const paymentRows = [
+                unit.pricePerMeter ? ['📏 سعر المتر', unit.pricePerMeter] : null,
+                unit.downPayment ? ['💰 مقدم الحجز', unit.downPayment] : null,
+                unit.downPaymentPercent ? ['📊 نسبة المقدم', unit.downPaymentPercent] : null,
+                unit.installmentPeriod ? ['📅 مدة التقسيط', unit.installmentPeriod] : null,
+                unit.maintenanceDeposit ? ['🛠️ وديعة الصيانة', unit.maintenanceDeposit] : null,
+                unit.garage ? ['🚗 الجراج', unit.garage] : null
+            ].filter(Boolean);
+
+            const paymentPlanHTML = paymentRows.length > 0 ? `
+                <div class="mb-4 bg-gradient-to-l from-goldCustom/10 to-transparent border border-goldCustom/20 p-4 rounded-xl">
+                    <h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 تفاصيل السداد</h4>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        ${paymentRows.map(([label, value]) => `
+                        <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">${label}:</span><strong class="text-white text-sm block">${value}</strong></div>`).join('')}
+                    </div>
+                    ${unit.paymentSystem ? `<p class="text-xs text-zinc-400 mt-3 leading-relaxed">🗒️ ${unit.paymentSystem}</p>` : ''}
+                </div>` : (unit.paymentSystem ? `<p class="text-xs text-zinc-400 mb-4 leading-relaxed">🗒️ ${unit.paymentSystem}</p>` : '');
+
+            const featureItems = unit.features.map(f =>
+                `<div class="text-sm text-zinc-300 font-medium flex items-start gap-2 before:content-['✓'] before:text-goldCustom before:text-base before:font-bold before:mt-[-2px]">${f}</div>`
             ).join('');
 
+            const isSold = unit.isSold;
+            const contactBtnText = isSold ? 'الوحدة مُباعة' : 'استفسر عن هذه الوحدة';
             const waMessage = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + unit.title);
+            const waLink = isSold ? 'javascript:void(0);' : `https://wa.me/201555086599?text=${waMessage}`;
+            const waTarget = isSold ? '' : `target="_blank" rel="noopener noreferrer"`;
+            const btnClass = isSold
+                ? 'w-full py-3 px-4 bg-red-900/40 text-white/50 cursor-not-allowed rounded-xl font-bold text-sm flex items-center justify-center gap-2'
+                : 'w-full py-3 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg';
 
             cardEl.innerHTML = `
-                <div class="p-6 flex flex-col h-full">
-                    <h3 class="text-lg font-bold text-white leading-tight mb-2">${unit.title}</h3>
-                    ${unit.priceText ? `<div class="text-xl font-extrabold text-priceBlue mb-3 tracking-tight">${unit.priceText}</div>` : ''}
+                <div class="p-6 flex flex-col h-full relative">
+                    ${statusBadgeHTML}
+                    <h3 class="text-lg font-bold text-white leading-tight mb-2 pl-16">${unit.title}</h3>
+                    ${unit.deliveryDate ? `<div class="text-xs text-zinc-500 mb-2">🔑 موعد الاستلام: ${unit.deliveryDate}</div>` : ''}
+                    ${unit.totalPriceText ? `<div class="text-xl font-extrabold text-priceBlue mb-3 tracking-tight">${unit.totalPriceText}</div>` : ''}
                     <div class="flex flex-wrap gap-2 mb-4">${metaBadges}</div>
                     ${paymentPlanHTML}
-                    ${bulletItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${bulletItems}</div>` : ''}
-                    <a href="https://wa.me/201555086599?text=${waMessage}" target="_blank" rel="noopener noreferrer" class="mt-auto w-full py-3 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg">💬 استفسر عن هذه الوحدة</a>
+                    ${featureItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${featureItems}</div>` : ''}
+                    <a class="${btnClass} mt-auto" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
                 </div>
             `;
             return cardEl;
@@ -1057,6 +1099,14 @@
                 ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`
                 : `<div class="text-center py-10 text-zinc-500 font-semibold bg-bgCard/30 rounded-2xl border border-white/5">لسه مفيش وحدات مضافة لهذا الكمباوند حالياً.</div>`;
 
+            const mapButtonHTML = compound.mapUrl
+                ? `<a href="${compound.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 mt-2 text-sm font-bold text-priceBlue hover:underline">🗺️ عرض الموقع على الخريطة</a>`
+                : '';
+
+            const statusBadgeHTML = compound.status
+                ? `<span class="inline-block bg-goldCustom/15 text-goldCustom border border-goldCustom/30 py-1 px-3 rounded-lg text-xs font-bold mb-3">${compound.status}</span>`
+                : '';
+
             detailWrap.innerHTML = `
                 <button type="button" class="compound-back-btn mb-6 inline-flex items-center gap-2 text-zinc-400 hover:text-goldCustom font-bold text-sm transition-colors">
                     <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -1065,11 +1115,13 @@
                 <div class="bg-bgCard rounded-3xl border border-white/5 overflow-hidden mb-8">
                     <img src="${imageSrc}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${compound.name}" class="w-full aspect-[16/9] object-cover bg-zinc-800">
                     <div class="p-6 md:p-8">
+                        ${statusBadgeHTML}
                         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">${compound.name}</h2>
                         ${compound.location ? `<div class="text-zinc-400 mb-1">📍 ${compound.location}</div>` : ''}
-                        ${compound.developer ? `<div class="text-zinc-400 mb-4">🏢 المطور: ${compound.developer}</div>` : ''}
-                        ${compound.priceFromText ? `<div class="text-xl font-extrabold text-priceBlue mb-4">يبدأ سعر المتر من ${compound.priceFromText}</div>` : ''}
-                        ${compound.about ? `<p class="text-sm text-zinc-300 leading-relaxed mb-4">${compound.about}</p>` : ''}
+                        ${compound.developer ? `<div class="text-zinc-400 mb-1">🏢 المطور: ${compound.developer}</div>` : ''}
+                        ${mapButtonHTML}
+                        ${compound.priceFromText ? `<div class="text-xl font-extrabold text-priceBlue mt-4 mb-4">يبدأ سعر المتر من ${compound.priceFromText}</div>` : ''}
+                        ${compound.description ? `<p class="text-sm text-zinc-300 leading-relaxed mb-4">${compound.description}</p>` : ''}
                         ${compound.services.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🛎️ الخدمات</h4>${renderCompoundBadges(compound.services)}` : ''}
                         ${compound.unitTypes.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🏠 أنواع الوحدات</h4>${renderCompoundBadges(compound.unitTypes)}` : ''}
                         ${compound.spaces.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">📐 المساحات المتاحة</h4>${renderCompoundBadges(compound.spaces)}` : ''}
@@ -1453,3 +1505,4 @@
     </script>
 </body>    
 </html>
+

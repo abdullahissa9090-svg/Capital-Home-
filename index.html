@@ -275,7 +275,7 @@
         // ==========================================================
         const SHEET_ID = '1ghSjffYNF3HaeokjO6kQTTAoL0o7AKZkyUbkJihqmSs';
         const SHEET_GID = '0'; // شيت "العقارات" (أول شيت في الملف)
-        const SHEET_GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${SHEET_GID}`;
+        const SHEET_GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${SHEET_GID}&headers=1`;
 
         // كل عمود في الشيت مكتوب بصيغة "نص عربي (englishKey)" مثل: "كود العقار (id)"
         // أعمدة خطة السداد الأربعة استثناء وليس لها قوس إنجليزي، فنتعرف عليها
@@ -492,7 +492,7 @@
         const COMPOUND_UNITS_SHEET_NAME = 'CompoundUnits';
 
         function buildCompoundsGvizUrl(sheetName) {
-            return `https://docs.google.com/spreadsheets/d/${COMPOUNDS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            return `https://docs.google.com/spreadsheets/d/${COMPOUNDS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`;
         }
         const COMPOUNDS_GVIZ_URL = buildCompoundsGvizUrl(COMPOUNDS_SHEET_NAME);
         const COMPOUND_UNITS_GVIZ_URL = buildCompoundsGvizUrl(COMPOUND_UNITS_SHEET_NAME);

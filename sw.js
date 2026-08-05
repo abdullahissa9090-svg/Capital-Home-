@@ -1,7 +1,7 @@
 // Service Worker - كابيتال هوم
 // إصدار الكاش: غيّر الرقم ده مع أي تحديث كبير للملفات الأساسية عشان
 // المتصفح يجبر تحميل نسخة جديدة بدل ما يفضل شايل القديمة.
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const SHELL_CACHE = `capital-home-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `capital-home-runtime-${CACHE_VERSION}`;
 const SHEET_CACHE = `capital-home-sheet-${CACHE_VERSION}`;

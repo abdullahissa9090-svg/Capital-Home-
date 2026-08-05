@@ -1002,6 +1002,22 @@
             ).join('')}</div>`;
         }
 
+        // يتحقق إن القيمة رقم صافي (من غير % أو كلام) عشان نعرف نتعامل معاها كسعر
+        function isPureNumber(v) {
+            return /^-?\d+(\.\d+)?$/.test(String(v).trim());
+        }
+
+        // ينسّق أي قيمة رقمية بفواصل الآلاف ويضيف وحدة (جنيه، جنيه/م²...).
+        // لو القيمة مش رقم صافي (زي "5 سنوات" أو "15%")، يسيبها زي ما هي من غير تغيير.
+        function formatMoney(value, suffix) {
+            const raw = String(value === undefined || value === null ? '' : value).trim();
+            if (!raw) return '';
+            if (!isPureNumber(raw)) return raw;
+            const num = parseFloat(raw);
+            const formatted = num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+            return suffix ? `${formatted} ${suffix}` : formatted;
+        }
+
         function buildCompoundUnitCard(unit, index) {
             const cardEl = document.createElement('article');
             const statusBorder = unit.isSold ? 'border-red-900/50' : (unit.isReserved ? 'border-amber-700/50' : 'border-white/5');
@@ -1027,12 +1043,12 @@
                     : '');
 
             const paymentRows = [
-                unit.pricePerMeter ? ['📏 سعر المتر', unit.pricePerMeter] : null,
-                unit.downPayment ? ['💰 مقدم الحجز', unit.downPayment] : null,
-                unit.downPaymentPercent ? ['📊 نسبة المقدم', unit.downPaymentPercent] : null,
+                unit.pricePerMeter ? ['📏 سعر المتر', formatMoney(unit.pricePerMeter, 'جنيه/م²')] : null,
+                unit.downPayment ? ['💰 مقدم الحجز', formatMoney(unit.downPayment, 'جنيه')] : null,
+                unit.downPaymentPercent ? ['📊 نسبة المقدم', formatMoney(unit.downPaymentPercent, '')] : null,
                 unit.installmentPeriod ? ['📅 مدة التقسيط', unit.installmentPeriod] : null,
-                unit.maintenanceDeposit ? ['🛠️ وديعة الصيانة', unit.maintenanceDeposit] : null,
-                unit.garage ? ['🚗 الجراج', unit.garage] : null
+                unit.maintenanceDeposit ? ['🛠️ وديعة الصيانة', formatMoney(unit.maintenanceDeposit, 'جنيه')] : null,
+                unit.garage ? ['🚗 الجراج', formatMoney(unit.garage, 'جنيه')] : null
             ].filter(Boolean);
 
             const paymentPlanHTML = paymentRows.length > 0 ? `
@@ -1063,7 +1079,7 @@
                     ${statusBadgeHTML}
                     <h3 class="text-lg font-bold text-white leading-tight mb-2 pl-16">${unit.title}</h3>
                     ${unit.deliveryDate ? `<div class="text-xs text-zinc-500 mb-2">🔑 موعد الاستلام: ${unit.deliveryDate}</div>` : ''}
-                    ${unit.totalPriceText ? `<div class="text-xl font-extrabold text-priceBlue mb-3 tracking-tight">${unit.totalPriceText}</div>` : ''}
+                    ${unit.totalPriceText ? `<div class="text-xl font-extrabold text-priceBlue mb-3 tracking-tight">${formatMoney(unit.totalPriceText, 'جنيه')}</div>` : ''}
                     <div class="flex flex-wrap gap-2 mb-4">${metaBadges}</div>
                     ${paymentPlanHTML}
                     ${featureItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${featureItems}</div>` : ''}

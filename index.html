@@ -316,7 +316,11 @@
             const parenMatch = raw.match(/\(([a-zA-Z]+)\)/);
             if (parenMatch) return parenMatch[1].toLowerCase();
 
-            // 2) احتياطي: أعمدة خطة السداد التي لا تحتوي على قوس إنجليزي
+            // 2) عمود بعنوان إنجليزي بسيط من غير قوس حواليه، زي "gallery"
+            //    (يقبل حروف/أرقام إنجليزية فقط عشان ميتعارضش مع عناوين عربية).
+            if (/^[a-zA-Z][a-zA-Z0-9]*$/.test(raw)) return raw.toLowerCase();
+
+            // 3) احتياطي: أعمدة خطة السداد التي لا تحتوي على قوس إنجليزي
             for (const [key, keyword] of PAYMENT_PLAN_KEYWORDS) {
                 if (raw.includes(keyword)) return key;
             }

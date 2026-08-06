@@ -103,6 +103,13 @@
         body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
         .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+
+        /* بتخبي شريط السكرول الافتراضي في سلايدر صور الكمباوند مع
+           الحفاظ على السحب باليد يمين وشمال (touch/trackpad) عادي جداً. */
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .compound-gallery-track > img { scroll-snap-align: center; }
         
         @keyframes slideUpFade {
             0% { opacity: 0; transform: translateY(30px); }
@@ -511,6 +518,8 @@
             const servicesRaw = getCell(cells, colIndexMap, 'services');
             const unitTypesRaw = getCell(cells, colIndexMap, 'unittypes');
             const spacesRaw = getCell(cells, colIndexMap, 'spaces');
+            const galleryRaw = getCell(cells, colIndexMap, 'gallery');
+            const gallery = galleryRaw ? String(galleryRaw).split('|').map(s => s.trim()).filter(Boolean) : [];
 
             return {
                 id: String(id).trim(),
@@ -518,6 +527,7 @@
                 developer: String(getCell(cells, colIndexMap, 'developer') || '').trim(),
                 location: String(getCell(cells, colIndexMap, 'location') || '').trim(),
                 image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
+                gallery: gallery,
                 description: String(getCell(cells, colIndexMap, 'description') || '').trim(),
                 services: servicesRaw ? String(servicesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
                 unitTypes: unitTypesRaw ? String(unitTypesRaw).split('|').map(s => s.trim()).filter(Boolean) : [],
@@ -658,6 +668,99 @@
             if (!clean) return '';
             if (/^(https?:)?\/\//i.test(clean) || clean.startsWith('/')) return clean;
             return '/' + clean;
+        }
+
+        // بترجع صورة الغلاف لأي كمباوند: أول صورة في gallery لو موجودة،
+        // وإلا عمود image القديم، عشان يفضل الموقع متوافق مع البيانات
+        // القديمة اللي لسه ماعندهاش gallery.
+        function getCompoundCoverImage(compound) {
+            if (compound.gallery && compound.gallery.length > 0) return compound.gallery[0];
+            return compound.image || '';
+        }
+
+        // بيبني سلايدر الصور لصفحة تفاصيل الكمباوند. لو صورة واحدة بس،
+        // بيرجع img عادية زي القديم من غير سلايدر أو نقط أو مصغرات.
+        function buildCompoundGalleryHTML(images, altName, fallbackImage) {
+            const safeAlt = String(altName || '').replace(/"/g, '&quot;');
+
+            if (!images || images.length === 0) {
+                return `<img src="${fallbackImage}" loading="lazy" decoding="async" alt="${safeAlt}" class="w-full aspect-[16/9] object-cover bg-zinc-800">`;
+            }
+
+            if (images.length === 1) {
+                const src = resolveAssetPath(images[0]);
+                return `<img src="${src}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${safeAlt}" class="w-full aspect-[16/9] object-cover bg-zinc-800">`;
+            }
+
+            const slides = images.map((img, i) => {
+                const src = resolveAssetPath(img);
+                return `<img src="${src}" onerror="this.src='${fallbackImage}'" loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async" alt="${safeAlt} - صورة ${i + 1}" class="w-full flex-shrink-0 snap-center aspect-[16/9] object-cover bg-zinc-800">`;
+            }).join('');
+
+            const dots = images.map((_, i) => {
+                return `<button type="button" class="compound-gallery-dot w-2 h-2 rounded-full transition-colors ${i === 0 ? 'bg-goldCustom' : 'bg-white/25'}" data-gallery-index="${i}" aria-label="اذهب للصورة ${i + 1}"></button>`;
+            }).join('');
+
+            const thumbs = images.map((img, i) => {
+                const src = resolveAssetPath(img);
+                return `<img src="${src}" onerror="this.src='${fallbackImage}'" loading="lazy" decoding="async" alt="مصغرة ${i + 1}" class="compound-gallery-thumb w-16 h-12 flex-shrink-0 object-cover rounded-lg cursor-pointer border-2 transition-colors ${i === 0 ? 'border-goldCustom opacity-100' : 'border-transparent opacity-50'}" data-gallery-index="${i}">`;
+            }).join('');
+
+            return `
+                <div class="compound-gallery relative" data-gallery-root>
+                    <div class="compound-gallery-track flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" data-gallery-track>
+                        ${slides}
+                    </div>
+                    <div class="flex items-center justify-center gap-1.5 py-2.5 bg-bgCard" data-gallery-dots>
+                        ${dots}
+                    </div>
+                    <div class="flex gap-2 overflow-x-auto px-3 pb-3 no-scrollbar" data-gallery-thumbs>
+                        ${thumbs}
+                    </div>
+                </div>
+            `;
+        }
+
+        // بتظبط تفاعل السلايدر بعد ما يتحط في الصفحة: السحب باليد شغال
+        // طبيعي (overflow-x + scroll-snap)، والدالة دي بتزود إمكانية
+        // الضغط على المصغرات/النقط للتنقل، وتحديث النقطة الفعالة وانت بتسحب.
+        function initCompoundGallery(root) {
+            if (!root) return;
+            const track = root.querySelector('[data-gallery-track]');
+            const dots = Array.from(root.querySelectorAll('.compound-gallery-dot'));
+            const thumbs = Array.from(root.querySelectorAll('.compound-gallery-thumb'));
+            if (!track) return;
+
+            function setActive(index) {
+                dots.forEach((d, i) => {
+                    d.classList.toggle('bg-goldCustom', i === index);
+                    d.classList.toggle('bg-white/25', i !== index);
+                });
+                thumbs.forEach((t, i) => {
+                    t.classList.toggle('border-goldCustom', i === index);
+                    t.classList.toggle('opacity-100', i === index);
+                    t.classList.toggle('border-transparent', i !== index);
+                    t.classList.toggle('opacity-50', i !== index);
+                });
+            }
+
+            function goToIndex(index) {
+                const slide = track.children[index];
+                if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+
+            dots.forEach((dot, i) => dot.addEventListener('click', () => goToIndex(i)));
+            thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => goToIndex(i)));
+
+            let scrollTimeout = null;
+            track.addEventListener('scroll', () => {
+                if (scrollTimeout) clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const slideWidth = track.clientWidth || 1;
+                    const index = Math.round(track.scrollLeft / slideWidth);
+                    setActive(Math.max(0, Math.min(index, dots.length - 1)));
+                }, 80);
+            }, { passive: true });
         }
 
         function buildPropertyPath(id) {
@@ -1109,7 +1212,12 @@
             detailWrap.className = 'col-span-full';
 
             const fallbackImage = '/images/placeholder.webp';
-            const imageSrc = compound.image ? resolveAssetPath(compound.image) : fallbackImage;
+            // لو عمود gallery فيه صور، بيتعرض سلايدر كامل. لو فاضي، بنرجع
+            // لعمود image القديم زي ما هو من غير أي تغيير في الشكل.
+            const galleryImages = (compound.gallery && compound.gallery.length > 0)
+                ? compound.gallery
+                : (compound.image ? [compound.image] : []);
+            const galleryHTML = buildCompoundGalleryHTML(galleryImages, compound.name, fallbackImage);
 
             const unitsHTML = units.length > 0
                 ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`
@@ -1129,7 +1237,7 @@
                     رجوع لكل الكمباوندات
                 </button>
                 <div class="bg-bgCard rounded-3xl border border-white/5 overflow-hidden mb-8">
-                    <img src="${imageSrc}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${compound.name}" class="w-full aspect-[16/9] object-cover bg-zinc-800">
+                    ${galleryHTML}
                     <div class="p-6 md:p-8">
                         ${statusBadgeHTML}
                         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">${compound.name}</h2>
@@ -1149,6 +1257,9 @@
             `;
 
             wrapper.appendChild(detailWrap);
+
+            const galleryRoot = detailWrap.querySelector('[data-gallery-root]');
+            if (galleryRoot) initCompoundGallery(galleryRoot);
 
             if (units.length > 0) {
                 const unitsGrid = detailWrap.querySelector('.grid');
@@ -1197,7 +1308,8 @@
                 cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + compound.name);
 
                 const fallbackImage = '/images/placeholder.webp';
-                const imageSrc = compound.image ? resolveAssetPath(compound.image) : fallbackImage;
+                const coverImage = getCompoundCoverImage(compound);
+                const imageSrc = coverImage ? resolveAssetPath(coverImage) : fallbackImage;
 
                 cardEl.innerHTML = `
                     <div class="p-6 pb-5 flex flex-col h-full group">

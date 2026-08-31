@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>  
 <html lang="ar-EG" dir="rtl">    
 <head>    
@@ -196,6 +195,12 @@
                 <span id="favCountBadge" class="hidden absolute -top-1.5 -left-1.5 bg-favRed text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
             </button>
         </nav>    
+
+        <div id="locationSubFilter" class="flex gap-2 justify-center mb-8 flex-wrap" aria-label="فلترة الشقق حسب المنطقة">
+            <button type="button" id="btnLoc-" class="loc-btn active-loc-btn px-4 py-2 rounded-full text-xs font-bold border border-goldCustom/40 bg-goldCustom/10 text-goldCustom transition-all duration-300" data-loc="" aria-pressed="true">الكل</button>
+            <button type="button" id="btnLoc-المنيا" class="loc-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-transparent text-zinc-400 transition-all duration-300 hover:bg-white/5" data-loc="المنيا" aria-pressed="false">المنيا</button>
+            <button type="button" id="btnLoc-المنيا الجديدة" class="loc-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-transparent text-zinc-400 transition-all duration-300 hover:bg-white/5" data-loc="المنيا الجديدة" aria-pressed="false">المنيا الجديدة</button>
+        </div>    
         <main>    
             <div id="noResults" class="hidden text-center py-16 text-zinc-500 font-semibold text-lg bg-bgCard/30 rounded-3xl border border-white/5" aria-live="polite">لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!</div>    
             
@@ -343,8 +348,13 @@
         function getCell(cells, colIndexMap, key) {
             const idx = colIndexMap[key];
             if (idx === undefined || !cells || !cells[idx]) return '';
-            const v = cells[idx].v;
-            return (v === null || v === undefined) ? '' : v;
+            const cell = cells[idx];
+            const v = cell.v;
+            if (v !== null && v !== undefined) return v;
+            // احتياطي: لو القيمة الأصلية (v) فاضية بسبب تعارض نوع الخلية مع نوع
+            // العمود (مثلاً خلية سعر مكتوبة بفاصلة "4,930,000" وسط عمود أرقام صافية)،
+            // نرجع للنص المنسّق (f) بدل ما نضيّع القيمة ونحسبها صفر.
+            return (cell.f !== null && cell.f !== undefined) ? cell.f : '';
         }
 
         function rowToProperty(cells, colIndexMap) {
@@ -659,6 +669,17 @@
         }
 
         let currentCategory = "شقة";    
+        let currentLocationFilter = ""; // فاضي = كل المناطق، مستخدم بس لما currentCategory === "شقة"
+
+        // بيرجع "المنيا" أو "المنيا الجديدة" بشكل موحّد بغض النظر عن أي كلام زيادة
+        // أو مسافات في خلية locationCategory (زي "المنيا شارع طه حسين" أو "المنيا الجديدة ")
+        function normalizeLocationCategory(loc) {
+            const clean = String(loc || '').trim();
+            if (!clean) return '';
+            if (clean.includes('الجديدة')) return 'المنيا الجديدة';
+            if (clean.includes('المنيا')) return 'المنيا';
+            return clean;
+        }
         let isEventsBound = false;    
         let renderTimeout; 
 
@@ -879,6 +900,9 @@
                     if (!favIds.includes(item.id)) return false;
                 } else if (item.category !== currentCategory) {
                     return false;
+                }
+                if (currentCategory === "شقة" && currentLocationFilter) {
+                    if (normalizeLocationCategory(item.locationCategory) !== currentLocationFilter) return false;
                 }
                 if (keyword) {    
                     const matchTitle = normalizeArabic(item.title).includes(keyword);    
@@ -1576,6 +1600,27 @@
             }    
                 
             currentCategory = categoryName;     
+
+            // شريط فلتر المنطقة يظهر بس في تاب الشقق، ويترجع لـ"الكل" كل مرة نخش على تاب تاني
+            const locBar = document.getElementById('locationSubFilter');
+            if (locBar) {
+                if (categoryName === "شقة") {
+                    locBar.classList.remove('hidden');
+                } else {
+                    locBar.classList.add('hidden');
+                }
+            }
+            currentLocationFilter = "";
+            document.querySelectorAll('.loc-btn').forEach(b => {
+                const isAll = b.getAttribute('data-loc') === "";
+                b.classList.toggle('active-loc-btn', isAll);
+                b.classList.toggle('bg-goldCustom/10', isAll);
+                b.classList.toggle('text-goldCustom', isAll);
+                b.classList.toggle('border-goldCustom/40', isAll);
+                b.classList.toggle('text-zinc-400', !isAll);
+                b.classList.toggle('border-white/10', !isAll);
+                b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+            });
         }    
             
         document.querySelectorAll('.nav-btn').forEach(button => {    
@@ -1594,6 +1639,24 @@
                 scrollToPropertiesTop();
             });    
         });    
+
+        document.querySelectorAll('.loc-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                currentLocationFilter = this.getAttribute('data-loc') || "";
+                document.querySelectorAll('.loc-btn').forEach(b => {
+                    const isActive = b === this;
+                    b.classList.toggle('active-loc-btn', isActive);
+                    b.classList.toggle('bg-goldCustom/10', isActive);
+                    b.classList.toggle('text-goldCustom', isActive);
+                    b.classList.toggle('border-goldCustom/40', isActive);
+                    b.classList.toggle('text-zinc-400', !isActive);
+                    b.classList.toggle('border-white/10', !isActive);
+                    b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+                triggerDynamicRender();
+                scrollToPropertiesTop();
+            });
+        });
             
         function scrollToPropertiesTop() {
             const wrapper = document.getElementById('propertiesWrapper');

@@ -108,6 +108,30 @@
            الحفاظ على السحب باليد يمين وشمال (touch/trackpad) عادي جداً. */
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* تأثير لمعة (shimmer) خفيف على شارة سعر أي وحدة "عرض خاص" */
+        .price-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .price-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: -150%;
+            width: 60%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent);
+            animation: priceShimmerSweep 2.6s ease-in-out infinite;
+        }
+        @keyframes priceShimmerSweep {
+            0% { right: -150%; }
+            60% { right: 130%; }
+            100% { right: 130%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .price-shimmer::after { animation: none; display: none; }
+        }
         .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .compound-gallery-track > .compound-gallery-slide { scroll-snap-align: center; }
         
@@ -142,6 +166,22 @@
 <body class="text-white bg-bgMain scroll-smooth antialiased pb-16 relative">  
 
     <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-[-1] opacity-50"></div>
+
+    <div id="stickyTopBar" class="fixed top-0 inset-x-0 z-40 -translate-y-full transition-transform duration-300 bg-bgMain/90 backdrop-blur-md border-b border-white/5 shadow-lg">
+        <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-2.5">
+            <div class="flex items-center gap-2">
+                <img src="/brand-og-image.jpg" alt="لوجو كابيتال هوم" width="32" height="32" class="w-8 h-8 object-contain rounded-full">
+                <span class="text-sm font-bold text-white">كابيتال هوم</span>
+            </div>
+            <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"
+               target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-1.5 bg-whatsappGreen text-white text-xs font-bold py-1.5 px-3 rounded-full transition-transform duration-300 hover:scale-105"
+               aria-label="تواصل معنا عبر واتساب">
+                <svg width="16" height="16" fill="white" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                واتساب
+            </a>
+        </div>
+    </div>
 
     <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"     
        target="_blank"     
@@ -373,6 +413,7 @@
             const paid = getCell(cells, colIndexMap, 'paid');
             const remaining = getCell(cells, colIndexMap, 'remaining');
             const value = getCell(cells, colIndexMap, 'value');
+            const specialOfferRaw = String(getCell(cells, colIndexMap, 'specialoffer') || '').trim().toLowerCase();
 
             const meta = metaRaw ? String(metaRaw).split('|').map(s => s.trim()).filter(Boolean) : [];
             const bullets = bulletsRaw ? String(bulletsRaw).split('\n').map(s => s.trim()).filter(Boolean) : [];
@@ -388,7 +429,8 @@
                 image: String(getCell(cells, colIndexMap, 'image') || '').trim(),
                 meta,
                 bullets,
-                customContactText: String(getCell(cells, colIndexMap, 'customcontacttext') || '').trim()
+                customContactText: String(getCell(cells, colIndexMap, 'customcontacttext') || '').trim(),
+                isSpecialOffer: ['نعم', 'yes', 'true', '1'].includes(specialOfferRaw)
             };
 
             if (status && String(status).trim().toLowerCase() === 'sold') {
@@ -1008,7 +1050,10 @@
                             <meta itemprop="priceCurrency" content="EGP" />
                             <meta itemprop="price" content="${prop.price}" />
                             <meta itemprop="availability" content="${isSold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock'}" />
-                            <div class="text-2xl font-extrabold text-priceBlue mb-4 tracking-tight">${prop.priceText}</div>
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="text-2xl font-extrabold text-priceBlue tracking-tight price-countup ${prop.isSpecialOffer ? 'price-shimmer px-2 -mx-2 rounded-lg' : ''}" data-target="${prop.price}" data-final="${String(prop.priceText).replace(/"/g, '&quot;')}">0 جنيه</div>
+                                ${prop.isSpecialOffer ? '<span class="bg-red-500/15 text-red-400 border border-red-500/30 text-[11px] font-bold px-2 py-1 rounded-lg">🔥 عرض خاص</span>' : ''}
+                            </div>
                         </div>
 
                         <div class="flex flex-wrap gap-2 mt-auto pt-2">${metaBadges}</div>
@@ -1069,6 +1114,8 @@
                 cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + jsonLdHTML + bgDecorative + summaryHTML + detailHTML;
                 wrapper.appendChild(cardEl);     
             });    
+
+            initPriceCountUp();
 
             if (initialPropertyToOpen) {
                 const card = wrapper.querySelector(`.card[data-id="${initialPropertyToOpen}"]`);
@@ -1658,6 +1705,54 @@
             });
         });
             
+        // بتشغّل أنيميشن "عدّاد متصاعد" لأي عنصر سعر ظاهر في الشاشة (من 0 لحد الرقم
+        // الحقيقي)، وفي آخر خطوة بترجّع النص الأصلي بالظبط (data-final) عشان أي صياغة
+        // خاصة في priceText (زي "يبدأ من" أو "جنيه/م²") تفضل زي ما هي.
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function animatePriceCountUp(el) {
+            const target = parseFloat(el.getAttribute('data-target'));
+            const finalText = el.getAttribute('data-final') || '';
+            if (prefersReducedMotion || !target || isNaN(target) || target <= 0) {
+                el.textContent = finalText;
+                return;
+            }
+            const duration = 900;
+            const startTime = performance.now();
+            function step(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out
+                const current = Math.round(target * eased);
+                el.textContent = current.toLocaleString('en-US') + ' جنيه';
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = finalText;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        function initPriceCountUp() {
+            const els = document.querySelectorAll('.price-countup:not([data-animated])');
+            if (!els.length) return;
+            if (!('IntersectionObserver' in window)) {
+                els.forEach(el => { el.setAttribute('data-animated', '1'); animatePriceCountUp(el); });
+                return;
+            }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        el.setAttribute('data-animated', '1');
+                        animatePriceCountUp(el);
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.3 });
+            els.forEach(el => observer.observe(el));
+        }
+
         function scrollToPropertiesTop() {
             const wrapper = document.getElementById('propertiesWrapper');
             if (!wrapper) return;
@@ -1665,7 +1760,30 @@
             const targetY = wrapper.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
             window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
         }
-            
+
+        // شريط علوي رفيع (لوجو + واتساب) بيظهر بس بعد ما المستخدم ينزل تحت الهيدر الرئيسي،
+        // بيختفي تاني لو رجع لفوق عشان ميتكررش مع الهيدر الأصلي.
+        (function initStickyTopBar() {
+            const bar = document.getElementById('stickyTopBar');
+            if (!bar) return;
+            let ticking = false;
+            const SHOW_AFTER_PX = 420;
+            function update() {
+                if (window.scrollY > SHOW_AFTER_PX) {
+                    bar.classList.remove('-translate-y-full');
+                } else {
+                    bar.classList.add('-translate-y-full');
+                }
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(update);
+                    ticking = true;
+                }
+            }, { passive: true });
+        })();
+
         function initApp() {
             try {
                 const savedLead = localStorage.getItem('lastLead');

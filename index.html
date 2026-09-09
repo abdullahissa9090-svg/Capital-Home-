@@ -136,6 +136,30 @@
         @media (prefers-reduced-motion: reduce) {
             .price-shimmer::after { animation: none; display: none; }
         }
+
+        /* توست صغير أنيق بدل alert() المزعجة - بيستخدم transform+opacity بس */
+        #appToast {
+            position: fixed;
+            bottom: 96px;
+            left: 50%;
+            z-index: 60;
+            background: rgba(20,20,20,0.95);
+            color: #fff;
+            border: 1px solid rgba(212,175,55,0.35);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        #appToast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
         .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .compound-gallery-track > .compound-gallery-slide { scroll-snap-align: center; }
         
@@ -170,6 +194,8 @@
 <body class="text-white bg-bgMain scroll-smooth antialiased pb-16 relative">  
 
     <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-[-1] opacity-50"></div>
+
+    <div id="appToast" role="status" aria-live="polite"></div>
 
     <div id="stickyTopBar" class="fixed top-0 inset-x-0 z-40 -translate-y-full transition-transform duration-300 bg-bgMain/90 backdrop-blur-md border-b border-white/5 shadow-lg">
         <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-2.5">
@@ -1285,7 +1311,10 @@
                     <div class="flex flex-wrap gap-2 mb-4">${metaBadges}</div>
                     ${paymentPlanHTML}
                     ${featureItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${featureItems}</div>` : ''}
-                    <a class="${btnClass} mt-auto" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
+                    <div class="flex gap-2 mt-auto">
+                        <a class="${btnClass} flex-1" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
+                        <button type="button" aria-label="مشاركة تفاصيل الوحدة" class="w-14 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg flex items-center justify-center transition-all hover:bg-white/10 btn-sh-unit" data-unit-id="${unit.id}">🔗</button>
+                    </div>
                 </div>
             `;
             return cardEl;
@@ -1546,17 +1575,23 @@
                 const shareBtn = e.target.closest('.btn-sh');    
                 if (shareBtn && wrapper.contains(shareBtn)) {    
                     e.stopPropagation();     
-                    const title = shareBtn.getAttribute('data-title');     
                     const id = shareBtn.getAttribute('data-id');    
+                    const prop = propertiesData.find(p => p.id === id);    
                     const targetUrl = buildPropertyAbsoluteUrl(id);    
-                    const text = 'معاينة وتفاصيل: [ ' + title + ' ] بمحافظة المنيا. تفضل بزيارة الرابط المباشر للعقار: ' + targetUrl;    
-                    if (navigator.share) {     
-                        navigator.share({ title: 'كابيتال هوم', text: text, url: targetUrl }).catch(err => console.error(err));     
-                    } else if (navigator.clipboard) {     
-                        navigator.clipboard.writeText(text).then(() => { alert('تم نسخ رابط وتفاصيل العقار بنجاح!'); });     
-                    }    
+                    const text = prop ? buildShareMessageForProperty(prop) : ('تفضل بزيارة الرابط المباشر للعقار: ' + targetUrl);
+                    shareTextViaSystemOrClipboard(text, targetUrl);
                     return;     
                 }    
+
+                const shareUnitBtn = e.target.closest('.btn-sh-unit');
+                if (shareUnitBtn && wrapper.contains(shareUnitBtn)) {
+                    e.stopPropagation();
+                    const unitId = shareUnitBtn.getAttribute('data-unit-id');
+                    const unit = compoundUnitsData.find(u => u.id === unitId);
+                    const text = unit ? buildShareMessageForCompoundUnit(unit) : 'تفضل تواصل معنا لمزيد من التفاصيل.';
+                    shareTextViaSystemOrClipboard(text, window.location.href);
+                    return;
+                }
             
                 const summary = e.target.closest('.card-summary');    
                 if (summary && wrapper.contains(summary)) {    
@@ -1775,6 +1810,71 @@
             els.forEach(el => observer.observe(el));
         }
 
+        // توست صغير في الأسفل بدل alert() - بيختفي لوحده بعد ثانيتين
+        let toastTimer = null;
+        function showToast(message) {
+            const el = document.getElementById('appToast');
+            if (!el) return;
+            el.textContent = message;
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        // بيبني رسالة جاهزة وغنية بالتفاصيل لأي عقار عشان تتبعت أو تتنسخ للواتساب،
+        // بنفس روح الرسايل الجاهزة (الوصف الكامل من bullets لو موجود، وإلا نرجع
+        // لملخص أساسي من العنوان + السعر + meta).
+        function buildShareMessageForProperty(prop) {
+            const lines = ['مرحباً بيك 🌿', prop.title, ''];
+            if (prop.bullets && prop.bullets.length) {
+                lines.push(prop.bullets.join('\n'));
+            } else {
+                if (prop.meta && prop.meta.length) lines.push(prop.meta.join(' | '));
+                if (prop.priceText) lines.push('💰 السعر: ' + prop.priceText);
+                if (prop.finishing) lines.push('🎨 التشطيب: ' + prop.finishing);
+            }
+            lines.push('');
+            lines.push(buildPropertyAbsoluteUrl(prop.id));
+            lines.push('كابيتال هوم - وسيطك الموثوق');
+            return lines.filter(l => l !== undefined && l !== null).join('\n');
+        }
+
+        function shareTextViaSystemOrClipboard(text, urlForShare) {
+            if (navigator.share) {
+                navigator.share({ title: 'كابيتال هوم', text: text, url: urlForShare }).catch(() => {});
+                return;
+            }
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('تم نسخ تفاصيل الوحدة ✓');
+                }).catch(() => {
+                    showToast('تعذر النسخ، حاول مرة أخرى');
+                });
+            }
+        }
+
+
+        // بيبني رسالة جاهزة لوحدة كمباوند (نفس شكل رسايل الواتساب الجاهزة:
+        // اسم الكمباوند + الموقع + السعر + تفاصيل السداد)
+        function buildShareMessageForCompoundUnit(unit) {
+            const compound = compoundsData.find(c => c.id === unit.compoundId);
+            const lines = ['مرحباً بيك 🌿', unit.title];
+            if (compound) {
+                lines.push(`في كمبوند *${compound.name}*` + (compound.developer ? ' - ' + compound.developer : ''));
+                if (compound.location) lines.push('📍 ' + compound.location);
+            }
+            lines.push('');
+            if (unit.pricePerMeter) lines.push('💰 سعر المتر: ' + formatMoney(unit.pricePerMeter, 'جنيه'));
+            if (unit.totalPriceText) lines.push('💵 الإجمالي: ' + formatMoney(unit.totalPriceText, 'جنيه'));
+            if (unit.downPayment) lines.push('📊 مقدم الحجز: ' + formatMoney(unit.downPayment, 'جنيه') + (unit.downPaymentPercent ? ' (' + unit.downPaymentPercent + ')' : ''));
+            if (unit.installmentPeriod) lines.push('📅 التقسيط: ' + unit.installmentPeriod + (unit.paymentSystem ? ' (' + unit.paymentSystem + ')' : ''));
+            lines.push('');
+            lines.push('لو حابب تفاصيل أكتر أو معاينة، أنا تحت أمرك 🏡');
+            lines.push('كابيتال هوم - وسيطك الموثوق');
+            return lines.filter(l => l !== undefined && l !== null).join('\n');
+        }
+
+
         function scrollToPropertiesTop() {
             const wrapper = document.getElementById('propertiesWrapper');
             if (!wrapper) return;
@@ -1866,5 +1966,4 @@
         }
     </script>
 </body>    
-</html>
-
+    </html>

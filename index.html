@@ -41,7 +41,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">    
 
     <script type="application/ld+json">
     {
@@ -93,14 +93,14 @@
                         favRed: '#ef4444'
                     },    
                     fontFamily: {    
-                        cairo: ['Cairo', 'sans-serif'],    
+                        cairo: ['IBM Plex Sans Arabic', 'sans-serif'],    
                     }    
                 }    
             }    
         }    
     </script>    
     <style>    
-        body { font-family: 'Cairo', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
+        body { font-family: 'IBM Plex Sans Arabic', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
         .sticky-nav { position: sticky; top: 12px; z-index: 100; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
 
@@ -160,6 +160,36 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
+
+        /* شاشة تحميل بسيطة بتظهر لحد ما بيانات الشيت توصل */
+        .splash-pulse {
+            animation: splashPulse 1.6s ease-in-out infinite;
+        }
+        @keyframes splashPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+        }
+        .splash-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #d4af37;
+            display: inline-block;
+            animation: splashDotBounce 1.2s ease-in-out infinite;
+        }
+        .splash-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .splash-dots span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes splashDotBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+            40% { transform: translateY(-6px); opacity: 1; }
+        }
+        #appSplash.splash-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .splash-pulse, .splash-dots span { animation: none; }
+        }
         .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .compound-gallery-track > .compound-gallery-slide { scroll-snap-align: center; }
         
@@ -193,9 +223,27 @@
 
 <body class="text-white bg-bgMain scroll-smooth antialiased pb-16 relative">  
 
+    <div id="appSplash" class="fixed inset-0 z-[100] bg-bgMain flex flex-col items-center justify-center gap-4 transition-opacity duration-500">
+        <img src="/brand-og-image.jpg" alt="كابيتال هوم" width="72" height="72" class="w-18 h-18 rounded-full object-contain splash-pulse">
+        <div class="text-lg font-bold text-white tracking-wide">كابيتال هوم</div>
+        <div class="splash-dots flex gap-1.5">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+
     <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-[-1] opacity-50"></div>
 
     <div id="appToast" role="status" aria-live="polite"></div>
+
+    <button type="button" id="installAppBtn" class="hidden fixed bottom-24 right-6 z-40 items-center gap-2 bg-goldCustom text-black text-xs font-bold py-2.5 px-4 rounded-full shadow-xl transition-transform duration-300 hover:scale-105">
+        📲 ثبّت التطبيق
+    </button>
+
+    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div class="absolute top-[-10%] right-[-10%] w-72 h-72 bg-goldCustom/[0.06] rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[10%] left-[-10%] w-72 h-72 bg-goldCustom/[0.05] rounded-full blur-[100px]"></div>
+    </div>
 
     <div id="stickyTopBar" class="fixed top-0 inset-x-0 z-40 -translate-y-full transition-transform duration-300 bg-bgMain/90 backdrop-blur-md border-b border-white/5 shadow-lg">
         <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-2.5">
@@ -1028,7 +1076,7 @@
                 const isSold = prop.status === 'sold';
                 const cardOpacityClass = isSold ? 'opacity-85 grayscale-[20%]' : '';
 
-                cardEl.className = `card animate-enter relative bg-bgCard rounded-3xl border ${isSold ? 'border-red-900/50' : 'border-white/5'} overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full focus:outline-none focus:border-goldCustom ${cardOpacityClass}`;     
+                cardEl.className = `card animate-enter relative bg-bgCard/75 backdrop-blur-md rounded-3xl border ${isSold ? 'border-red-900/50' : 'border-goldCustom/10'} overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full focus:outline-none focus:border-goldCustom ${cardOpacityClass}`;     
                 cardEl.style.animationDelay = `${index * 50}ms`;
                 cardEl.setAttribute('data-id', prop.id);     
                 
@@ -1249,7 +1297,7 @@
         function buildCompoundUnitCard(unit, index) {
             const cardEl = document.createElement('article');
             const statusBorder = unit.isSold ? 'border-red-900/50' : (unit.isReserved ? 'border-amber-700/50' : 'border-white/5');
-            cardEl.className = `compound-unit-card animate-enter relative bg-bgCard rounded-3xl border ${statusBorder} overflow-hidden transition-all duration-300 hover:border-goldCustom/30 flex flex-col h-full ${unit.isSold ? 'opacity-80 grayscale-[15%]' : ''}`;
+            cardEl.className = `compound-unit-card animate-enter relative bg-bgCard/75 backdrop-blur-md rounded-3xl border ${statusBorder} overflow-hidden transition-all duration-300 hover:border-goldCustom/30 flex flex-col h-full ${unit.isSold ? 'opacity-80 grayscale-[15%]' : ''}`;
             cardEl.style.animationDelay = `${index * 50}ms`;
 
             const metaParts = [
@@ -1428,7 +1476,7 @@
 
             filtered.forEach((compound, index) => {
                 const cardEl = document.createElement('article');
-                cardEl.className = 'compound-card-summary animate-enter relative bg-bgCard rounded-3xl border border-white/5 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full cursor-pointer';
+                cardEl.className = 'compound-card-summary animate-enter relative bg-bgCard/75 backdrop-blur-md rounded-3xl border border-goldCustom/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full cursor-pointer';
                 cardEl.style.animationDelay = `${index * 50}ms`;
                 cardEl.setAttribute('data-compound-id', compound.id);
                 cardEl.tabIndex = 0;
@@ -1875,6 +1923,34 @@
         }
 
 
+        // زرار "ثبّت التطبيق" - بيظهر بس لما المتصفح يقول إن التثبيت متاح
+        // (كروم/أندرويد بشكل أساسي)، وبيختفي لو التطبيق متثبت بالفعل.
+        (function initInstallPrompt() {
+            const btn = document.getElementById('installAppBtn');
+            if (!btn) return;
+            const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+            if (isStandalone) return;
+            let deferredPrompt = null;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                btn.classList.remove('hidden');
+                btn.classList.add('flex');
+            });
+            btn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            });
+            window.addEventListener('appinstalled', () => {
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+            });
+        })();
+
         function scrollToPropertiesTop() {
             const wrapper = document.getElementById('propertiesWrapper');
             if (!wrapper) return;
@@ -1926,6 +2002,7 @@
 
             updateFavCountBadge();
             renderSkeletons();
+            setTimeout(hideAppSplash, 8000); // شبكة صعبة/تعليق غير متوقع - نتجنب شاشة تحميل عالقة للأبد
 
             loadPropertiesFromSheet().then(() => {
                 if (dataLoadError) {
@@ -1941,7 +2018,17 @@
                 }
 
                 renderProperties();
+            }).finally(() => {
+                hideAppSplash();
             });
+        }
+
+        // بتخفي شاشة التحميل بسلاسة (fade) لما البيانات تخلص تحميل، نجحت أو فشلت
+        function hideAppSplash() {
+            const splash = document.getElementById('appSplash');
+            if (!splash) return;
+            splash.classList.add('splash-hidden');
+            setTimeout(() => splash.remove(), 550);
         }
 
         if (document.readyState === 'loading') {
@@ -1966,4 +2053,5 @@
         }
     </script>
 </body>    
-    </html>
+</html>
+

@@ -190,6 +190,27 @@
         @media (prefers-reduced-motion: reduce) {
             .splash-pulse, .splash-dots span { animation: none; }
         }
+
+        /* فتح/قفل تفاصيل الوحدة بحركة انزلاق ناعمة بدل الظهور المفاجئ.
+           تقنية grid-template-rows: بتشتغل مع أي ارتفاع محتوى من غير ما
+           نحسب القيمة بـ JS، وبتفضل سلسة على أي جهاز. */
+        .details-box {
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .details-box.details-open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+        .details-box > .details-inner {
+            overflow: hidden;
+            min-height: 0;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .details-box { transition: none; }
+        }
         .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .compound-gallery-track > .compound-gallery-slide { scroll-snap-align: center; }
         
@@ -1172,7 +1193,8 @@
                     : "w-full py-3.5 px-4 bg-whatsappGreen text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 shadow-lg";
 
                 const detailHTML = `
-                    <div class="details-box hidden px-6 pb-6 pt-2 bg-black/20 border-t border-white/5">
+                    <div class="details-box px-6 bg-black/20 border-t border-white/5">
+                        <div class="details-inner pb-6 pt-2">
                         ${galleryHTML} 
                         ${paymentPlanHTML}
                         <div class="flex flex-col gap-3 bg-white/[0.02] p-5 rounded-xl border border-white/5 mb-6">
@@ -1185,6 +1207,7 @@
                                 <a class="flex-1 py-3 px-2 bg-phoneBlue text-white rounded-xl font-bold text-sm flex items-center justify-center gap-1 transition-all hover:brightness-110" href="tel:+201555086599">📞 اتصال</a>
                                 <button type="button" aria-label="مشاركة تفاصيل العقار" class="w-14 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg flex items-center justify-center transition-all hover:bg-white/10 btn-sh" data-title="${prop.title}" data-id="${prop.id}">🔗</button>
                             </div>
+                        </div>
                         </div>
                     </div>
                 `;    
@@ -1200,7 +1223,7 @@
                 if (card) {
                     const detailsBox = card.querySelector('.details-box');
                     if (detailsBox) {
-                        detailsBox.classList.remove('hidden');
+                        detailsBox.classList.add('details-open');
                         card.classList.remove('border-white/5');
                         card.classList.add('border-goldCustom', 'shadow-[0_0_20px_rgba(212,175,55,0.15)]');
                         card.setAttribute('aria-expanded', 'true');
@@ -1645,10 +1668,10 @@
                 if (summary && wrapper.contains(summary)) {    
                     const card = summary.closest('.card');
                     const detailsBox = card.querySelector('.details-box');
-                    const isHidden = detailsBox.classList.contains('hidden');
+                    const isHidden = !detailsBox.classList.contains('details-open');
                     
                     document.querySelectorAll('.details-box').forEach(box => {
-                        box.classList.add('hidden');
+                        box.classList.remove('details-open');
                         const parentCard = box.closest('.card');
                         parentCard.classList.remove('border-goldCustom', 'shadow-[0_0_20px_rgba(212,175,55,0.15)]');
                         parentCard.classList.add('border-white/5');
@@ -1658,7 +1681,7 @@
                     });
 
                     if (isHidden) {     
-                        detailsBox.classList.remove('hidden');     
+                        detailsBox.classList.add('details-open');     
                         card.classList.remove('border-white/5');
                         card.classList.add('border-goldCustom', 'shadow-[0_0_20px_rgba(212,175,55,0.15)]');
                         card.setAttribute('aria-expanded', 'true');
@@ -1675,7 +1698,7 @@
 
                         setTimeout(() => { 
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-                        }, 100);     
+                        }, 420);     
                     } else {
                         window.history.replaceState({}, '', '/');
                         setCanonicalUrl(window.location.origin + '/');

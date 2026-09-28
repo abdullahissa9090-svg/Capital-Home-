@@ -211,6 +211,140 @@
         @media (prefers-reduced-motion: reduce) {
             .details-box { transition: none; }
         }
+
+        /* ===== مقارنة وحدتين ===== */
+        .btn-cmp {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: transparent;
+            color: #a1a1aa;
+            font-size: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 20;
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+        }
+        .btn-cmp:hover { border-color: rgba(212,175,55,0.5); color: #d4af37; }
+        .btn-cmp:active { transform: scale(0.96); }
+        .btn-cmp.is-active {
+            border-color: #d4af37;
+            background: rgba(212,175,55,0.12);
+            color: #d4af37;
+        }
+
+        .compare-bar {
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 96px;
+            z-index: 55;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px 10px 10px;
+            background: rgba(20,20,23,0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212,175,55,0.35);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(140%);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0s linear 0.35s;
+        }
+        .compare-bar.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+        }
+        .compare-bar-text { flex: 1; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.4; }
+        .compare-bar-clear {
+            font-size: 12px; font-weight: 700; color: #a1a1aa;
+            padding: 8px 10px; border-radius: 10px; background: transparent; border: 0;
+        }
+        .compare-bar-open {
+            font-size: 13px; font-weight: 800; color: #0c0c0e;
+            background: #d4af37; border: 0; border-radius: 12px; padding: 9px 16px;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .compare-bar-open:disabled { opacity: 0.35; cursor: not-allowed; }
+        .compare-bar-open:not(:disabled):active { transform: scale(0.96); }
+        @media (min-width: 768px) {
+            .compare-bar { left: 24px; right: auto; width: 420px; }
+        }
+
+        .compare-overlay {
+            position: fixed; inset: 0; z-index: 80;
+            visibility: hidden; pointer-events: none;
+            transition: visibility 0s linear 0.35s;
+        }
+        .compare-overlay.open { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+        .compare-backdrop {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.72);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .compare-overlay.open .compare-backdrop { opacity: 1; }
+        .compare-panel {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            max-height: 90vh; overflow-y: auto; overscroll-behavior: contain;
+            background: #141417;
+            border-top: 1px solid rgba(212,175,55,0.35);
+            border-radius: 24px 24px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .compare-overlay.open .compare-panel { transform: translateY(0); }
+        @media (min-width: 768px) {
+            .compare-panel {
+                left: 50%; right: auto; width: 640px; bottom: 5vh;
+                border-radius: 24px; border: 1px solid rgba(212,175,55,0.35);
+                transform: translate(-50%, 120%);
+            }
+            .compare-overlay.open .compare-panel { transform: translate(-50%, 0); }
+        }
+        .compare-handle { width: 44px; height: 4px; border-radius: 999px; background: rgba(255,255,255,0.18); margin: 10px auto 0; }
+        .cmp-head-cell {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 12px; position: relative; min-height: 84px;
+        }
+        .cmp-head-num { font-size: 11px; font-weight: 800; color: #d4af37; margin-bottom: 4px; }
+        .cmp-head-title { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.45; padding-left: 26px; }
+        .cmp-remove {
+            position: absolute; top: 8px; left: 8px; width: 24px; height: 24px; border-radius: 999px;
+            background: rgba(255,255,255,0.08); color: #d4d4d8; font-size: 12px; border: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cmp-row { padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+        .cmp-label { font-size: 11px; font-weight: 700; color: #8b8b95; text-align: center; margin-bottom: 8px; }
+        .cmp-cells { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cmp-cell {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px; padding: 10px; font-size: 14px; font-weight: 700; color: #fff;
+            text-align: center; line-height: 1.55; word-break: break-word; min-height: 44px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+        }
+        .cmp-cell.cmp-best { border-color: rgba(212,175,55,0.6); background: rgba(212,175,55,0.08); color: #d4af37; }
+        .cmp-cell.cmp-muted { color: #8b8b95; font-weight: 500; }
+        .cmp-line-small { font-size: 13px; font-weight: 500; color: #d4d4d8; }
+        .cmp-tag { font-size: 10px; font-weight: 800; color: #0c0c0e; background: #d4af37; padding: 2px 8px; border-radius: 999px; }
+        .cmp-diff {
+            margin: 6px 0 16px; padding: 12px 14px; border-radius: 14px; text-align: center;
+            border: 1px solid rgba(212,175,55,0.35); background: rgba(212,175,55,0.07);
+            color: #f3e4a8; font-size: 13px; font-weight: 700; line-height: 1.6;
+        }
+        .cmp-note { font-size: 11px; color: #8b8b95; text-align: center; margin: 0 0 14px; }
+        @media (prefers-reduced-motion: reduce) {
+            .compare-bar, .compare-panel, .compare-backdrop, .btn-cmp { transition: none; }
+        }
+
         .compound-gallery-track { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .compound-gallery-track > .compound-gallery-slide { scroll-snap-align: center; }
         
@@ -256,6 +390,25 @@
     <div class="absolute inset-0 bg-grid-pattern pointer-events-none z-[-1] opacity-50"></div>
 
     <div id="appToast" role="status" aria-live="polite"></div>
+
+    <div id="compareBar" class="compare-bar" role="region" aria-label="مقارنة الوحدات">
+        <div id="compareBarText" class="compare-bar-text"></div>
+        <button type="button" id="compareBarClear" class="compare-bar-clear" aria-label="مسح المقارنة">مسح</button>
+        <button type="button" id="compareBarOpen" class="compare-bar-open" disabled>قارن الآن</button>
+    </div>
+
+    <div id="compareSheet" class="compare-overlay" role="dialog" aria-modal="true" aria-labelledby="compareTitle" aria-hidden="true">
+        <div class="compare-backdrop" data-cmp-close></div>
+        <div class="compare-panel">
+            <div class="compare-handle" aria-hidden="true"></div>
+            <div class="flex items-center justify-between px-5 pt-3 pb-3">
+                <h2 id="compareTitle" class="text-lg font-extrabold text-white">⚖️ مقارنة الوحدتين</h2>
+                <button type="button" id="compareCloseBtn" data-cmp-close aria-label="إغلاق" class="w-9 h-9 rounded-full bg-white/10 text-white flex items-center justify-center text-sm">✕</button>
+            </div>
+            <div id="compareBody" class="px-5 pb-8"></div>
+        </div>
+    </div>
+
 
     <button type="button" id="installAppBtn" class="hidden fixed bottom-24 right-6 z-40 items-center gap-2 bg-goldCustom text-black text-xs font-bold py-2.5 px-4 rounded-full shadow-xl transition-transform duration-300 hover:scale-105">
         📲 ثبّت التطبيق
@@ -810,6 +963,7 @@
         }
 
         let currentCategory = "شقة";    
+        let compareIds = [];
         let currentLocationFilter = ""; // فاضي = كل المناطق، مستخدم بس لما currentCategory === "شقة"
 
         // بيرجع "المنيا" أو "المنيا الجديدة" بشكل موحّد بغض النظر عن أي كلام زيادة
@@ -1156,6 +1310,7 @@
                         </div>
 
                         <div class="flex flex-wrap gap-2 mt-auto pt-2">${metaBadges}</div>
+                        ${isSold ? '' : `<div><button type="button" class="btn-cmp ${compareIds.includes(prop.id) ? 'is-active' : ''}" data-id="${prop.id}" aria-pressed="${compareIds.includes(prop.id)}">${compareIds.includes(prop.id) ? '✓ ضمن المقارنة' : '⚖️ قارن'}</button></div>`}
                         
                         <div class="w-full flex items-center justify-center gap-2 mt-6 pt-4 border-t border-white/5 text-xs text-zinc-500 font-bold uppercase tracking-wider group-hover:text-goldCustom transition-colors">
                             اضغط لرؤية التفاصيل الكاملة
@@ -1617,6 +1772,13 @@
                     return;
                 }
 
+                const cmpBtn = e.target.closest('.btn-cmp');
+                if (cmpBtn && wrapper.contains(cmpBtn)) {
+                    e.stopPropagation();
+                    toggleCompare(cmpBtn.getAttribute('data-id'));
+                    return;
+                }
+
                 const favBtn = e.target.closest('.fav-btn');
                 if (favBtn && wrapper.contains(favBtn)) {
                     e.stopPropagation();
@@ -1881,6 +2043,227 @@
             els.forEach(el => observer.observe(el));
         }
 
+        // ===== مقارنة وحدتين =====
+        function escapeHtmlText(v) {
+            return String(v === undefined || v === null ? '' : v)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        const CMP_EMOJI_RE = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu;
+        function cleanMetaText(s) {
+            return String(s || '').replace(CMP_EMOJI_RE, '').replace(/\s+/g, ' ').trim();
+        }
+        function cmpFormatNum(n) {
+            return Math.round(n).toLocaleString('en-US');
+        }
+        // المساحة والدور مكتوبين كنص حر في عمود meta، فبنستخرجهم بحذر:
+        // لو مالقيناش قيمة واضحة بنعرض "—" بدل ما نخمّن.
+        const CMP_AREA_RE = /(\d+(?:[.,]\d+)?)\s*(?:م²|م2|متر|م)(?![\u0600-\u06FF])/;
+        function extractArea(prop) {
+            const sources = [...(prop.meta || []), prop.title || ''];
+            for (const s of sources) {
+                const m = cleanMetaText(s).match(CMP_AREA_RE);
+                if (m) {
+                    const n = parseFloat(m[1].replace(',', '.'));
+                    if (n >= 15 && n <= 20000) return { value: n, sourceItem: s };
+                }
+            }
+            return null;
+        }
+        function extractFloor(prop) {
+            const item = (prop.meta || []).find(s => /الدور|أرضي|ارضي|بدروم|روف/.test(s));
+            return item ? { text: cleanMetaText(item), sourceItem: item } : null;
+        }
+
+        function isCompared(id) { return compareIds.includes(id); }
+
+        function syncCompareButtons() {
+            document.querySelectorAll('.btn-cmp').forEach(btn => {
+                const active = isCompared(btn.getAttribute('data-id'));
+                btn.classList.toggle('is-active', active);
+                btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+                btn.textContent = active ? '✓ ضمن المقارنة' : '⚖️ قارن';
+            });
+        }
+
+        function updateCompareBar() {
+            compareIds = compareIds.filter(id => propertiesData.some(p => p.id === id));
+            const bar = document.getElementById('compareBar');
+            const text = document.getElementById('compareBarText');
+            const openBtn = document.getElementById('compareBarOpen');
+            if (!bar || !text || !openBtn) return;
+            if (compareIds.length === 0) {
+                bar.classList.remove('show');
+                return;
+            }
+            if (compareIds.length === 1) {
+                text.textContent = '⚖️ 1/2 — اختار وحدة تانية للمقارنة';
+                openBtn.disabled = true;
+            } else {
+                text.textContent = '⚖️ الوحدتين جاهزين للمقارنة';
+                openBtn.disabled = false;
+            }
+            bar.classList.add('show');
+        }
+
+        function toggleCompare(id) {
+            const i = compareIds.indexOf(id);
+            if (i !== -1) {
+                compareIds.splice(i, 1);
+            } else {
+                if (compareIds.length >= 2) {
+                    compareIds.shift();
+                    showToast('اتبدلت الوحدة الأولى بالوحدة الجديدة');
+                }
+                compareIds.push(id);
+            }
+            syncCompareButtons();
+            updateCompareBar();
+        }
+
+        function removeFromCompare(id) {
+            compareIds = compareIds.filter(x => x !== id);
+            syncCompareButtons();
+            updateCompareBar();
+            if (compareIds.length < 2) closeCompareSheet();
+            else renderCompareSheet();
+        }
+
+        function clearCompare() {
+            compareIds = [];
+            syncCompareButtons();
+            updateCompareBar();
+            closeCompareSheet();
+        }
+
+        function buildCompareRows(a, b) {
+            const areaA = extractArea(a), areaB = extractArea(b);
+            const floorA = extractFloor(a), floorB = extractFloor(b);
+            const priceKnown = a.price > 0 && b.price > 0;
+            const one = (v) => [v || '—'];
+            const rows = [];
+
+            rows.push({
+                label: 'السعر',
+                a: one(a.priceText || (a.price > 0 ? cmpFormatNum(a.price) + ' جنيه' : '')),
+                b: one(b.priceText || (b.price > 0 ? cmpFormatNum(b.price) + ' جنيه' : '')),
+                best: priceKnown && a.price !== b.price ? (a.price < b.price ? 'a' : 'b') : null,
+                tag: 'الأوفر'
+            });
+
+            const areaText = (info) => info ? String(parseFloat(info.value.toFixed(1))) + ' م²' : '';
+            rows.push({ label: 'المساحة', a: one(areaText(areaA)), b: one(areaText(areaB)), best: null });
+
+            if (areaA && areaB && priceKnown) {
+                const ppmA = a.price / areaA.value, ppmB = b.price / areaB.value;
+                rows.push({
+                    label: 'سعر المتر (تقريبي)',
+                    a: [cmpFormatNum(ppmA) + ' جنيه/م²'],
+                    b: [cmpFormatNum(ppmB) + ' جنيه/م²'],
+                    best: Math.round(ppmA) !== Math.round(ppmB) ? (ppmA < ppmB ? 'a' : 'b') : null,
+                    tag: 'الأوفر للمتر'
+                });
+            }
+
+            rows.push({ label: 'الدور', a: one(floorA && floorA.text), b: one(floorB && floorB.text), best: null });
+            rows.push({ label: 'التشطيب', a: one(a.finishing), b: one(b.finishing), best: null });
+            rows.push({ label: 'المنطقة', a: one(a.locationCategory), b: one(b.locationCategory), best: null });
+            rows.push({ label: 'النوع', a: one(a.category), b: one(b.category), best: null });
+
+            const others = (p, areaInfo, floorInfo) => (p.meta || [])
+                .filter(s => (!areaInfo || s !== areaInfo.sourceItem) && (!floorInfo || s !== floorInfo.sourceItem))
+                .map(cleanMetaText).filter(Boolean);
+            const fa = others(a, areaA, floorA), fb = others(b, areaB, floorB);
+            if (fa.length || fb.length) {
+                rows.push({ label: 'مواصفات إضافية', a: fa.length ? fa : ['—'], b: fb.length ? fb : ['—'], best: null, small: true });
+            }
+            return rows;
+        }
+
+        function buildCompareWhatsAppLink(a, b) {
+            const lines = [
+                'مرحباً كابيتال هوم 👋',
+                'بقارن بين الوحدتين دول وعايز رأيكم:',
+                '',
+                '1️⃣ ' + a.title,
+                a.priceText ? '💰 ' + a.priceText : '',
+                '🔗 ' + buildPropertyAbsoluteUrl(a.id),
+                '',
+                '2️⃣ ' + b.title,
+                b.priceText ? '💰 ' + b.priceText : '',
+                '🔗 ' + buildPropertyAbsoluteUrl(b.id),
+                '',
+                'أنهي أنسب في رأيكم؟'
+            ].filter((l, idx, arr) => !(l === '' && arr[idx - 1] === ''));
+            return 'https://wa.me/201555086599?text=' + encodeURIComponent(lines.join('\n'));
+        }
+
+        function renderCompareSheet() {
+            const body = document.getElementById('compareBody');
+            if (!body) return;
+            const a = propertiesData.find(p => p.id === compareIds[0]);
+            const b = propertiesData.find(p => p.id === compareIds[1]);
+            if (!a || !b) { closeCompareSheet(); return; }
+
+            const headCell = (p, n) => `
+                <div class="cmp-head-cell">
+                    <div class="cmp-head-num">الوحدة ${n}</div>
+                    <div class="cmp-head-title">${escapeHtmlText(p.title)}</div>
+                    <button type="button" class="cmp-remove" data-cmp-remove="${escapeHtmlText(p.id)}" aria-label="شيل الوحدة من المقارنة">✕</button>
+                </div>`;
+
+            const rowsHTML = buildCompareRows(a, b).map(r => {
+                const cell = (lines, side) => {
+                    const isBest = r.best === side;
+                    const empty = lines.length === 1 && lines[0] === '—';
+                    const inner = lines.map(l => `<div class="${r.small ? 'cmp-line-small' : ''}">${escapeHtmlText(l)}</div>`).join('');
+                    return `<div class="cmp-cell ${isBest ? 'cmp-best' : ''} ${empty ? 'cmp-muted' : ''}">${inner}${isBest && r.tag ? `<span class="cmp-tag">${r.tag}</span>` : ''}</div>`;
+                };
+                return `<div class="cmp-row"><div class="cmp-label">${r.label}</div><div class="cmp-cells">${cell(r.a, 'a')}${cell(r.b, 'b')}</div></div>`;
+            }).join('');
+
+            let diffHTML = '';
+            if (a.price > 0 && b.price > 0) {
+                const diff = Math.abs(a.price - b.price);
+                diffHTML = diff === 0
+                    ? '<div class="cmp-diff">السعر متساوي بين الوحدتين</div>'
+                    : `<div class="cmp-diff">${a.price < b.price ? 'الوحدة الأولى' : 'الوحدة التانية'} أوفر بمقدار ${cmpFormatNum(diff)} جنيه</div>`;
+            }
+
+            body.innerHTML = `
+                <div class="cmp-cells mb-2">${headCell(a, 1)}${headCell(b, 2)}</div>
+                ${rowsHTML}
+                <div style="height:10px"></div>
+                ${diffHTML}
+                <p class="cmp-note">المساحة والدور بتتقرا من بيانات الإعلان، وسعر المتر تقريبي.</p>
+                <a id="compareWhatsApp" href="${buildCompareWhatsAppLink(a, b)}" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center justify-center gap-2 w-full bg-whatsappGreen text-white font-bold py-3.5 rounded-xl transition-transform duration-200 active:scale-[0.98]">
+                    💬 اسأل كابيتال هوم عن الوحدتين
+                </a>
+                <button type="button" id="compareClearInSheet" class="w-full mt-3 py-3 text-sm font-bold text-zinc-400">مسح المقارنة</button>`;
+        }
+
+        function openCompareSheet() {
+            if (compareIds.length < 2) return;
+            const overlay = document.getElementById('compareSheet');
+            if (!overlay) return;
+            renderCompareSheet();
+            overlay.classList.add('open');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            const closeBtn = document.getElementById('compareCloseBtn');
+            if (closeBtn) closeBtn.focus();
+            if (typeof gtag === 'function') gtag('event', 'compare_units', { unit_a: compareIds[0], unit_b: compareIds[1] });
+        }
+
+        function closeCompareSheet() {
+            const overlay = document.getElementById('compareSheet');
+            if (!overlay) return;
+            overlay.classList.remove('open');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
         // توست صغير في الأسفل بدل alert() - بيختفي لوحده بعد ثانيتين
         let toastTimer = null;
         function showToast(message) {
@@ -1948,6 +2331,27 @@
 
         // زرار "ثبّت التطبيق" - بيظهر بس لما المتصفح يقول إن التثبيت متاح
         // (كروم/أندرويد بشكل أساسي)، وبيختفي لو التطبيق متثبت بالفعل.
+        (function initCompare() {
+            const overlay = document.getElementById('compareSheet');
+            const openBtn = document.getElementById('compareBarOpen');
+            const clearBtn = document.getElementById('compareBarClear');
+            if (!overlay || !openBtn || !clearBtn) return;
+            openBtn.addEventListener('click', openCompareSheet);
+            clearBtn.addEventListener('click', clearCompare);
+            overlay.addEventListener('click', (e) => {
+                if (e.target.closest('[data-cmp-close]')) { closeCompareSheet(); return; }
+                const rm = e.target.closest('[data-cmp-remove]');
+                if (rm) { removeFromCompare(rm.getAttribute('data-cmp-remove')); return; }
+                if (e.target.closest('#compareClearInSheet')) { clearCompare(); return; }
+                if (e.target.closest('#compareWhatsApp') && typeof gtag === 'function') {
+                    gtag('event', 'compare_whatsapp', { unit_a: compareIds[0], unit_b: compareIds[1] });
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && overlay.classList.contains('open')) closeCompareSheet();
+            });
+        })();
+
         (function initInstallPrompt() {
             const btn = document.getElementById('installAppBtn');
             if (!btn) return;

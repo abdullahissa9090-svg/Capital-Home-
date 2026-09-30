@@ -1537,6 +1537,7 @@
                     <div class="flex flex-wrap gap-2 mb-4">${metaBadges}</div>
                     ${paymentPlanHTML}
                     ${featureItems ? `<div class="flex flex-col gap-2 bg-white/[0.02] p-4 rounded-xl border border-white/5 mb-4">${featureItems}</div>` : ''}
+                    ${unit.isSold ? '' : `<div><button type="button" class="btn-cmp ${compareIds.includes(unit.id) ? 'is-active' : ''}" data-id="${unit.id}" aria-pressed="${compareIds.includes(unit.id)}">${compareIds.includes(unit.id) ? '✓ ضمن المقارنة' : '⚖️ قارن'}</button></div>`}
                     <div class="flex gap-2 mt-auto">
                         <a class="${btnClass} flex-1" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
                         <button type="button" aria-label="مشاركة تفاصيل الوحدة" class="w-14 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg flex items-center justify-center transition-all hover:bg-white/10 btn-sh-unit" data-unit-id="${unit.id}">🔗</button>
@@ -2077,6 +2078,68 @@
 
         function isCompared(id) { return compareIds.includes(id); }
 
+        // بيدور على العنصر في مصدره الصح (عقار عادي أو وحدة كمباوند) ويرجعه
+        // بشكل موحّد عشان باقي كود المقارنة يتعامل معاهم بنفس الطريقة.
+        function findComparable(id) {
+            const prop = propertiesData.find(p => p.id === id);
+            if (prop) return normalizeProperty(prop);
+            const unit = compoundUnitsData.find(u => u.id === id);
+            if (unit) return normalizeUnit(unit);
+            return null;
+        }
+
+        function normalizeProperty(prop) {
+            const areaInfo = extractArea(prop);
+            const floorInfo = extractFloor(prop);
+            const others = (prop.meta || [])
+                .filter(s => (!areaInfo || s !== areaInfo.sourceItem) && (!floorInfo || s !== floorInfo.sourceItem))
+                .map(cleanMetaText).filter(Boolean);
+            const compound = null;
+            return {
+                kind: 'property',
+                id: prop.id,
+                title: prop.title,
+                price: prop.price > 0 ? prop.price : null,
+                priceText: prop.priceText || (prop.price > 0 ? cmpFormatNum(prop.price) + ' جنيه' : ''),
+                area: areaInfo ? { value: areaInfo.value, text: String(parseFloat(areaInfo.value.toFixed(1))) + ' م²' } : null,
+                pricePerMeter: (areaInfo && prop.price > 0) ? (prop.price / areaInfo.value) : null,
+                pricePerMeterApprox: true,
+                floorText: floorInfo ? floorInfo.text : '',
+                finishing: prop.finishing || '',
+                locationText: prop.locationCategory || '',
+                categoryText: prop.category || '',
+                extraLines: others,
+                paymentLines: [],
+                waLink: buildPropertyAbsoluteUrl(prop.id)
+            };
+        }
+
+        function normalizeUnit(unit) {
+            const compound = compoundsData.find(c => c.id === unit.compoundId);
+            const ppmNum = parseFloat(String(unit.pricePerMeter || '').replace(/[^\d.]/g, ''));
+            const areaNum = parseFloat(String(unit.space || '').replace(/[^\d.]/g, ''));
+            const payment = [];
+            if (unit.downPayment) payment.push('مقدم: ' + formatMoney(unit.downPayment, 'جنيه') + (unit.downPaymentPercent ? ' (' + unit.downPaymentPercent + ')' : ''));
+            if (unit.installmentPeriod) payment.push('تقسيط: ' + unit.installmentPeriod + (unit.paymentSystem ? ' - ' + unit.paymentSystem : ''));
+            return {
+                kind: 'unit',
+                id: unit.id,
+                title: unit.title + (compound ? ' - ' + compound.name : ''),
+                price: unit.price > 0 ? unit.price : null,
+                priceText: unit.totalPriceText ? formatMoney(unit.totalPriceText, 'جنيه') : (unit.price > 0 ? cmpFormatNum(unit.price) + ' جنيه' : ''),
+                area: areaNum ? { value: areaNum, text: String(parseFloat(areaNum.toFixed(1))) + ' م²' } : null,
+                pricePerMeter: !isNaN(ppmNum) && ppmNum > 0 ? ppmNum : null,
+                pricePerMeterApprox: false,
+                floorText: unit.floor || '',
+                finishing: unit.finishing || '',
+                locationText: compound ? compound.location : '',
+                categoryText: unit.unitType || '',
+                extraLines: (unit.features || []).slice(),
+                paymentLines: payment,
+                waLink: window.location.origin + window.location.pathname
+            };
+        }
+
         function syncCompareButtons() {
             document.querySelectorAll('.btn-cmp').forEach(btn => {
                 const active = isCompared(btn.getAttribute('data-id'));
@@ -2087,7 +2150,7 @@
         }
 
         function updateCompareBar() {
-            compareIds = compareIds.filter(id => propertiesData.some(p => p.id === id));
+            compareIds = compareIds.filter(id => findComparable(id));
             const bar = document.getElementById('compareBar');
             const text = document.getElementById('compareBarText');
             const openBtn = document.getElementById('compareBarOpen');
@@ -2136,46 +2199,54 @@
             closeCompareSheet();
         }
 
+        // a و b هنا عناصر موحّدة (طالعة من normalizeProperty أو normalizeUnit)،
+        // مش مهم مصدرهم الأصلي كان عقار عادي أو وحدة كمباوند.
         function buildCompareRows(a, b) {
-            const areaA = extractArea(a), areaB = extractArea(b);
-            const floorA = extractFloor(a), floorB = extractFloor(b);
-            const priceKnown = a.price > 0 && b.price > 0;
+            const priceKnown = a.price && b.price;
             const one = (v) => [v || '—'];
             const rows = [];
 
             rows.push({
                 label: 'السعر',
-                a: one(a.priceText || (a.price > 0 ? cmpFormatNum(a.price) + ' جنيه' : '')),
-                b: one(b.priceText || (b.price > 0 ? cmpFormatNum(b.price) + ' جنيه' : '')),
+                a: one(a.priceText), b: one(b.priceText),
                 best: priceKnown && a.price !== b.price ? (a.price < b.price ? 'a' : 'b') : null,
                 tag: 'الأوفر'
             });
 
-            const areaText = (info) => info ? String(parseFloat(info.value.toFixed(1))) + ' م²' : '';
-            rows.push({ label: 'المساحة', a: one(areaText(areaA)), b: one(areaText(areaB)), best: null });
+            rows.push({ label: 'المساحة', a: one(a.area && a.area.text), b: one(b.area && b.area.text), best: null });
 
-            if (areaA && areaB && priceKnown) {
-                const ppmA = a.price / areaA.value, ppmB = b.price / areaB.value;
+            const ppmA = a.pricePerMeter, ppmB = b.pricePerMeter;
+            if (ppmA && ppmB) {
+                const anyApprox = a.pricePerMeterApprox || b.pricePerMeterApprox;
                 rows.push({
-                    label: 'سعر المتر (تقريبي)',
-                    a: [cmpFormatNum(ppmA) + ' جنيه/م²'],
-                    b: [cmpFormatNum(ppmB) + ' جنيه/م²'],
+                    label: 'سعر المتر' + (anyApprox ? ' (تقريبي)' : ''),
+                    a: [cmpFormatNum(ppmA) + ' جنيه/م²'], b: [cmpFormatNum(ppmB) + ' جنيه/م²'],
                     best: Math.round(ppmA) !== Math.round(ppmB) ? (ppmA < ppmB ? 'a' : 'b') : null,
                     tag: 'الأوفر للمتر'
                 });
             }
 
-            rows.push({ label: 'الدور', a: one(floorA && floorA.text), b: one(floorB && floorB.text), best: null });
+            rows.push({ label: 'الدور', a: one(a.floorText), b: one(b.floorText), best: null });
             rows.push({ label: 'التشطيب', a: one(a.finishing), b: one(b.finishing), best: null });
-            rows.push({ label: 'المنطقة', a: one(a.locationCategory), b: one(b.locationCategory), best: null });
-            rows.push({ label: 'النوع', a: one(a.category), b: one(b.category), best: null });
+            rows.push({ label: 'المنطقة', a: one(a.locationText), b: one(b.locationText), best: null });
+            rows.push({ label: 'النوع', a: one(a.categoryText), b: one(b.categoryText), best: null });
 
-            const others = (p, areaInfo, floorInfo) => (p.meta || [])
-                .filter(s => (!areaInfo || s !== areaInfo.sourceItem) && (!floorInfo || s !== floorInfo.sourceItem))
-                .map(cleanMetaText).filter(Boolean);
-            const fa = others(a, areaA, floorA), fb = others(b, areaB, floorB);
-            if (fa.length || fb.length) {
-                rows.push({ label: 'مواصفات إضافية', a: fa.length ? fa : ['—'], b: fb.length ? fb : ['—'], best: null, small: true });
+            if (a.paymentLines.length || b.paymentLines.length) {
+                rows.push({
+                    label: 'خطة السداد',
+                    a: a.paymentLines.length ? a.paymentLines : ['—'],
+                    b: b.paymentLines.length ? b.paymentLines : ['—'],
+                    best: null, small: true
+                });
+            }
+
+            if (a.extraLines.length || b.extraLines.length) {
+                rows.push({
+                    label: 'مواصفات إضافية',
+                    a: a.extraLines.length ? a.extraLines : ['—'],
+                    b: b.extraLines.length ? b.extraLines : ['—'],
+                    best: null, small: true
+                });
             }
             return rows;
         }
@@ -2187,11 +2258,11 @@
                 '',
                 '1️⃣ ' + a.title,
                 a.priceText ? '💰 ' + a.priceText : '',
-                '🔗 ' + buildPropertyAbsoluteUrl(a.id),
+                '🔗 ' + a.waLink,
                 '',
                 '2️⃣ ' + b.title,
                 b.priceText ? '💰 ' + b.priceText : '',
-                '🔗 ' + buildPropertyAbsoluteUrl(b.id),
+                '🔗 ' + b.waLink,
                 '',
                 'أنهي أنسب في رأيكم؟'
             ].filter((l, idx, arr) => !(l === '' && arr[idx - 1] === ''));
@@ -2201,8 +2272,8 @@
         function renderCompareSheet() {
             const body = document.getElementById('compareBody');
             if (!body) return;
-            const a = propertiesData.find(p => p.id === compareIds[0]);
-            const b = propertiesData.find(p => p.id === compareIds[1]);
+            const a = findComparable(compareIds[0]);
+            const b = findComparable(compareIds[1]);
             if (!a || !b) { closeCompareSheet(); return; }
 
             const headCell = (p, n) => `

@@ -472,6 +472,21 @@
             <input type="text" id="propertySearch" class="w-full relative px-6 py-5 bg-bgCard/80 backdrop-blur-md border border-white/10 rounded-2xl text-base font-semibold text-white placeholder-zinc-500 outline-none shadow-[0_8px_30px_rgba(0,0,0,0.5)] focus:border-goldCustom focus:bg-bgCard transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو الميزة (مثال: المنيا الجديدة، تقسيط)...">    
         </div>    
 
+        <div class="mb-8 w-full max-w-3xl mx-auto flex flex-wrap items-center gap-2.5 justify-center relative z-20">
+            <div class="flex items-center gap-2 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2">
+                <label for="priceMinInput" class="text-xs font-bold text-zinc-400">💰 من</label>
+                <input type="number" id="priceMinInput" inputmode="numeric" min="0" step="50000" placeholder="السعر" class="w-24 bg-transparent text-sm font-bold text-white placeholder-zinc-600 outline-none">
+            </div>
+            <div class="flex items-center gap-2 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2">
+                <label for="priceMaxInput" class="text-xs font-bold text-zinc-400">لحد</label>
+                <input type="number" id="priceMaxInput" inputmode="numeric" min="0" step="50000" placeholder="السعر" class="w-24 bg-transparent text-sm font-bold text-white placeholder-zinc-600 outline-none">
+            </div>
+            <button type="button" id="priceFilterClear" class="hidden text-xs font-bold text-zinc-500 underline px-2">مسح</button>
+            <button type="button" id="sortDirectionBtn" aria-label="تبديل ترتيب السعر" class="flex items-center gap-1.5 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-zinc-300 transition-colors hover:border-goldCustom/40">
+                <span id="sortDirectionIcon">⬆️</span> <span id="sortDirectionLabel">الأرخص أولاً</span>
+            </button>
+        </div>
+
         <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-between mb-10 max-w-2xl mx-auto shadow-lg flex-wrap" aria-label="أقسام العقارات">    
             <button type="button" id="btnCat-شقة" class="nav-btn active-btn flex-1 py-3 px-2 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300" data-cat="شقة" aria-pressed="true">🏢 الشقق</button>    
             <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
@@ -972,6 +987,9 @@
         let currentCategory = "شقة";    
         let compareIds = [];
         let currentLocationFilter = ""; // فاضي = كل المناطق، مستخدم بس لما currentCategory === "شقة"
+        let priceMinFilter = null;
+        let priceMaxFilter = null;
+        let sortDirection = 'asc'; // 'asc' = الأرخص أولاً، 'desc' = الأغلى أولاً
 
         // بيرجع "المنيا" أو "المنيا الجديدة" بشكل موحّد بغض النظر عن أي كلام زيادة
         // أو مسافات في خلية locationCategory (زي "المنيا شارع طه حسين" أو "المنيا الجديدة ")
@@ -1206,6 +1224,8 @@
                 if (currentCategory === "شقة" && currentLocationFilter) {
                     if (normalizeLocationCategory(item.locationCategory) !== currentLocationFilter) return false;
                 }
+                if (priceMinFilter !== null && item.price < priceMinFilter) return false;
+                if (priceMaxFilter !== null && item.price > priceMaxFilter) return false;
                 if (keyword) {    
                     const matchTitle = normalizeArabic(item.title).includes(keyword);    
                     const matchPriceText = normalizeArabic(item.priceText).includes(keyword);    
@@ -1219,7 +1239,7 @@
                 return true;    
             });    
 
-            // الترتيب: المباع ينزل أسفل القائمة، وبعدين الترتيب حسب السعر
+            // الترتيب: المباع ينزل أسفل القائمة دايمًا، وبعدين حسب السعر والاتجاه المختار
             filtered.sort((a, b) => {
                 const aSold = a.status === 'sold';
                 const bSold = b.status === 'sold';
@@ -1227,7 +1247,8 @@
                 if (aSold && !bSold) return 1;
                 if (!aSold && bSold) return -1;
                 
-                return Number(a.price) - Number(b.price);
+                const diff = Number(a.price) - Number(b.price);
+                return sortDirection === 'desc' ? -diff : diff;
             });
             
             const noResults = document.getElementById('noResults');    
@@ -2427,6 +2448,51 @@
             });
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && overlay.classList.contains('open')) closeCompareSheet();
+            });
+        })();
+
+        (function initPriceAndSortFilters() {
+            const minInput = document.getElementById('priceMinInput');
+            const maxInput = document.getElementById('priceMaxInput');
+            const clearBtn = document.getElementById('priceFilterClear');
+            const sortBtn = document.getElementById('sortDirectionBtn');
+            const sortIcon = document.getElementById('sortDirectionIcon');
+            const sortLabel = document.getElementById('sortDirectionLabel');
+            if (!minInput || !maxInput || !sortBtn) return;
+
+            function updateClearVisibility() {
+                const hasValue = priceMinFilter !== null || priceMaxFilter !== null;
+                if (clearBtn) clearBtn.classList.toggle('hidden', !hasValue);
+            }
+
+            function applyPriceInputs() {
+                const minVal = minInput.value.trim();
+                const maxVal = maxInput.value.trim();
+                priceMinFilter = minVal ? Math.max(0, parseFloat(minVal)) : null;
+                priceMaxFilter = maxVal ? Math.max(0, parseFloat(maxVal)) : null;
+                updateClearVisibility();
+                triggerDebouncedRender();
+            }
+
+            minInput.addEventListener('input', applyPriceInputs);
+            maxInput.addEventListener('input', applyPriceInputs);
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    minInput.value = '';
+                    maxInput.value = '';
+                    priceMinFilter = null;
+                    priceMaxFilter = null;
+                    updateClearVisibility();
+                    triggerDynamicRender();
+                });
+            }
+
+            sortBtn.addEventListener('click', () => {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                if (sortIcon) sortIcon.textContent = sortDirection === 'asc' ? '⬆️' : '⬇️';
+                if (sortLabel) sortLabel.textContent = sortDirection === 'asc' ? 'الأرخص أولاً' : 'الأغلى أولاً';
+                triggerDynamicRender();
             });
         })();
 

@@ -1,3 +1,4 @@
+here
 <!DOCTYPE html>  
 <html lang="ar-EG" dir="rtl">    
 <head>    
@@ -462,6 +463,17 @@
             <a href="#leadForm" class="bg-gradient-to-l from-goldCustom to-[#b8952b] text-bgMain px-8 py-3.5 rounded-xl font-bold text-sm shadow-[0_5px_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(212,175,55,0.4)]">🎯 خلينا ندورلك على عقار</a>    
             <a href="tel:+201555086599" class="bg-white/5 backdrop-blur-sm border border-white/10 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/10">📞 اتصال مباشر بالمكتب</a>    
         </div>    
+
+        <div class="flex justify-center gap-3 flex-wrap mt-8 relative z-10 w-full max-w-md mx-auto">
+            <div class="flex-1 min-w-[140px] bg-bgCard/70 backdrop-blur-md border border-goldCustom/10 rounded-2xl px-4 py-4 text-center">
+                <div id="statUnitsCount" class="text-2xl font-extrabold text-goldCustom tracking-tight">—</div>
+                <div class="text-[11px] font-bold text-zinc-400 mt-1">عقار معروض على الموقع</div>
+            </div>
+            <div class="flex-1 min-w-[140px] bg-bgCard/70 backdrop-blur-md border border-goldCustom/10 rounded-2xl px-4 py-4 text-center">
+                <div id="statTotalValue" class="text-2xl font-extrabold text-goldCustom tracking-tight">—</div>
+                <div class="text-[11px] font-bold text-zinc-400 mt-1">قيمة العقارات المعروضة <span class="text-zinc-500">(تقديري)</span></div>
+            </div>
+        </div>
     </header>    
     
     <div class="w-[92%] max-w-[1100px] mx-auto mt-2">    
@@ -2568,9 +2580,46 @@
                 }
 
                 renderProperties();
+                updateHeroStats();
             }).finally(() => {
                 hideAppSplash();
             });
+        }
+
+        // بتحسب وتعرض عدد العقارات المتاحة (مش المباعة) وقيمتها الإجمالية التقديرية،
+        // أرقام حقيقية من نفس بيانات الشيت الحية، مش أرقام ثابتة أو وهمية.
+        function updateHeroStats() {
+            const countEl = document.getElementById('statUnitsCount');
+            const valueEl = document.getElementById('statTotalValue');
+            if (!countEl || !valueEl) return;
+
+            const available = propertiesData.filter(p => p.status !== 'sold');
+            const totalValue = available.reduce((sum, p) => sum + (p.price > 0 ? p.price : 0), 0);
+
+            animateStatCountUp(countEl, available.length, (n) => n.toLocaleString('en-US'));
+
+            if (totalValue >= 1000000) {
+                animateStatCountUp(valueEl, totalValue / 1000000, (n) => n.toFixed(n < 10 ? 1 : 0) + ' مليون ج.م');
+            } else if (totalValue > 0) {
+                animateStatCountUp(valueEl, totalValue, (n) => n.toLocaleString('en-US') + ' ج.م');
+            } else {
+                valueEl.textContent = '—';
+            }
+        }
+
+        function animateStatCountUp(el, target, formatFn) {
+            if (!target || target <= 0) { el.textContent = '0'; return; }
+            if (prefersReducedMotion) { el.textContent = formatFn(target); return; }
+            const duration = 900;
+            const startTime = performance.now();
+            function step(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = formatFn(target * eased);
+                if (progress < 1) requestAnimationFrame(step);
+                else el.textContent = formatFn(target);
+            }
+            requestAnimationFrame(step);
         }
 
         // بتخفي شاشة التحميل بسلاسة (fade) لما البيانات تخلص تحميل، نجحت أو فشلت

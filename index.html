@@ -466,11 +466,11 @@
         <div class="flex justify-center gap-3 flex-wrap mt-8 relative z-10 w-full max-w-md mx-auto">
             <div class="flex-1 min-w-[140px] bg-bgCard/70 backdrop-blur-md border border-goldCustom/10 rounded-2xl px-4 py-4 text-center">
                 <div id="statUnitsCount" class="text-2xl font-extrabold text-goldCustom tracking-tight">—</div>
-                <div class="text-[11px] font-bold text-zinc-400 mt-1">عقار ووحدة معروضة على الموقع</div>
+                <div class="text-[11px] font-bold text-zinc-400 mt-1">عقار ووحدة متاحة لدينا</div>
             </div>
             <div class="flex-1 min-w-[140px] bg-bgCard/70 backdrop-blur-md border border-goldCustom/10 rounded-2xl px-4 py-4 text-center">
                 <div id="statTotalValue" class="text-2xl font-extrabold text-goldCustom tracking-tight">—</div>
-                <div class="text-[11px] font-bold text-zinc-400 mt-1">قيمة العقارات المعروضة <span class="text-zinc-500">(تقديري)</span></div>
+                <div class="text-[11px] font-bold text-zinc-400 mt-1">قيمة العقارات المتاحة <span class="text-zinc-500">(تقديري)</span></div>
             </div>
         </div>
     </header>    
@@ -2599,6 +2599,11 @@
 
         // بتحسب وتعرض عدد العقارات المتاحة (مش المباعة) وقيمتها الإجمالية التقديرية،
         // أرقام حقيقية من نفس بيانات الشيت الحية، مش أرقام ثابتة أو وهمية.
+        // وحدات حصرية (فلل) متاحة عن طريق المكتب بس وأصحابها رافضين نشرها على الموقع.
+        // لازم الرقمين دول يفضلوا حقيقيين: عدّلهم هنا لما يتغيروا (عدد الوحدات، وقيمتها بالجنيه).
+        const EXCLUSIVE_UNITS_COUNT = 20;
+        const EXCLUSIVE_UNITS_VALUE = 200000000;
+
         function updateHeroStats() {
             const countEl = document.getElementById('statUnitsCount');
             const valueEl = document.getElementById('statTotalValue');
@@ -2607,9 +2612,10 @@
             const availableProps = propertiesData.filter(p => p.status !== 'sold');
             const availableUnits = compoundUnitsData.filter(u => !u.isSold);
             const all = availableProps.concat(availableUnits);
-            const totalValue = all.reduce((sum, p) => sum + (p.price > 0 ? p.price : 0), 0);
+            const totalValue = all.reduce((sum, p) => sum + (p.price > 0 ? p.price : 0), 0) + EXCLUSIVE_UNITS_VALUE;
+            const totalCount = all.length + EXCLUSIVE_UNITS_COUNT;
 
-            animateStatCountUp(countEl, all.length, (n) => Math.round(n).toLocaleString('en-US'));
+            animateStatCountUp(countEl, totalCount, (n) => Math.round(n).toLocaleString('en-US'));
 
             if (totalValue >= 1000000000) {
                 animateStatCountUp(valueEl, totalValue / 1000000000, (n) => n.toFixed(2) + ' مليار ج.م');
@@ -2667,5 +2673,4 @@
         }
     </script>
 </body>    
-</html>
-
+    </html>

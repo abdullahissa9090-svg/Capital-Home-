@@ -670,16 +670,53 @@
         }
 
         // يقرأ قيمة خلية بأمان بالاعتماد على اسم الحقل بدل رقم العمود.
+        // ===== حماية: أي نص جاي من الشيت بيتنقّى هنا (نقطة الدخول الوحيدة للبيانات) =====
+        // لو حد كتب كود جوه خلية في الشيت، بيتحوّل لنص عادي ومبيشتغلش في الموقع.
+        const HTML_ESCAPE_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+        const HTML_UNESCAPE_MAP = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" };
+        function sanitizeSheetText(v) {
+            return String(v).replace(/[&<>"']/g, c => HTML_ESCAPE_MAP[c]);
+        }
+        // بيرجّع النص لأصله، بنستخدمه بس في الأماكن اللي مش HTML
+        // (رسايل الواتساب، المشاركة، البيانات المنظمة...) عشان ميظهرش "&amp;" للعميل.
+        function decodeEntities(v) {
+            return String(v === undefined || v === null ? '' : v)
+                .replace(/&(amp|lt|gt|quot|#39);/g, (m, t) => HTML_UNESCAPE_MAP[t]);
+        }
+        // الروابط: نقبل بس http/https أو مسار نسبي. أي بروتوكول تاني
+        // (javascript: / data: / vbscript:...) بيتمسح خالص.
+        function sanitizeUrl(u) {
+            const s = String(u || '').trim();
+            if (!s) return '';
+            const probe = s.replace(/[\u0000-\u001F\u007F-\u009F\s]/g, '');
+            if (/^[a-z][a-z0-9+.\-]*:/i.test(probe) && !/^https?:/i.test(probe)) return '';
+            return s;
+        }
+        // المعرّف (id): حروف وأرقام وعربي و _ - . ومسافة بس.
+        function sanitizeId(v) {
+            return String(v).replace(/[^\w\-. \u0600-\u06FF]/g, '');
+        }
+        const SHEET_URL_KEYS = new Set(['image', 'mapurl']);
+        const SHEET_ID_KEYS = new Set(['id', 'compoundid']);
+
         function getCell(cells, colIndexMap, key) {
             const idx = colIndexMap[key];
             if (idx === undefined || !cells || !cells[idx]) return '';
             const cell = cells[idx];
-            const v = cell.v;
-            if (v !== null && v !== undefined) return v;
-            // احتياطي: لو القيمة الأصلية (v) فاضية بسبب تعارض نوع الخلية مع نوع
-            // العمود (مثلاً خلية سعر مكتوبة بفاصلة "4,930,000" وسط عمود أرقام صافية)،
-            // نرجع للنص المنسّق (f) بدل ما نضيّع القيمة ونحسبها صفر.
-            return (cell.f !== null && cell.f !== undefined) ? cell.f : '';
+            let v = cell.v;
+            if (v === null || v === undefined) {
+                // احتياطي: لو القيمة الأصلية (v) فاضية بسبب تعارض نوع الخلية مع نوع
+                // العمود (مثلاً خلية سعر مكتوبة بفاصلة "4,930,000" وسط عمود أرقام صافية)،
+                // نرجع للنص المنسّق (f) بدل ما نضيّع القيمة ونحسبها صفر.
+                v = (cell.f !== null && cell.f !== undefined) ? cell.f : '';
+            }
+            if (typeof v !== 'string') return v;
+            if (SHEET_ID_KEYS.has(key)) return sanitizeId(v);
+            if (SHEET_URL_KEYS.has(key)) return sanitizeSheetText(sanitizeUrl(v));
+            if (key === 'gallery') {
+                return v.split('|').map(x => sanitizeUrl(x)).filter(Boolean).map(sanitizeSheetText).join('|');
+            }
+            return sanitizeSheetText(v);
         }
 
         function rowToProperty(cells, colIndexMap) {
@@ -1173,14 +1210,14 @@
             const jsonLd = {
                 "@context": "https://schema.org",
                 "@type": "Product",
-                "name": prop.title,
-                "category": prop.category,
+                "name": decodeEntities(prop.title),
+                "category": decodeEntities(prop.category),
                 "url": absoluteUrl,
-                "description": description
+                "description": decodeEntities(description)
             };
 
             if (prop.image) {
-                jsonLd.image = window.location.origin + resolveAssetPath(prop.image);
+                jsonLd.image = window.location.origin + resolveAssetPath(decodeEntities(prop.image));
             }
 
             const offer = {
@@ -1195,7 +1232,7 @@
             if (prop.locationCategory) {
                 jsonLd.address = {
                     "@type": "PostalAddress",
-                    "addressLocality": prop.locationCategory,
+                    "addressLocality": decodeEntities(prop.locationCategory),
                     "addressRegion": "محافظة المنيا",
                     "addressCountry": "EG"
                 };
@@ -1203,7 +1240,7 @@
 
             // حماية بسيطة: منع أي نص داخل البيانات (مثلاً وصف فيه وسم إغلاق سكريبت)
             // من كسر وسم السكريبت نفسه.
-            const safeJson = JSON.stringify(jsonLd).replace(/<\/script/gi, '<\\/script');
+            const safeJson = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
             return `<script type="application/ld+json">${safeJson}<\/script>`;
         }
 
@@ -1292,7 +1329,7 @@
                 cardEl.tabIndex = 0;
                 cardEl.setAttribute('role', 'button');
                 cardEl.setAttribute('aria-expanded', 'false');
-                cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + prop.title);
+                cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + decodeEntities(prop.title));
 
                 const isSold = prop.status === 'sold';
                 const cardOpacityClass = isSold ? 'opacity-85 grayscale-[20%]' : '';
@@ -1383,8 +1420,8 @@
                 }    
             
                 const contactBtnText = isSold ? "العقار مُباع" : (prop.customContactText ? prop.customContactText : "احجز معاينة مجانية");    
-                const waMessageInfo = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + prop.title);
-                const waMessageVideo = encodeURIComponent('مرحباً كابيتال هوم، أريد الحصول على فيديو المعاينة الواقعية لـ: ' + prop.title);
+                const waMessageInfo = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + decodeEntities(prop.title));
+                const waMessageVideo = encodeURIComponent('مرحباً كابيتال هوم، أريد الحصول على فيديو المعاينة الواقعية لـ: ' + decodeEntities(prop.title));
             
                 const waLink = isSold ? "javascript:void(0);" : `https://wa.me/201555086599?text=${waMessageInfo}`;
                 const waTarget = isSold ? "" : `target="_blank" rel="noopener noreferrer"`;
@@ -1567,7 +1604,7 @@
 
             const isSold = unit.isSold;
             const contactBtnText = isSold ? 'الوحدة مُباعة' : 'استفسر عن هذه الوحدة';
-            const waMessage = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + unit.title);
+            const waMessage = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + decodeEntities(unit.title));
             const waLink = isSold ? 'javascript:void(0);' : `https://wa.me/201555086599?text=${waMessage}`;
             const waTarget = isSold ? '' : `target="_blank" rel="noopener noreferrer"`;
             const btnClass = isSold
@@ -1706,7 +1743,7 @@
                 cardEl.setAttribute('data-compound-id', compound.id);
                 cardEl.tabIndex = 0;
                 cardEl.setAttribute('role', 'button');
-                cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + compound.name);
+                cardEl.setAttribute('aria-label', 'عرض تفاصيل ' + decodeEntities(compound.name));
 
                 const fallbackImage = '/images/placeholder.webp';
                 const coverImage = getCompoundCoverImage(compound);
@@ -2134,6 +2171,15 @@
             return null;
         }
 
+        // نصوص المقارنة بتتنقّى تاني وقت العرض (escapeHtmlText)، فهنا بنرجّعها لأصلها
+        // عشان متتنقّاش مرتين وتظهر "&amp;" للعميل.
+        function decodeCompareItem(it) {
+            ['title', 'priceText', 'floorText', 'finishing', 'locationText', 'categoryText'].forEach(k => { it[k] = decodeEntities(it[k]); });
+            it.extraLines = it.extraLines.map(decodeEntities);
+            it.paymentLines = it.paymentLines.map(decodeEntities);
+            return it;
+        }
+
         function normalizeProperty(prop) {
             const areaInfo = extractArea(prop);
             const floorInfo = extractFloor(prop);
@@ -2141,7 +2187,7 @@
                 .filter(s => (!areaInfo || s !== areaInfo.sourceItem) && (!floorInfo || s !== floorInfo.sourceItem))
                 .map(cleanMetaText).filter(Boolean);
             const compound = null;
-            return {
+            return decodeCompareItem({
                 kind: 'property',
                 id: prop.id,
                 title: prop.title,
@@ -2157,7 +2203,7 @@
                 extraLines: others,
                 paymentLines: [],
                 waLink: buildPropertyAbsoluteUrl(prop.id)
-            };
+            });
         }
 
         function normalizeUnit(unit) {
@@ -2167,7 +2213,7 @@
             const payment = [];
             if (unit.downPayment) payment.push('مقدم: ' + formatMoney(unit.downPayment, 'جنيه') + (unit.downPaymentPercent ? ' (' + unit.downPaymentPercent + ')' : ''));
             if (unit.installmentPeriod) payment.push('تقسيط: ' + unit.installmentPeriod + (unit.paymentSystem ? ' - ' + unit.paymentSystem : ''));
-            return {
+            return decodeCompareItem({
                 kind: 'unit',
                 id: unit.id,
                 title: unit.title + (compound ? ' - ' + compound.name : ''),
@@ -2183,7 +2229,7 @@
                 extraLines: (unit.features || []).slice(),
                 paymentLines: payment,
                 waLink: window.location.origin + window.location.pathname
-            };
+            });
         }
 
         function syncCompareButtons() {
@@ -2407,7 +2453,7 @@
             lines.push('');
             lines.push(buildPropertyAbsoluteUrl(prop.id));
             lines.push('كابيتال هوم - وسيطك الموثوق');
-            return lines.filter(l => l !== undefined && l !== null).join('\n');
+            return decodeEntities(lines.filter(l => l !== undefined && l !== null).join('\n'));
         }
 
         function shareTextViaSystemOrClipboard(text, urlForShare) {
@@ -2442,7 +2488,7 @@
             lines.push('');
             lines.push('لو حابب تفاصيل أكتر أو معاينة، أنا تحت أمرك 🏡');
             lines.push('كابيتال هوم - وسيطك الموثوق');
-            return lines.filter(l => l !== undefined && l !== null).join('\n');
+            return decodeEntities(lines.filter(l => l !== undefined && l !== null).join('\n'));
         }
 
 
@@ -2673,4 +2719,5 @@
         }
     </script>
 </body>    
-    </html>
+</html>
+

@@ -1,7 +1,7 @@
 // Service Worker - كابيتال هوم
 // إصدار الكاش: غيّر الرقم ده مع أي تحديث كبير للملفات الأساسية عشان
 // المتصفح يجبر تحميل نسخة جديدة بدل ما يفضل شايل القديمة.
-const CACHE_VERSION = "v20";
+const CACHE_VERSION = "v21";
 const SHELL_CACHE = `capital-home-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `capital-home-runtime-${CACHE_VERSION}`;
 const SHEET_CACHE = `capital-home-sheet-${CACHE_VERSION}`;
@@ -80,21 +80,26 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 0.5) ملف معرض الصور المركزي: Network First (عشان الصور الجديدة تظهر بعد النشر)
+  // 0.5) ملف معرض الصور: اطلب أحدث نسخة من الشبكة مع تجاوز HTTP/CDN cache.
+  // نحتفظ بنسخة احتياطية للاستخدام عند انقطاع الإنترنت فقط.
   if (
     url.origin === self.location.origin &&
     url.pathname === "/photo-gallery.json"
   ) {
     event.respondWith(
-      fetch(request)
+      fetch(new Request(request, { cache: "no-store" }))
         .then((response) => {
           if (response && response.ok) {
             const clone = response.clone();
-            caches.open(SHEET_CACHE).then((cache) => cache.put(request, clone));
+            event.waitUntil(
+              caches.open(SHEET_CACHE).then((cache) =>
+                cache.put("/photo-gallery.json", clone)
+              )
+            );
           }
           return response;
         })
-        .catch(() => caches.match(request))
+        .catch(() => caches.match("/photo-gallery.json"))
     );
     return;
   }

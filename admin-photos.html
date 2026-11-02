@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0c0c0e">
+<title>إدارة صور العقارات - كابيتال هوم</title>
+<style>
+  :root { --gold:#d4af37; --bg:#0c0c0e; --card:#141417; --line:rgba(255,255,255,.1); --ok:#22c55e; --err:#ef4444; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin:0; background:var(--bg); color:#fff; font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; padding: 16px 16px 90px; max-width: 560px; margin-inline:auto; line-height:1.6; }
+  h1 { font-size: 20px; margin: 8px 0 4px; color: var(--gold); }
+  p.sub { margin: 0 0 18px; color:#a1a1aa; font-size: 13px; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:14px; }
+  label { display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#d4d4d8; }
+  input[type=text], input[type=password] { width:100%; padding:13px 14px; font-size:16px; color:#fff; background:#0c0c0e; border:1px solid var(--line); border-radius:12px; outline:none; }
+  input:focus { border-color: var(--gold); }
+  button { font: inherit; cursor:pointer; border:0; border-radius:12px; padding:13px 16px; font-weight:800; font-size:15px; }
+  .btn-gold { background: var(--gold); color:#0c0c0e; width:100%; }
+  .btn-ghost { background: transparent; color:#d4d4d8; border:1px solid var(--line); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  .row { display:flex; gap:8px; align-items:flex-end; }
+  .row > .grow { flex:1; }
+  .msg { padding:10px 12px; border-radius:10px; font-size:13px; margin-top:10px; }
+  .msg.err { background: rgba(239,68,68,.12); color:#fca5a5; border:1px solid rgba(239,68,68,.35); }
+  .msg.ok { background: rgba(34,197,94,.12); color:#86efac; border:1px solid rgba(34,197,94,.35); }
+  .msg.info { background: rgba(212,175,55,.1); color:#f3e4a8; border:1px solid rgba(212,175,55,.3); }
+  .prop-title { font-size:16px; font-weight:800; margin:0 0 4px; }
+  .prop-meta { font-size:13px; color:#a1a1aa; }
+  .existing { display:flex; gap:6px; overflow-x:auto; margin-top:10px; }
+  .existing img { height:56px; width:74px; object-fit:cover; border-radius:8px; border:1px solid var(--line); }
+  .grid { display:grid; grid-template-columns: 1fr; gap:10px; margin-top:12px; }
+  .item { display:flex; gap:10px; background:#0c0c0e; border:1px solid var(--line); border-radius:12px; padding:8px; align-items:center; }
+  .item img { width:84px; height:64px; object-fit:cover; border-radius:8px; flex-shrink:0; background:#222; }
+  .item .info { flex:1; min-width:0; font-size:12px; color:#a1a1aa; }
+  .item .num { color: var(--gold); font-weight:800; font-size:14px; }
+  .item .status { font-weight:700; }
+  .item .status.up { color: var(--gold); } .item .status.done { color: var(--ok); } .item .status.fail { color: var(--err); }
+  .tools { display:flex; flex-direction:column; gap:6px; }
+  .tools button { padding:6px 10px; font-size:13px; background:#1c1c21; color:#fff; border:1px solid var(--line); }
+  .bar { position:fixed; inset-inline:0; bottom:0; background:rgba(12,12,14,.95); border-top:1px solid var(--line); padding:12px 16px calc(12px + env(safe-area-inset-bottom)); max-width:560px; margin-inline:auto; }
+  .hidden { display:none !important; }
+  .progress { height:6px; background:#222; border-radius:999px; overflow:hidden; margin-top:10px; }
+  .progress > i { display:block; height:100%; width:0; background: var(--gold); transition: width .25s; }
+  .top { display:flex; justify-content:space-between; align-items:center; }
+  .top button { padding:8px 12px; font-size:13px; }
+  .hint { font-size:12px; color:#8b8b95; margin-top:6px; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>📸 إدارة صور العقارات</h1>
+  <button id="logoutBtn" class="btn-ghost hidden" type="button">خروج</button>
+</div>
+<p class="sub">ضيف صور لأي عقار من الموبايل، وهتظهر على الموقع بعد النشر.</p>
+
+<!-- ===== تسجيل الدخول ===== -->
+<section id="loginView" class="card hidden">
+  <label for="pw">كلمة سر المدير</label>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••">
+  <button id="loginBtn" class="btn-gold" type="button" style="margin-top:12px">دخول</button>
+  <div id="loginMsg"></div>
+</section>
+
+<!-- ===== الأدمن ===== -->
+<section id="appView" class="hidden">
+  <div class="card">
+    <label for="propId">كود العقار (ID)</label>
+    <div class="row">
+      <div class="grow"><input id="propId" type="text" inputmode="text" autocapitalize="off" autocomplete="off" placeholder="مثال: duplex-170"></div>
+      <button id="lookupBtn" class="btn-gold" type="button" style="width:auto">تحقق</button>
+    </div>
+    <div id="lookupMsg"></div>
+    <div id="propBox" class="hidden" style="margin-top:12px">
+      <p id="propTitle" class="prop-title"></p>
+      <div id="propMeta" class="prop-meta"></div>
+      <div id="existingWrap" class="hidden">
+        <div class="hint">الصور الحالية على الموقع (هتتبدّل بالجديدة لما تحفظ، والقديمة بتفضل محفوظة في GitHub):</div>
+        <div id="existing" class="existing"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="photosCard" class="card hidden">
+    <label>صور العقار</label>
+    <input id="fileInput" type="file" accept="image/*" multiple class="hidden">
+    <button id="pickBtn" class="btn-ghost" type="button" style="width:100%">+ اختيار صور من المعرض</button>
+    <div class="hint">الأفضل من 4 إلى 5 صور (الحد الأقصى 8). الصور بتتصغّر تلقائي قبل الرفع. أول صورة هي اللي بتظهر في الأول.</div>
+    <div id="list" class="grid"></div>
+    <div id="compressMsg"></div>
+  </div>
+</section>
+
+<div id="saveBar" class="bar hidden">
+  <button id="saveBtn" class="btn-gold" type="button" disabled>حفظ الصور</button>
+  <div class="progress hidden" id="progress"><i></i></div>
+  <div id="saveMsg"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var MAX_PHOTOS = 8;
+  var MAX_DIM = 1600;           // أطول ضلع للصورة بعد الضغط
+  var TARGET_BYTES = 900 * 1024; // نحاول نبقى تحت ده
+  var HARD_BYTES = 1400 * 1024;  // السيرفر بيرفض أكتر من 1.5MB
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { propertyId: null, items: [], nextKey: 1, committing: false };
+
+  // ---------- طلبات API ----------
+  function api(method, path, body) {
+    var opts = { method: method, credentials: 'same-origin', headers: { 'X-Requested-With': 'ch-admin' } };
+    if (body !== undefined) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+    return fetch(path, opts).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (json) {
+        if (res.status === 401 && path.indexOf('/login') === -1 && path.indexOf('/session') === -1) { showLogin('انتهت الجلسة، سجّل دخول تاني.'); }
+        return { status: res.status, ok: res.ok, json: json };
+      });
+    });
+  }
+  var ERRORS = {
+    wrong_password: 'كلمة السر غلط.', too_many_attempts: 'محاولات كتير. استنى 15 دقيقة وجرب تاني.',
+    auth_not_configured: 'إعدادات الدخول ناقصة على السيرفر (ADMIN_PASSWORD / SESSION_SECRET).',
+    github_not_configured: 'إعدادات GitHub ناقصة على السيرفر.', github_error: 'GitHub رفض الطلب أو مش متاح دلوقتي. جرب تاني.',
+    sheet_unreachable: 'مقدرتش أوصل لشيت العقارات دلوقتي. جرب تاني بعد شوية.', property_not_found: 'الكود ده مش موجود في الشيت.',
+    invalid_id: 'كود العقار فيه رموز مش مسموحة.', image_too_large: 'الصورة لسه كبيرة بعد الضغط.',
+    unsupported_image_type: 'نوع الصورة مش مدعوم.', invalid_photo_count: 'عدد الصور لازم يكون من 1 لـ 8.',
+    unauthorized: 'انتهت الجلسة، سجّل دخول تاني.', body_too_large: 'الطلب كبير.'
+  };
+  function errText(r) { return (r && r.json && ERRORS[r.json.error]) || ('حصل خطأ (' + ((r && r.json && r.json.error) || (r && r.status) || 'شبكة') + ')'); }
+  function msg(el, kind, text) { el.innerHTML = ''; if (!text) return; var d = document.createElement('div'); d.className = 'msg ' + kind; d.textContent = text; el.appendChild(d); }
+
+  // ---------- العرض ----------
+  function showLogin(text) {
+    $('appView').classList.add('hidden'); $('saveBar').classList.add('hidden'); $('logoutBtn').classList.add('hidden');
+    $('loginView').classList.remove('hidden'); if (text) msg($('loginMsg'), 'err', text);
+  }
+  function showApp() {
+    $('loginView').classList.add('hidden'); $('appView').classList.remove('hidden'); $('logoutBtn').classList.remove('hidden');
+  }
+
+  $('loginBtn').addEventListener('click', function () {
+    var pw = $('pw').value; if (!pw) return;
+    $('loginBtn').disabled = true; msg($('loginMsg'), 'info', 'جاري الدخول...');
+    api('POST', '/api/admin/login', { password: pw }).then(function (r) {
+      $('loginBtn').disabled = false;
+      if (r.ok) { $('pw').value = ''; msg($('loginMsg'), '', ''); showApp(); } else { msg($('loginMsg'), 'err', errText(r)); }
+    }).catch(function () { $('loginBtn').disabled = false; msg($('loginMsg'), 'err', 'مفيش اتصال بالسيرفر.'); });
+  });
+  $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('loginBtn').click(); });
+  $('logoutBtn').addEventListener('click', function () { api('POST', '/api/admin/logout', {}).then(function () { resetAll(); showLogin(''); }); });
+
+  function resetAll() { state.propertyId = null; clearItems(); $('propBox').classList.add('hidden'); $('photosCard').classList.add('hidden'); $('saveBar').classList.add('hidden'); $('propId').value = ''; msg($('lookupMsg'), '', ''); }
+
+  // ---------- التحقق من العقار ----------
+  function lookup() {
+    var id = $('propId').value.trim(); if (!id) return;
+    $('lookupBtn').disabled = true; msg($('lookupMsg'), 'info', 'جاري التحقق...');
+    api('GET', '/api/admin/lookup?id=' + encodeURIComponent(id)).then(function (r) {
+      $('lookupBtn').disabled = false;
+      if (!r.ok) { msg($('lookupMsg'), 'err', errText(r)); return; }
+      if (!r.json.found) { state.propertyId = null; $('propBox').classList.add('hidden'); $('photosCard').classList.add('hidden'); msg($('lookupMsg'), 'err', 'الكود ده مش موجود في الشيت. اتأكد من كتابته.'); return; }
+      msg($('lookupMsg'), '', '');
+      if (state.propertyId !== id) clearItems();
+      state.propertyId = id;
+      var p = r.json.property;
+      $('propTitle').textContent = p.title || id;
+      $('propMeta').textContent = [p.category, p.priceText, p.status === 'sold' ? 'مباع' : ''].filter(Boolean).join(' • ');
+      $('propBox').classList.remove('hidden'); $('photosCard').classList.remove('hidden'); $('saveBar').classList.remove('hidden');
+      var ex = $('existing'); ex.innerHTML = '';
+      (r.json.existingPhotos || []).forEach(function (u) { var i = document.createElement('img'); i.src = u; i.alt = ''; i.loading = 'lazy'; ex.appendChild(i); });
+      $('existingWrap').classList.toggle('hidden', !(r.json.existingPhotos || []).length);
+      updateSave();
+    }).catch(function () { $('lookupBtn').disabled = false; msg($('lookupMsg'), 'err', 'مفيش اتصال بالسيرفر.'); });
+  }
+  $('lookupBtn').addEventListener('click', lookup);
+  $('propId').addEventListener('keydown', function (e) { if (e.key === 'Enter') lookup(); });
+  $('propId').addEventListener('input', function () { if (state.propertyId && $('propId').value.trim() !== state.propertyId) { state.propertyId = null; $('propBox').classList.add('hidden'); $('photosCard').classList.add('hidden'); $('saveBar').classList.add('hidden'); } });
+
+  // ---------- اختيار الصور وضغطها ----------
+  $('pickBtn').addEventListener('click', function () { $('fileInput').click(); });
+  $('fileInput').addEventListener('change', function () {
+    var files = Array.prototype.slice.call(this.files || []); this.value = '';
+    var room = MAX_PHOTOS - state.items.length;
+    if (files.length > room) { msg($('compressMsg'), 'info', 'الحد الأقصى ' + MAX_PHOTOS + ' صور. اتضافت أول ' + Math.max(room, 0) + ' بس.'); files = files.slice(0, Math.max(room, 0)); } else { msg($('compressMsg'), '', ''); }
+    files.forEach(addFile);
+  });
+
+  function blobToBase64(blob) {
+    return new Promise(function (resolve, reject) {
+      var fr = new FileReader();
+      fr.onload = function () { resolve(String(fr.result).split(',')[1] || ''); };
+      fr.onerror = function () { reject(fr.error); };
+      fr.readAsDataURL(blob);
+    });
+  }
+  function canvasToBlob(canvas, type, q) { return new Promise(function (res) { canvas.toBlob(function (b) { res(b); }, type, q); }); }
+
+  // بيصغّر ويحوّل لـ WebP (أو JPEG لو المتصفح مبيدعمش WebP)، ويقلل الجودة لحد ما الحجم يبقى مناسب
+  function compress(file) {
+    var bmpP = (window.createImageBitmap
+      ? createImageBitmap(file, { imageOrientation: 'from-image' }).catch(function () { return createImageBitmap(file); })
+      : Promise.reject(new Error('no_bitmap')));
+    return bmpP.then(function (bmp) {
+      var scale = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height));
+      var attempt = 0, q = 0.82, dim = scale;
+      function render() {
+        var w = Math.max(1, Math.round(bmp.width * dim)), h = Math.max(1, Math.round(bmp.height * dim));
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+        return canvasToBlob(c, 'image/webp', q).then(function (b) {
+          if (!b || b.type !== 'image/webp') return canvasToBlob(c, 'image/jpeg', q);
+          return b;
+        }).then(function (b) {
+          if (b.size > TARGET_BYTES && attempt < 5) { attempt++; if (q > 0.6) q -= 0.08; else dim *= 0.85; return render(); }
+          return b;
+        });
+      }
+      return render().then(function (b) { if (bmp.close) bmp.close(); if (b.size > HARD_BYTES) throw new Error('too_big'); return b; });
+    });
+  }
+
+  function addFile(file) {
+    var it = { key: state.nextKey++, name: file.name, status: 'compressing', blob: null, previewUrl: null, uploaded: null, error: '' };
+    state.items.push(it); render();
+    compress(file).then(function (blob) {
+      it.blob = blob; it.previewUrl = URL.createObjectURL(blob); it.status = 'ready'; render(); updateSave();
+    }).catch(function () {
+      it.status = 'bad'; it.error = 'مقدرتش أقرأ الصورة دي (ممكن تكون نوع مش مدعوم).'; render(); updateSave();
+    });
+  }
+  function clearItems() { state.items.forEach(function (i) { if (i.previewUrl) URL.revokeObjectURL(i.previewUrl); }); state.items = []; render(); updateSave(); }
+
+  function sizeLabel(b) { return b ? (Math.round(b.size / 1024) + ' ك.ب • ' + (b.type === 'image/webp' ? 'WebP' : 'JPEG')) : ''; }
+  var STATUS = { compressing: ['جاري الضغط...', ''], ready: ['جاهزة', ''], uploading: ['جاري الرفع...', 'up'], done: ['تم الرفع ✓', 'done'], failed: ['فشل الرفع', 'fail'], bad: ['صورة غير صالحة', 'fail'] };
+
+  function render() {
+    var list = $('list'); list.innerHTML = '';
+    state.items.forEach(function (it, idx) {
+      var div = document.createElement('div'); div.className = 'item';
+      var img = document.createElement('img'); img.alt = ''; if (it.previewUrl) img.src = it.previewUrl; div.appendChild(img);
+      var info = document.createElement('div'); info.className = 'info';
+      var st = STATUS[it.status] || ['', ''];
+      var num = document.createElement('div'); num.className = 'num'; num.textContent = 'صورة ' + (idx + 1) + (idx === 0 ? ' (الأساسية)' : ''); info.appendChild(num);
+      var sz = document.createElement('div'); sz.textContent = sizeLabel(it.blob) || it.name; info.appendChild(sz);
+      var s = document.createElement('div'); s.className = 'status ' + st[1]; s.textContent = it.error && (it.status === 'failed' || it.status === 'bad') ? it.error : st[0]; info.appendChild(s);
+      div.appendChild(info);
+      var tools = document.createElement('div'); tools.className = 'tools';
+      var locked = state.committing;
+      [['▲', function () { move(idx, -1); }, idx === 0], ['▼', function () { move(idx, 1); }, idx === state.items.length - 1], ['✕', function () { remove(idx); }, false]].forEach(function (t) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = t[0]; b.disabled = locked || t[2]; b.addEventListener('click', t[1]); tools.appendChild(b);
+      });
+      div.appendChild(tools); list.appendChild(div);
+    });
+  }
+  function move(i, d) { var j = i + d; if (j < 0 || j >= state.items.length) return; var t = state.items[i]; state.items[i] = state.items[j]; state.items[j] = t; render(); }
+  function remove(i) { var it = state.items[i]; if (it.previewUrl) URL.revokeObjectURL(it.previewUrl); state.items.splice(i, 1); render(); updateSave(); }
+
+  function updateSave() {
+    var usable = state.items.filter(function (i) { return i.status !== 'bad'; });
+    var busy = state.items.some(function (i) { return i.status === 'compressing' || i.status === 'uploading'; });
+    $('saveBtn').disabled = state.committing || busy || !state.propertyId || usable.length < 1;
+    var anyFail = state.items.some(function (i) { return i.status === 'failed'; });
+    $('saveBtn').textContent = state.committing ? 'جاري الحفظ...' : (anyFail || state.lastCommitFailed ? 'إعادة المحاولة' : 'حفظ الصور (' + usable.length + ')');
+  }
+
+  // ---------- الرفع ----------
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function uploadOne(it, id) {
+    if (it.uploaded) return Promise.resolve(true);
+    it.status = 'uploading'; it.error = ''; render();
+    var tries = 0;
+    function attempt() {
+      tries++;
+      return blobToBase64(it.blob).then(function (b64) { return api('POST', '/api/admin/upload-photo', { id: id, data: b64 }); }).then(function (r) {
+        if (r.ok) { it.uploaded = { sha: r.json.sha, ext: r.json.ext, proof: r.json.proof }; it.status = 'done'; render(); return true; }
+        var retryable = r.status >= 500 || r.status === 0;
+        if (retryable && tries < 3) return sleep(700 * tries).then(attempt);
+        it.status = 'failed'; it.error = errText(r); render(); return false;
+      }).catch(function () {
+        if (tries < 3) return sleep(700 * tries).then(attempt);
+        it.status = 'failed'; it.error = 'مفيش اتصال. جرب تاني.'; render(); return false;
+      });
+    }
+    return attempt();
+  }
+
+  $('saveBtn').addEventListener('click', function () {
+    if (!state.propertyId || state.committing) return;
+    var id = state.propertyId;
+    var items = state.items.filter(function (i) { return i.status !== 'bad'; });
+    state.committing = true; state.lastCommitFailed = false; updateSave(); render();
+    msg($('saveMsg'), 'info', 'جاري رفع الصور...'); $('progress').classList.remove('hidden'); setProgress(0);
+
+    var done = 0;
+    // رفع تسلسلي (طلب لكل صورة) عشان نتجنب حدود حجم الطلب ونتحكم في الإعادة
+    items.reduce(function (p, it) {
+      return p.then(function (okSoFar) {
+        return uploadOne(it, id).then(function (ok) { done++; setProgress(done / (items.length + 1)); return okSoFar && ok; });
+      });
+    }, Promise.resolve(true)).then(function (allOk) {
+      if (!allOk) { finish(false, 'في صور فشل رفعها. دوس "إعادة المحاولة" (اللي اترفع قبل كده مش هيترفع تاني).'); return; }
+      msg($('saveMsg'), 'info', 'جاري ربط الصور بالعقار...');
+      var photos = items.map(function (i) { return i.uploaded; });
+      return api('POST', '/api/admin/commit-photos', { id: id, photos: photos }).then(function (r) {
+        if (r.ok) { setProgress(1); finish(true, 'تم الحفظ ✓ الصور اتسجلت على GitHub. هتظهر على الموقع بعد ما فيرسل يخلّص النشر (غالبًا أقل من دقيقتين).'); lookupRefresh(id); }
+        else { state.lastCommitFailed = true; finish(false, errText(r) + ' — الصور اترفعت، دوس "إعادة المحاولة" وهتتربط من غير رفع تاني.'); }
+      }).catch(function () { state.lastCommitFailed = true; finish(false, 'مفيش اتصال وقت الحفظ. دوس "إعادة المحاولة".'); });
+    });
+  });
+  function setProgress(f) { $('progress').firstElementChild.style.width = Math.round(f * 100) + '%'; }
+  function finish(ok, text) {
+    state.committing = false; msg($('saveMsg'), ok ? 'ok' : 'err', text); render(); updateSave();
+    if (ok) { clearItems(); }
+  }
+  function lookupRefresh(id) { api('GET', '/api/admin/lookup?id=' + encodeURIComponent(id)).then(function (r) { if (!r.ok || !r.json.found) return; var ex = $('existing'); ex.innerHTML = ''; (r.json.existingPhotos || []).forEach(function (u) { var i = document.createElement('img'); i.src = u; i.alt = ''; ex.appendChild(i); }); $('existingWrap').classList.toggle('hidden', !(r.json.existingPhotos || []).length); }); }
+
+  // ---------- البداية ----------
+  api('GET', '/api/admin/session').then(function (r) {
+    if (r.ok && r.json.authenticated) showApp(); else showLogin(r.json && r.json.error === 'auth_not_configured' ? ERRORS.auth_not_configured : '');
+  }).catch(function () { showLogin('مفيش اتصال بالسيرفر.'); });
+})();
+</script>
+</body>
+</html>

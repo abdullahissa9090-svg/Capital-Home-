@@ -1,5 +1,13 @@
 {
   "version": 1,
-  "updatedAt": null,
-  "galleries": {}
+  "updatedAt": "2026-11-02T09:45:31.009Z",
+  "galleries": {
+    "A52": [
+      "/property-photos/A52/mvz2pk61-1.webp",
+      "/property-photos/A52/mvz2pk61-2.webp",
+      "/property-photos/A52/mvz2pk61-3.webp",
+      "/property-photos/A52/mvz2pk61-4.webp",
+      "/property-photos/A52/mvz2pk61-5.webp"
+    ]
+  }
 }

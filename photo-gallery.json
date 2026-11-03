@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-03T11:05:35.654Z",
+  "updatedAt": "2026-11-03T11:07:31.662Z",
   "galleries": {
     "A52": [
       "/property-photos/A52/mvz2pk61-1.webp",
@@ -42,6 +42,13 @@
       "/property-photos/a15_midan_palace/mw0l0e4r-2.webp",
       "/property-photos/a15_midan_palace/mw0l0e4r-3.webp",
       "/property-photos/a15_midan_palace/mw0l0e4r-4.webp"
+    ],
+    "a8": [
+      "/property-photos/a8/mw0l2vme-1.webp",
+      "/property-photos/a8/mw0l2vme-2.webp",
+      "/property-photos/a8/mw0l2vme-3.webp",
+      "/property-photos/a8/mw0l2vme-4.webp",
+      "/property-photos/a8/mw0l2vme-5.webp"
     ]
   }
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-03T11:03:08.978Z",
+  "updatedAt": "2026-11-03T11:04:07.264Z",
   "galleries": {
     "A52": [
       "/property-photos/A52/mvz2pk61-1.webp",
@@ -30,6 +30,12 @@
       "/property-photos/A44/mw0kx8u3-2.webp",
       "/property-photos/A44/mw0kx8u3-3.webp",
       "/property-photos/A44/mw0kx8u3-4.webp"
+    ],
+    "A45": [
+      "/property-photos/A45/mw0kyhvv-1.webp",
+      "/property-photos/A45/mw0kyhvv-2.webp",
+      "/property-photos/A45/mw0kyhvv-3.webp",
+      "/property-photos/A45/mw0kyhvv-4.webp"
     ]
   }
 }

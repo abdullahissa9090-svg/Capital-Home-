@@ -34,6 +34,10 @@
   .item { display:flex; gap:10px; background:#0c0c0e; border:1px solid var(--line); border-radius:12px; padding:8px; align-items:center; }
   .item img { width:84px; height:64px; object-fit:cover; border-radius:8px; flex-shrink:0; background:#222; }
   .item .info { flex:1; min-width:0; font-size:12px; color:#a1a1aa; }
+  .handle { touch-action:none; cursor:grab; font-size:22px; color:#8b8b95; padding:8px 6px; user-select:none; -webkit-user-select:none; }
+  .item.dragging { box-shadow:0 8px 24px rgba(0,0,0,.6); border-color:var(--gold); position:relative; z-index:5; transition:none; }
+  .item { transition: transform .15s; }
+  .tools button.star { color: var(--gold); }
   .item .num { color: var(--gold); font-weight:800; font-size:14px; }
   .item .status { font-weight:700; }
   .item .status.up { color: var(--gold); } .item .status.done { color: var(--ok); } .item .status.fail { color: var(--err); }
@@ -76,18 +80,14 @@
     <div id="propBox" class="hidden" style="margin-top:12px">
       <p id="propTitle" class="prop-title"></p>
       <div id="propMeta" class="prop-meta"></div>
-      <div id="existingWrap" class="hidden">
-        <div class="hint">الصور الحالية على الموقع (هتتبدّل بالجديدة لما تحفظ، والقديمة بتفضل محفوظة في GitHub):</div>
-        <div id="existing" class="existing"></div>
-      </div>
     </div>
   </div>
 
   <div id="photosCard" class="card hidden">
     <label>صور العقار</label>
     <input id="fileInput" type="file" accept="image/*" multiple class="hidden">
-    <button id="pickBtn" class="btn-ghost" type="button" style="width:100%">+ اختيار صور من المعرض</button>
-    <div class="hint">الأفضل من 4 إلى 5 صور (الحد الأقصى 8). الصور بتتصغّر تلقائي قبل الرفع. أول صورة هي اللي بتظهر في الأول.</div>
+    <button id="pickBtn" class="btn-ghost" type="button" style="width:100%">+ إضافة صور من المعرض</button>
+    <div class="hint">اسحب ⠿ لترتيب الصور، ★ لتحديد الأساسية، ✕ للحذف. أول صورة هي اللي بتظهر في الأول على الموقع. الأفضل 4-5 صور (الحد 8). الصور الجديدة بتتصغّر تلقائي.</div>
     <div id="list" class="grid"></div>
     <div id="compressMsg"></div>
   </div>
@@ -164,15 +164,12 @@
       if (!r.ok) { msg($('lookupMsg'), 'err', errText(r)); return; }
       if (!r.json.found) { state.propertyId = null; $('propBox').classList.add('hidden'); $('photosCard').classList.add('hidden'); msg($('lookupMsg'), 'err', 'الكود ده مش موجود في الشيت. اتأكد من كتابته.'); return; }
       msg($('lookupMsg'), '', '');
-      if (state.propertyId !== id) clearItems();
       state.propertyId = id;
       var p = r.json.property;
       $('propTitle').textContent = p.title || id;
       $('propMeta').textContent = [p.category, p.priceText, p.status === 'sold' ? 'مباع' : ''].filter(Boolean).join(' • ');
       $('propBox').classList.remove('hidden'); $('photosCard').classList.remove('hidden'); $('saveBar').classList.remove('hidden');
-      var ex = $('existing'); ex.innerHTML = '';
-      (r.json.existingPhotos || []).forEach(function (u) { var i = document.createElement('img'); i.src = u; i.alt = ''; i.loading = 'lazy'; ex.appendChild(i); });
-      $('existingWrap').classList.toggle('hidden', !(r.json.existingPhotos || []).length);
+      clearItems(); loadExisting(r.json.existingPhotos || []);
       updateSave();
     }).catch(function () { $('lookupBtn').disabled = false; msg($('lookupMsg'), 'err', 'مفيش اتصال بالسيرفر.'); });
   }
@@ -184,7 +181,7 @@
   $('pickBtn').addEventListener('click', function () { $('fileInput').click(); });
   $('fileInput').addEventListener('change', function () {
     var files = Array.prototype.slice.call(this.files || []); this.value = '';
-    var room = MAX_PHOTOS - state.items.length;
+    var room = MAX_PHOTOS - state.items.filter(function (i) { return i.status !== 'bad'; }).length;
     if (files.length > room) { msg($('compressMsg'), 'info', 'الحد الأقصى ' + MAX_PHOTOS + ' صور. اتضافت أول ' + Math.max(room, 0) + ' بس.'); files = files.slice(0, Math.max(room, 0)); } else { msg($('compressMsg'), '', ''); }
     files.forEach(addFile);
   });
@@ -224,7 +221,7 @@
   }
 
   function addFile(file) {
-    var it = { key: state.nextKey++, name: file.name, status: 'compressing', blob: null, previewUrl: null, uploaded: null, error: '' };
+    var it = { key: state.nextKey++, kind: 'new', name: file.name, status: 'compressing', blob: null, previewUrl: null, uploaded: null, error: '' };
     state.items.push(it); render();
     compress(file).then(function (blob) {
       it.blob = blob; it.previewUrl = URL.createObjectURL(blob); it.status = 'ready'; render(); updateSave();
@@ -232,39 +229,77 @@
       it.status = 'bad'; it.error = 'مقدرتش أقرأ الصورة دي (ممكن تكون نوع مش مدعوم).'; render(); updateSave();
     });
   }
-  function clearItems() { state.items.forEach(function (i) { if (i.previewUrl) URL.revokeObjectURL(i.previewUrl); }); state.items = []; render(); updateSave(); }
+  function clearItems() { state.items.forEach(function (i) { if (i.blob && i.previewUrl) URL.revokeObjectURL(i.previewUrl); }); state.items = []; render(); updateSave(); }
+  function loadExisting(urls) {
+    state.original = urls.slice();
+    state.items = urls.map(function (u) { return { key: state.nextKey++, kind: 'existing', url: u, name: '', status: 'existing', blob: null, previewUrl: u, uploaded: null, error: '' }; });
+    render(); updateSave();
+  }
 
-  function sizeLabel(b) { return b ? (Math.round(b.size / 1024) + ' ك.ب • ' + (b.type === 'image/webp' ? 'WebP' : 'JPEG')) : ''; }
-  var STATUS = { compressing: ['جاري الضغط...', ''], ready: ['جاهزة', ''], uploading: ['جاري الرفع...', 'up'], done: ['تم الرفع ✓', 'done'], failed: ['فشل الرفع', 'fail'], bad: ['صورة غير صالحة', 'fail'] };
+  function sizeLabel(it) { return it.kind === 'existing' ? 'محفوظة على الموقع' : (it.blob ? (Math.round(it.blob.size / 1024) + ' ك.ب • ' + (it.blob.type === 'image/webp' ? 'WebP' : 'JPEG')) : it.name); }
+  var STATUS = { existing: ['', ''], compressing: ['جاري الضغط...', ''], ready: ['جديدة - جاهزة للرفع', ''], uploading: ['جاري الرفع...', 'up'], done: ['تم الرفع ✓', 'done'], failed: ['فشل الرفع', 'fail'], bad: ['صورة غير صالحة', 'fail'] };
 
   function render() {
     var list = $('list'); list.innerHTML = '';
     state.items.forEach(function (it, idx) {
-      var div = document.createElement('div'); div.className = 'item';
+      var div = document.createElement('div'); div.className = 'item'; div.setAttribute('data-key', it.key);
+      var handle = document.createElement('div'); handle.className = 'handle'; handle.textContent = '⠿'; handle.setAttribute('aria-label', 'اسحب لتغيير الترتيب');
+      handle.addEventListener('pointerdown', function (e) { startDrag(e, idx); }); div.appendChild(handle);
       var img = document.createElement('img'); img.alt = ''; if (it.previewUrl) img.src = it.previewUrl; div.appendChild(img);
       var info = document.createElement('div'); info.className = 'info';
       var st = STATUS[it.status] || ['', ''];
-      var num = document.createElement('div'); num.className = 'num'; num.textContent = 'صورة ' + (idx + 1) + (idx === 0 ? ' (الأساسية)' : ''); info.appendChild(num);
-      var sz = document.createElement('div'); sz.textContent = sizeLabel(it.blob) || it.name; info.appendChild(sz);
-      var s = document.createElement('div'); s.className = 'status ' + st[1]; s.textContent = it.error && (it.status === 'failed' || it.status === 'bad') ? it.error : st[0]; info.appendChild(s);
+      var num = document.createElement('div'); num.className = 'num'; num.textContent = idx === 0 ? 'الصورة الأساسية ★' : ('صورة ' + (idx + 1)); info.appendChild(num);
+      var sz = document.createElement('div'); sz.textContent = sizeLabel(it); info.appendChild(sz);
+      var txt = it.error && (it.status === 'failed' || it.status === 'bad') ? it.error : st[0];
+      if (txt) { var s = document.createElement('div'); s.className = 'status ' + st[1]; s.textContent = txt; info.appendChild(s); }
       div.appendChild(info);
-      var tools = document.createElement('div'); tools.className = 'tools';
-      var locked = state.committing;
-      [['▲', function () { move(idx, -1); }, idx === 0], ['▼', function () { move(idx, 1); }, idx === state.items.length - 1], ['✕', function () { remove(idx); }, false]].forEach(function (t) {
-        var b = document.createElement('button'); b.type = 'button'; b.textContent = t[0]; b.disabled = locked || t[2]; b.addEventListener('click', t[1]); tools.appendChild(b);
-      });
+      var tools = document.createElement('div'); tools.className = 'tools'; var locked = state.committing;
+      var star = document.createElement('button'); star.type = 'button'; star.className = 'star'; star.textContent = '★'; star.title = 'اجعلها الأساسية'; star.disabled = locked || idx === 0; star.addEventListener('click', function () { setMain(idx); }); tools.appendChild(star);
+      var del = document.createElement('button'); del.type = 'button'; del.textContent = '✕'; del.title = 'حذف'; del.disabled = locked; del.addEventListener('click', function () { remove(idx); }); tools.appendChild(del);
       div.appendChild(tools); list.appendChild(div);
     });
   }
-  function move(i, d) { var j = i + d; if (j < 0 || j >= state.items.length) return; var t = state.items[i]; state.items[i] = state.items[j]; state.items[j] = t; render(); }
-  function remove(i) { var it = state.items[i]; if (it.previewUrl) URL.revokeObjectURL(it.previewUrl); state.items.splice(i, 1); render(); updateSave(); }
+  function setMain(i) { if (i <= 0 || i >= state.items.length) return; var it = state.items.splice(i, 1)[0]; state.items.unshift(it); render(); updateSave(); }
+  function remove(i) { var it = state.items[i]; if (it.blob && it.previewUrl) URL.revokeObjectURL(it.previewUrl); state.items.splice(i, 1); render(); updateSave(); }
+
+  // سحب وإفلات لتغيير الترتيب (pointer events: بتشتغل بالصباع والماوس)
+  function startDrag(e, from) {
+    if (state.committing || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.preventDefault();
+    var handle = e.currentTarget, nodes = Array.prototype.slice.call($('list').children), el = nodes[from];
+    var rects = nodes.map(function (n) { var r = n.getBoundingClientRect(); return { top: r.top, h: r.height }; });
+    var startY = e.clientY, target = from, shift = rects[from].h + 10;
+    el.classList.add('dragging');
+    try { handle.setPointerCapture(e.pointerId); } catch (x) {}
+    function onMove(ev) {
+      var dy = ev.clientY - startY; el.style.transform = 'translateY(' + dy + 'px)';
+      var center = rects[from].top + rects[from].h / 2 + dy;
+      target = rects.filter(function (r, i) { return i !== from && r.top + r.h / 2 < center; }).length;
+      nodes.forEach(function (n, i) {
+        if (i === from) return;
+        var off = 0;
+        if (from < target && i > from && i <= target) off = -shift;
+        if (from > target && i >= target && i < from) off = shift;
+        n.style.transform = off ? 'translateY(' + off + 'px)' : '';
+      });
+    }
+    function end(ev) {
+      handle.removeEventListener('pointermove', onMove); handle.removeEventListener('pointerup', end); handle.removeEventListener('pointercancel', end);
+      try { handle.releasePointerCapture(e.pointerId); } catch (x) {}
+      if (ev.type !== 'pointercancel' && target !== from) { var it = state.items.splice(from, 1)[0]; state.items.splice(target, 0, it); }
+      render(); updateSave();
+    }
+    handle.addEventListener('pointermove', onMove); handle.addEventListener('pointerup', end); handle.addEventListener('pointercancel', end);
+  }
 
   function updateSave() {
     var usable = state.items.filter(function (i) { return i.status !== 'bad'; });
     var busy = state.items.some(function (i) { return i.status === 'compressing' || i.status === 'uploading'; });
-    $('saveBtn').disabled = state.committing || busy || !state.propertyId || usable.length < 1;
+    var sig = usable.map(function (i) { return i.kind === 'existing' ? i.url : 'N' + i.key; }).join('|');
+    var dirty = sig !== (state.original || []).join('|');
+    $('saveBtn').disabled = state.committing || busy || !state.propertyId || !dirty;
     var anyFail = state.items.some(function (i) { return i.status === 'failed'; });
-    $('saveBtn').textContent = state.committing ? 'جاري الحفظ...' : (anyFail || state.lastCommitFailed ? 'إعادة المحاولة' : 'حفظ الصور (' + usable.length + ')');
+    $('saveBtn').textContent = state.committing ? 'جاري الحفظ...' : (anyFail || state.lastCommitFailed ? 'إعادة المحاولة' : 'حفظ التغييرات');
   }
 
   // ---------- الرفع ----------
@@ -292,31 +327,32 @@
     if (!state.propertyId || state.committing) return;
     var id = state.propertyId;
     var items = state.items.filter(function (i) { return i.status !== 'bad'; });
+    if (!items.length && !window.confirm('هتشيل كل الصور من الموقع والعقار هيرجع لصورته القديمة (لو ليه). متأكد؟')) return;
+    var fresh = items.filter(function (i) { return i.kind !== 'existing'; });
     state.committing = true; state.lastCommitFailed = false; updateSave(); render();
-    msg($('saveMsg'), 'info', 'جاري رفع الصور...'); $('progress').classList.remove('hidden'); setProgress(0);
+    msg($('saveMsg'), 'info', fresh.length ? 'جاري رفع الصور الجديدة...' : 'جاري الحفظ...'); $('progress').classList.remove('hidden'); setProgress(0);
 
     var done = 0;
-    // رفع تسلسلي (طلب لكل صورة) عشان نتجنب حدود حجم الطلب ونتحكم في الإعادة
-    items.reduce(function (p, it) {
+    // رفع تسلسلي للصور الجديدة بس (طلب لكل صورة)، والموجودة بتتحفظ بالرابط من غير رفع تاني
+    fresh.reduce(function (p, it) {
       return p.then(function (okSoFar) {
-        return uploadOne(it, id).then(function (ok) { done++; setProgress(done / (items.length + 1)); return okSoFar && ok; });
+        return uploadOne(it, id).then(function (ok) { done++; setProgress(done / (fresh.length + 1)); return okSoFar && ok; });
       });
     }, Promise.resolve(true)).then(function (allOk) {
       if (!allOk) { finish(false, 'في صور فشل رفعها. دوس "إعادة المحاولة" (اللي اترفع قبل كده مش هيترفع تاني).'); return; }
       msg($('saveMsg'), 'info', 'جاري ربط الصور بالعقار...');
-      var photos = items.map(function (i) { return i.uploaded; });
+      var photos = items.map(function (i) { return i.kind === 'existing' ? { url: i.url } : i.uploaded; });
       return api('POST', '/api/admin/commit-photos', { id: id, photos: photos }).then(function (r) {
-        if (r.ok) { setProgress(1); finish(true, 'تم الحفظ ✓ الصور اتسجلت على GitHub. هتظهر على الموقع بعد ما فيرسل يخلّص النشر (غالبًا أقل من دقيقتين).'); lookupRefresh(id); }
-        else { state.lastCommitFailed = true; finish(false, errText(r) + ' — الصور اترفعت، دوس "إعادة المحاولة" وهتتربط من غير رفع تاني.'); }
+        if (r.ok) { setProgress(1); finish(true, 'تم الحفظ ✓ هتظهر على الموقع بعد ما فيرسل يخلّص النشر (غالبًا أقل من دقيقتين).'); reloadExisting(id); }
+        else { state.lastCommitFailed = true; finish(false, errText(r) + ' — دوس "إعادة المحاولة" (الصور الجديدة اترفعت ومش هتترفع تاني).'); }
       }).catch(function () { state.lastCommitFailed = true; finish(false, 'مفيش اتصال وقت الحفظ. دوس "إعادة المحاولة".'); });
     });
   });
   function setProgress(f) { $('progress').firstElementChild.style.width = Math.round(f * 100) + '%'; }
   function finish(ok, text) {
     state.committing = false; msg($('saveMsg'), ok ? 'ok' : 'err', text); render(); updateSave();
-    if (ok) { clearItems(); }
   }
-  function lookupRefresh(id) { api('GET', '/api/admin/lookup?id=' + encodeURIComponent(id)).then(function (r) { if (!r.ok || !r.json.found) return; var ex = $('existing'); ex.innerHTML = ''; (r.json.existingPhotos || []).forEach(function (u) { var i = document.createElement('img'); i.src = u; i.alt = ''; ex.appendChild(i); }); $('existingWrap').classList.toggle('hidden', !(r.json.existingPhotos || []).length); }); }
+  function reloadExisting(id) { api('GET', '/api/admin/lookup?id=' + encodeURIComponent(id)).then(function (r) { if (r.ok && r.json.found && state.propertyId === id) { clearItems(); loadExisting(r.json.existingPhotos || []); } }); }
 
   // ---------- البداية ----------
   api('GET', '/api/admin/session').then(function (r) {

@@ -215,7 +215,9 @@
         /* ===== معرض صور العقار (سلايدر بالسحب) ===== */
         .ch-gallery-track { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; outline:none; }
         .ch-gallery-track::-webkit-scrollbar { display:none; }
-        .ch-photo { flex:0 0 100%; width:100%; aspect-ratio:4/3; object-fit:contain; scroll-snap-align:center; scroll-snap-stop:always; background:#0c0c0e; display:block; }
+        .ch-slide { position:relative; flex:0 0 100%; width:100%; aspect-ratio:4/3; overflow:hidden; scroll-snap-align:center; scroll-snap-stop:always; background:#0c0c0e; }
+        .ch-slide-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:blur(24px); transform:scale(1.3); opacity:.45; pointer-events:none; }
+        .ch-photo { position:relative; display:block; width:100%; height:100%; object-fit:contain; }
         .ch-gallery-count { position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,.62); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; direction:ltr; pointer-events:none; }
         .ch-gallery-nav { position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:999px; background:rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.2); font-size:22px; line-height:1; display:none; align-items:center; justify-content:center; z-index:2; }
         .ch-gallery-prev { right:8px; } .ch-gallery-next { left:8px; }
@@ -1302,7 +1304,7 @@
         function buildPhotoGalleryHTML(urls, altText) {
             const n = urls.length;
             const slides = urls.map((u, i) =>
-                `<img class="ch-photo" src="${u}" alt="${altText}${n > 1 ? ' - صورة ' + (i + 1) : ''}" loading="lazy" decoding="async" width="400" height="300">`
+                `<div class="ch-slide"><img class="ch-slide-bg" src="${u}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="ch-photo" src="${u}" alt="${altText}${n > 1 ? ' - صورة ' + (i + 1) : ''}" loading="lazy" decoding="async" width="400" height="300"></div>`
             ).join('');
             const nav = n > 1
                 ? `<button type="button" class="ch-gallery-nav ch-gallery-prev" data-dir="-1" aria-label="الصورة السابقة">›</button><button type="button" class="ch-gallery-nav ch-gallery-next" data-dir="1" aria-label="الصورة التالية">‹</button>`
@@ -1328,7 +1330,8 @@
         function handlePhotoError(img) {
             const g = img.closest('.ch-gallery');
             const track = g && g.querySelector('.ch-gallery-track');
-            img.remove();
+            const slide = img.closest('.ch-slide');
+            (slide || img).remove();
             if (!g || !track) return;
             const left = track.querySelectorAll('.ch-photo').length;
             if (left === 0) { g.remove(); return; }

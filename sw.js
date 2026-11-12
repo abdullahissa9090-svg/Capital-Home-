@@ -1,7 +1,7 @@
-// Service Worker - كابيتال هوم
+here// Service Worker - كابيتال هوم
 // إصدار الكاش: غيّر الرقم ده مع أي تحديث كبير للملفات الأساسية عشان
 // المتصفح يجبر تحميل نسخة جديدة بدل ما يفضل شايل القديمة.
-const CACHE_VERSION = 'v22';
+const CACHE_VERSION = 'v24';
 const SHELL_CACHE = `capital-home-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `capital-home-runtime-${CACHE_VERSION}`;
 const SHEET_CACHE = `capital-home-sheet-${CACHE_VERSION}`;
@@ -13,7 +13,7 @@ const SHELL_ASSETS = [
   '/index.html',
   '/manifest.json',
   '/favicon.ico',
-  '/brand-og-image.jpg',
+  '/brand-logo-144.webp',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/icon-maskable-192.png',

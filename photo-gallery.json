@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-03T11:57:30.904Z",
+  "updatedAt": "2026-11-12T16:09:31.989Z",
   "galleries": {
     "A52": [
       "/property-photos/A52/mvz2pk61-1.webp",
@@ -115,6 +115,10 @@
       "/property-photos/A54/mw0mv5v8-6.webp",
       "/property-photos/A54/mw0mv5v8-7.webp",
       "/property-photos/A54/mw0mv5v8-8.webp"
+    ],
+    "A40": [
+      "/property-photos/A40/mwdqtx61-1.webp",
+      "/property-photos/A40/mwdqtx61-2.webp"
     ]
   }
 }

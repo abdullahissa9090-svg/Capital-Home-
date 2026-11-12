@@ -1,4 +1,4 @@
-<!DOCTYPE html>  
+here<!DOCTYPE html>  
 <html lang="ar-EG" dir="rtl">    
 <head>    
     <meta charset="UTF-8">    
@@ -41,6 +41,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://docs.google.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">    
 
     <script type="application/ld+json">
@@ -216,12 +217,22 @@
         .ch-gallery-track { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; outline:none; }
         .ch-gallery-track::-webkit-scrollbar { display:none; }
         .ch-slide { position:relative; flex:0 0 100%; width:100%; aspect-ratio:4/3; overflow:hidden; scroll-snap-align:center; scroll-snap-stop:always; background:#0c0c0e; }
-        .ch-slide-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:blur(24px); transform:scale(1.3); opacity:.45; pointer-events:none; }
+        .ch-slide-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:blur(14px); transform:scale(1.15); opacity:.45; pointer-events:none; }
         .ch-photo { position:relative; display:block; width:100%; height:100%; object-fit:contain; }
         .ch-gallery-count { position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,.62); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; direction:ltr; pointer-events:none; }
         .ch-gallery-nav { position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:999px; background:rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.2); font-size:22px; line-height:1; display:none; align-items:center; justify-content:center; z-index:2; }
         .ch-gallery-prev { right:8px; } .ch-gallery-next { left:8px; }
         @media (hover:hover) and (pointer:fine) { .ch-gallery:hover .ch-gallery-nav { display:flex; } }
+
+        /* ===== أقسام الصفحة الرئيسية (عروض مميزة / أحدث الإضافات) ===== */
+        .home-track { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x proximity; padding:2px 2px 12px; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+        .home-track::-webkit-scrollbar { display:none; }
+        .home-card { flex:0 0 min(74vw, 270px); scroll-snap-align:start; display:flex; flex-direction:column; background:rgba(20,20,23,.78); border:1px solid rgba(212,175,55,.14); border-radius:20px; overflow:hidden; text-decoration:none; color:inherit; transition:border-color .25s ease; }
+        .home-card:hover { border-color:rgba(212,175,55,.45); }
+        .home-card-media { position:relative; aspect-ratio:4/3; background:linear-gradient(135deg,#1a1a1f,#0c0c0e); display:flex; align-items:center; justify-content:center; font-size:34px; overflow:hidden; }
+        .home-card-img { position:relative; display:block; width:100%; height:100%; object-fit:contain; }
+        button:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline:2px solid #d4af37; outline-offset:2px; }
+        @media (prefers-reduced-motion: reduce) { .home-card { transition:none; } }
 
         /* ===== مقارنة وحدتين ===== */
         .btn-cmp {
@@ -390,7 +401,7 @@
 <body class="text-white bg-bgMain scroll-smooth antialiased pb-16 pt-[52px] relative">  
 
     <div id="appSplash" class="fixed inset-0 z-[100] bg-bgMain flex flex-col items-center justify-center gap-4 transition-opacity duration-500">
-        <img src="/brand-og-image.jpg" alt="كابيتال هوم" width="72" height="72" class="w-18 h-18 rounded-full object-contain splash-pulse">
+        <img src="/brand-logo-144.webp" alt="كابيتال هوم" width="72" height="72" class="w-18 h-18 rounded-full object-contain splash-pulse">
         <div class="text-lg font-bold text-white tracking-wide">كابيتال هوم</div>
         <div class="splash-dots flex gap-1.5">
             <span></span><span></span><span></span>
@@ -431,12 +442,16 @@
     </div>
 
     <div id="stickyTopBar" class="fixed top-0 inset-x-0 z-40 bg-bgMain/90 backdrop-blur-md border-b border-white/5 shadow-lg">
-        <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-2.5">
+        <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-2">
             <div class="flex items-center gap-2">
-                <img src="/brand-og-image.jpg" alt="لوجو كابيتال هوم" width="32" height="32" class="w-8 h-8 object-contain rounded-full">
+                <img src="/brand-logo-144.webp" alt="لوجو كابيتال هوم" width="32" height="32" class="w-8 h-8 object-contain rounded-full">
                 <span class="text-sm font-bold text-white hidden sm:inline">كابيتال هوم</span>
             </div>
             <div class="flex items-center gap-2">
+                <button type="button" id="topSearchBtn" class="relative w-9 h-9 rounded-full bg-white/5 border border-white/10 text-white text-sm flex items-center justify-center before:absolute before:-inset-1 before:content-['']" aria-label="ابحث عن عقار">🔍</button>
+                <button type="button" id="topFavBtn" class="relative w-9 h-9 rounded-full bg-white/5 border border-white/10 text-white text-sm flex items-center justify-center before:absolute before:-inset-1 before:content-['']" aria-label="المفضلة">
+                    ❤️<span id="topFavBadge" class="hidden absolute -top-1 -left-1 bg-favRed text-white text-[10px] font-extrabold min-w-[18px] h-[18px] px-1 rounded-full items-center justify-center">0</span>
+                </button>
                 <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D8%B3%D9%88%D9%8A%D9%82%20%D8%B9%D9%82%D8%A7%D8%B1%D9%8A%20%D9%85%D8%B9%D9%83%D9%85"
                    target="_blank" rel="noopener noreferrer"
                    class="flex items-center gap-1 border border-goldCustom/50 text-goldCustom text-xs font-bold py-1.5 px-3 rounded-full transition-all duration-300 hover:bg-goldCustom/10"
@@ -484,7 +499,18 @@
                 <div class="text-[11px] font-bold text-zinc-400 mt-1">قيمة العقارات المتاحة <span class="text-zinc-500">(تقديري)</span></div>
             </div>
         </div>
-    </header>    
+    </header>
+
+    <section id="homeSections" class="hidden w-[92%] max-w-[1100px] mx-auto mt-2 mb-8" aria-label="عقارات مختارة">
+        <div id="featuredSection" class="hidden mb-7">
+            <h2 class="text-lg font-extrabold text-white mb-3 px-1">🔥 عروض مميزة</h2>
+            <div id="featuredTrack" class="home-track" role="list" aria-label="عروض مميزة"></div>
+        </div>
+        <div id="latestSection" class="hidden">
+            <h2 class="text-lg font-extrabold text-white mb-3 px-1">🆕 أحدث الإضافات</h2>
+            <div id="latestTrack" class="home-track" role="list" aria-label="أحدث الإضافات"></div>
+        </div>
+    </section>    
     
     <div class="w-[92%] max-w-[1100px] mx-auto mt-2">    
         
@@ -494,22 +520,48 @@
             <input type="text" id="propertySearch" class="w-full relative px-6 py-5 bg-bgCard/80 backdrop-blur-md border border-white/10 rounded-2xl text-base font-semibold text-white placeholder-zinc-500 outline-none shadow-[0_8px_30px_rgba(0,0,0,0.5)] focus:border-goldCustom focus:bg-bgCard transition-all duration-300" placeholder="🔍 ابحث بالمنطقة، السعر، أو الميزة (مثال: المنيا الجديدة، تقسيط)...">    
         </div>    
 
-        <div class="mb-8 w-full max-w-3xl mx-auto flex flex-wrap items-center gap-2.5 justify-center relative z-20">
-            <div class="flex items-center gap-2 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2">
-                <label for="priceMinInput" class="text-xs font-bold text-zinc-400">💰 من</label>
-                <input type="number" id="priceMinInput" inputmode="numeric" min="0" step="50000" placeholder="السعر" class="w-24 bg-transparent text-sm font-bold text-white placeholder-zinc-600 outline-none">
+        <div id="filtersBar" class="mb-8 w-full max-w-3xl mx-auto relative z-20">
+            <div class="flex flex-wrap items-center justify-center gap-2.5">
+                <button type="button" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel" class="flex items-center gap-2 bg-bgCard/60 border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-zinc-200 transition-colors hover:border-goldCustom/40">
+                    🎛️ فلاتر متقدمة
+                    <span id="filtersActiveBadge" class="hidden bg-goldCustom text-bgMain text-[10px] font-extrabold min-w-[18px] h-[18px] px-1 rounded-full items-center justify-center">0</span>
+                </button>
+                <button type="button" id="sortDirectionBtn" aria-label="تبديل ترتيب السعر" class="flex items-center gap-1.5 bg-bgCard/60 border border-white/10 rounded-xl px-4 py-3 text-xs font-bold text-zinc-300 transition-colors hover:border-goldCustom/40">
+                    <span id="sortDirectionIcon">⬆️</span> <span id="sortDirectionLabel">الأرخص أولاً</span>
+                </button>
             </div>
-            <div class="flex items-center gap-2 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2">
-                <label for="priceMaxInput" class="text-xs font-bold text-zinc-400">لحد</label>
-                <input type="number" id="priceMaxInput" inputmode="numeric" min="0" step="50000" placeholder="السعر" class="w-24 bg-transparent text-sm font-bold text-white placeholder-zinc-600 outline-none">
+            <div id="filtersPanel" class="hidden mt-3 bg-bgCard/60 border border-white/10 rounded-2xl p-4 flex flex-col gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <fieldset>
+                        <legend class="text-xs font-bold text-zinc-400 mb-2">💰 السعر (جنيه)</legend>
+                        <div class="flex items-center gap-2">
+                            <label for="priceMinInput" class="sr-only">أقل سعر</label>
+                            <input type="number" id="priceMinInput" inputmode="numeric" min="0" step="50000" placeholder="من" class="w-full min-w-0 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-base font-bold text-white placeholder-zinc-600 outline-none focus:border-goldCustom">
+                            <span class="text-zinc-600" aria-hidden="true">—</span>
+                            <label for="priceMaxInput" class="sr-only">أعلى سعر</label>
+                            <input type="number" id="priceMaxInput" inputmode="numeric" min="0" step="50000" placeholder="إلى" class="w-full min-w-0 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-base font-bold text-white placeholder-zinc-600 outline-none focus:border-goldCustom">
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend class="text-xs font-bold text-zinc-400 mb-2">📐 المساحة (م²)</legend>
+                        <div class="flex items-center gap-2">
+                            <label for="areaMinInput" class="sr-only">أقل مساحة</label>
+                            <input type="number" id="areaMinInput" inputmode="numeric" min="0" step="10" placeholder="من" class="w-full min-w-0 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-base font-bold text-white placeholder-zinc-600 outline-none focus:border-goldCustom">
+                            <span class="text-zinc-600" aria-hidden="true">—</span>
+                            <label for="areaMaxInput" class="sr-only">أكبر مساحة</label>
+                            <input type="number" id="areaMaxInput" inputmode="numeric" min="0" step="10" placeholder="إلى" class="w-full min-w-0 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-base font-bold text-white placeholder-zinc-600 outline-none focus:border-goldCustom">
+                        </div>
+                    </fieldset>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-zinc-400 mb-2">📍 المنطقة</div>
+                    <div id="locationSubFilter" class="flex gap-2 flex-wrap" role="group" aria-label="فلترة حسب المنطقة"></div>
+                </div>
             </div>
-            <button type="button" id="priceFilterClear" class="hidden text-xs font-bold text-zinc-500 underline px-2">مسح</button>
-            <button type="button" id="sortDirectionBtn" aria-label="تبديل ترتيب السعر" class="flex items-center gap-1.5 bg-bgCard/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-zinc-300 transition-colors hover:border-goldCustom/40">
-                <span id="sortDirectionIcon">⬆️</span> <span id="sortDirectionLabel">الأرخص أولاً</span>
-            </button>
         </div>
 
         <nav class="buttons sticky-nav bg-bgMain/80 border border-white/5 p-1.5 rounded-2xl flex gap-1.5 justify-between mb-10 max-w-2xl mx-auto shadow-lg flex-wrap" aria-label="أقسام العقارات">    
+            <button type="button" id="btnCat-الكل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="الكل" aria-pressed="false">🏠 الكل</button>
             <button type="button" id="btnCat-شقة" class="nav-btn active-btn flex-1 py-3 px-2 bg-bgCard border border-white/5 text-goldCustom rounded-xl font-bold text-sm transition-all duration-300" data-cat="شقة" aria-pressed="true">🏢 الشقق</button>    
             <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
             <button type="button" id="btnCat-محل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
@@ -521,12 +573,11 @@
             </button>
         </nav>    
 
-        <div id="locationSubFilter" class="flex gap-2 justify-center mb-8 flex-wrap" aria-label="فلترة الشقق حسب المنطقة">
-            <button type="button" id="btnLoc-" class="loc-btn active-loc-btn px-4 py-2 rounded-full text-xs font-bold border border-goldCustom/40 bg-goldCustom/10 text-goldCustom transition-all duration-300" data-loc="" aria-pressed="true">الكل</button>
-            <button type="button" id="btnLoc-المنيا" class="loc-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-transparent text-zinc-400 transition-all duration-300 hover:bg-white/5" data-loc="المنيا" aria-pressed="false">المنيا</button>
-            <button type="button" id="btnLoc-المنيا الجديدة" class="loc-btn px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-transparent text-zinc-400 transition-all duration-300 hover:bg-white/5" data-loc="المنيا الجديدة" aria-pressed="false">المنيا الجديدة</button>
-        </div>    
         <main>    
+            <div id="resultsBar" class="hidden flex flex-wrap items-center justify-between gap-2 mb-4 px-1 text-sm text-zinc-400" aria-live="polite">
+                <span id="resultsCountText" class="font-semibold"></span>
+                <button type="button" id="resultsResetBtn" class="hidden text-xs font-bold text-goldCustom border border-goldCustom/40 rounded-full px-4 py-2.5 hover:bg-goldCustom/10 transition-colors">↺ إعادة ضبط الفلاتر</button>
+            </div>
             <div id="noResults" class="hidden text-center py-16 text-zinc-500 font-semibold text-lg bg-bgCard/30 rounded-3xl border border-white/5" aria-live="polite">لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!</div>    
             
             <div id="propertiesWrapper" class="properties-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>    
@@ -643,7 +694,13 @@
 
         function parsePrice(raw) {
             if (raw === undefined || raw === null || raw === '') return 0;
-            const cleaned = String(raw).replace(/[^\d.]/g, '');
+            // أرقام عربية/فارسية وفاصلة عشرية عربية (٫) بتتحوّل لأرقام عادية قبل التنقية
+            const ascii = String(raw)
+                .replace(/[\u0660-\u0669]/g, d => String(d.charCodeAt(0) - 0x0660))
+                .replace(/[\u06F0-\u06F9]/g, d => String(d.charCodeAt(0) - 0x06F0))
+                .replace(/\u066B/g, '.')
+                .replace(/[\u066C,\s]/g, '');
+            const cleaned = ascii.replace(/[^\d.]/g, '');
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
         }
@@ -730,6 +787,26 @@
             return sanitizeSheetText(v);
         }
 
+        // حماية العرض من تنسيقات غلط في الشيت (بتتعرض كلها صح من غير ما حد يعدّل الشيت):
+        // - مميزات مكتوبة كمصفوفة ["..", ".."] بدل الفصل بـ |
+        // - "\n" مكتوبة حرفيًا أو شرطة مائلة \ بدل سطر جديد
+        // - تفاصيل في سطر واحد مفصولة بـ " | "
+        function parseMetaList(raw) {
+            if (!raw) return [];
+            const text = String(raw).trim();
+            if (text.startsWith('[') && text.endsWith(']')) {
+                const quoted = [...text.matchAll(/&quot;(.*?)&quot;/g)].map(m => m[1].trim()).filter(Boolean);
+                if (quoted.length) return quoted;
+            }
+            return text.split('|').map(x => x.trim()).filter(Boolean);
+        }
+        function parseBulletList(raw) {
+            if (!raw) return [];
+            let text = String(raw).replace(/\\n/g, '\n').replace(/\\(?=\S)/g, '\n');
+            if (!text.includes('\n') && (text.match(/\|/g) || []).length >= 2) text = text.replace(/\|/g, '\n');
+            return text.split('\n').map(x => x.trim()).filter(Boolean);
+        }
+
         function rowToProperty(cells, colIndexMap) {
             const id = getCell(cells, colIndexMap, 'id');
             const category = getCell(cells, colIndexMap, 'category');
@@ -748,8 +825,8 @@
             const value = getCell(cells, colIndexMap, 'value');
             const specialOfferRaw = String(getCell(cells, colIndexMap, 'specialoffer') || '').trim().toLowerCase();
 
-            const meta = metaRaw ? String(metaRaw).split('|').map(s => s.trim()).filter(Boolean) : [];
-            const bullets = bulletsRaw ? String(bulletsRaw).split('\n').map(s => s.trim()).filter(Boolean) : [];
+            const meta = parseMetaList(metaRaw);
+            const bullets = parseBulletList(bulletsRaw);
 
             const prop = {
                 id: String(id).trim(),
@@ -766,8 +843,11 @@
                 isSpecialOffer: ['نعم', 'yes', 'true', '1'].includes(specialOfferRaw)
             };
 
-            if (status && String(status).trim().toLowerCase() === 'sold') {
+            const statusNorm = String(status || '').trim().toLowerCase();
+            if (statusNorm === 'sold' || statusNorm.includes('مباع')) {
                 prop.status = 'sold';
+            } else if (statusNorm === 'negotiating' || statusNorm === 'negotiation' || statusNorm.includes('التفاوض')) {
+                prop.status = 'negotiating';
             }
 
             const hasPaymentPlan = [offer, paid, remaining, value].some(v => String(v).trim());
@@ -859,7 +939,11 @@
                 }
 
                 propertiesData = rows
-                    .map(r => rowToProperty(r && r.c, colIndexMap))
+                    .map((r, i) => {
+                        const prop = rowToProperty(r && r.c, colIndexMap);
+                        if (prop) prop.order = i; // ترتيب الصف في الشيت (الأحدث إضافةً = الأخير)
+                        return prop;
+                    })
                     .filter(Boolean);
 
                 dataLoadError = propertiesData.length === 0;
@@ -1012,7 +1096,8 @@
         function getFavorites() {
             try {
                 const raw = localStorage.getItem(FAV_STORAGE_KEY);
-                return raw ? JSON.parse(raw) : [];
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed.filter(v => typeof v === 'string') : [];
             } catch (e) {
                 return [];
             }
@@ -1038,16 +1123,38 @@
             updateFavCountBadge();
             return favs.includes(id);
         }
+        function removeFavoriteId(id) {
+            saveFavorites(getFavorites().filter(f => f !== id));
+            updateFavCountBadge();
+        }
         function updateFavCountBadge() {
-            const badge = document.getElementById('favCountBadge');
-            if (!badge) return;
             const count = getFavorites().length;
-            if (count > 0) {
-                badge.textContent = count > 99 ? '99+' : String(count);
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+            ['favCountBadge', 'topFavBadge'].forEach(badgeId => {
+                const badge = document.getElementById(badgeId);
+                if (!badge) return;
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : String(count);
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                } else {
+                    badge.classList.add('hidden');
+                    badge.classList.remove('flex');
+                }
+            });
+        }
+        // بيزامن حالة قلوب المفضلة الظاهرة في الصفحة مع التخزين (مثلاً لو اتغيّرت من تبويب تاني)
+        function syncFavButtons() {
+            const favs = getFavorites();
+            document.querySelectorAll('.fav-btn').forEach(btn => {
+                const active = favs.includes(btn.getAttribute('data-id'));
+                btn.textContent = active ? '❤️' : '🤍';
+                btn.setAttribute('aria-pressed', String(active));
+                btn.setAttribute('aria-label', active ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة');
+                btn.classList.toggle('bg-favRed', active);
+                btn.classList.toggle('bg-black/50', !active);
+                btn.classList.toggle('text-white/70', !active);
+                btn.classList.toggle('text-white', active);
+            });
         }
 
         let currentCategory = "شقة";    
@@ -1056,16 +1163,246 @@
         let priceMinFilter = null;
         let priceMaxFilter = null;
         let sortDirection = 'asc'; // 'asc' = الأرخص أولاً، 'desc' = الأغلى أولاً
+        const ALL_CATEGORY = 'الكل'; // تبويب "الكل" = كل أنواع العقارات مع بعض
+        let areaMinFilter = null;
+        let areaMaxFilter = null;
+        let homeSectionsHaveContent = false;
 
         // بيرجع "المنيا" أو "المنيا الجديدة" بشكل موحّد بغض النظر عن أي كلام زيادة
         // أو مسافات في خلية locationCategory (زي "المنيا شارع طه حسين" أو "المنيا الجديدة ")
         function normalizeLocationCategory(loc) {
             const clean = String(loc || '').trim();
             if (!clean) return '';
-            if (clean.includes('الجديدة')) return 'المنيا الجديدة';
-            if (clean.includes('المنيا')) return 'المنيا';
+            if (clean.includes('المنيا')) return clean.includes('الجديدة') ? 'المنيا الجديدة' : 'المنيا';
             return clean;
         }
+
+        // ===== المرحلة 2: الفلاتر المتقدمة وأقسام الصفحة الرئيسية =====
+        const CATEGORY_EMOJI = { 'شقة': '🏢', 'فيلا': '🏡', 'محل': '🏪', 'أرض': '🌍' };
+        const AVAILABILITY_LABELS = { available: 'متاحة', negotiating: 'تحت التفاوض', sold: 'مباعة' };
+        const AVAILABILITY_ICONS = { available: '🟢', negotiating: '🟠', sold: '🔴' };
+        const AVAILABILITY_TEXT_CLASS = { available: 'text-green-400', negotiating: 'text-amber-400', sold: 'text-red-400' };
+
+        function $id(id) { return document.getElementById(id); }
+
+        function getAvailability(prop) {
+            if (prop && prop.status === 'sold') return 'sold';
+            if (prop && prop.status === 'negotiating') return 'negotiating';
+            return 'available';
+        }
+
+        // المساحة مستخرجة بحذر من نص الشيت؛ null = غير محددة (مبنخمّنش)
+        function getAreaValue(prop) {
+            if (prop._area === undefined) {
+                const a = extractArea(prop);
+                prop._area = a ? a.value : null;
+            }
+            return prop._area;
+        }
+        function formatAreaNumber(n) { return String(Math.round(n * 10) / 10); }
+
+        function hasActiveFilters() {
+            const si = $id('propertySearch');
+            return !!((si && si.value.trim()) || priceMinFilter !== null || priceMaxFilter !== null ||
+                areaMinFilter !== null || areaMaxFilter !== null || currentLocationFilter);
+        }
+        function countActiveFilterGroups() {
+            return ((priceMinFilter !== null || priceMaxFilter !== null) ? 1 : 0) +
+                ((areaMinFilter !== null || areaMaxFilter !== null) ? 1 : 0) +
+                (currentLocationFilter ? 1 : 0);
+        }
+
+        // كل الفلاتر بتشتغل مع بعض (AND). العقار اللي ناقصه سعر أو مساحة بيتستبعد
+        // بس لو الفلتر المعني شغال، ومبنفترضش قيم مش موجودة.
+        function filterProperties() {
+            const searchInput = $id('propertySearch');
+            const keyword = searchInput ? normalizeArabic(searchInput.value) : '';
+            const isFavoritesView = currentCategory === "المفضلة";
+            const favIds = isFavoritesView ? getFavorites() : null;
+            const areaActive = areaMinFilter !== null || areaMaxFilter !== null;
+            const priceActive = priceMinFilter !== null || priceMaxFilter !== null;
+            let excludedNoArea = 0;
+
+            const items = propertiesData.filter(item => {
+                if (isFavoritesView) {
+                    if (!favIds.includes(item.id)) return false;
+                } else if (currentCategory !== ALL_CATEGORY && item.category !== currentCategory) {
+                    return false;
+                }
+                if (currentLocationFilter && normalizeLocationCategory(item.locationCategory) !== currentLocationFilter) return false;
+                if (priceActive) {
+                    if (!(item.price > 0)) return false;
+                    if (priceMinFilter !== null && item.price < priceMinFilter) return false;
+                    if (priceMaxFilter !== null && item.price > priceMaxFilter) return false;
+                }
+                if (keyword) {
+                    const matchTitle = normalizeArabic(item.title).includes(keyword);
+                    const matchPriceText = normalizeArabic(item.priceText).includes(keyword);
+                    const matchLocation = normalizeArabic(item.locationCategory).includes(keyword);
+                    const matchFinishing = item.finishing ? normalizeArabic(item.finishing).includes(keyword) : false;
+                    const matchBullets = item.bullets ? item.bullets.some(b => normalizeArabic(b).includes(keyword)) : false;
+                    const matchMeta = item.meta ? item.meta.some(m => normalizeArabic(m).includes(keyword)) : false;
+                    if (!matchTitle && !matchPriceText && !matchLocation && !matchFinishing && !matchBullets && !matchMeta) return false;
+                }
+                if (areaActive) {
+                    const area = getAreaValue(item);
+                    if (area === null) { excludedNoArea++; return false; }
+                    if (areaMinFilter !== null && area < areaMinFilter) return false;
+                    if (areaMaxFilter !== null && area > areaMaxFilter) return false;
+                }
+                return true;
+            });
+            return { items, excludedNoArea, isFavoritesView, favIds };
+        }
+
+        function updateFiltersBadge() {
+            const badge = $id('filtersActiveBadge');
+            if (!badge) return;
+            const n = countActiveFilterGroups();
+            badge.textContent = String(n);
+            badge.classList.toggle('hidden', n === 0);
+            badge.classList.toggle('flex', n > 0);
+        }
+
+        function updateResultsBar(count, excludedNoArea) {
+            const bar = $id('resultsBar');
+            const text = $id('resultsCountText');
+            const resetBtn = $id('resultsResetBtn');
+            if (!bar || !text) return;
+            let msg = 'عدد النتائج: ' + count;
+            if (excludedNoArea > 0) msg += ' (اتستبعد ' + excludedNoArea + ' عقار لأن مساحته غير محددة)';
+            const badPrice = priceMinFilter !== null && priceMaxFilter !== null && priceMinFilter > priceMaxFilter;
+            const badArea = areaMinFilter !== null && areaMaxFilter !== null && areaMinFilter > areaMaxFilter;
+            if (badPrice || badArea) msg += ' — راجع الحدود: "من" لازم تكون أصغر من "إلى"';
+            text.textContent = msg;
+            if (resetBtn) resetBtn.classList.toggle('hidden', !hasActiveFilters());
+            bar.classList.remove('hidden');
+            updateFiltersBadge();
+        }
+
+        // بيظبط إيه اللي يظهر حوالين القائمة حسب القسم الحالي
+        function updateBrowseChrome() {
+            const isCompounds = currentCategory === 'الكمباوندات';
+            const isFav = currentCategory === 'المفضلة';
+            const fb = $id('filtersBar');
+            if (fb) fb.classList.toggle('hidden', isCompounds);
+            const rb = $id('resultsBar');
+            if (rb && isCompounds) rb.classList.add('hidden');
+            const hs = $id('homeSections');
+            if (hs) hs.classList.toggle('hidden', isCompounds || isFav || hasActiveFilters() || !homeSectionsHaveContent);
+            updateFiltersBadge();
+        }
+
+        function styleLocChip(btn, active) {
+            btn.classList.toggle('active-loc-btn', active);
+            btn.classList.toggle('bg-goldCustom/10', active);
+            btn.classList.toggle('text-goldCustom', active);
+            btn.classList.toggle('border-goldCustom/40', active);
+            btn.classList.toggle('bg-transparent', !active);
+            btn.classList.toggle('text-zinc-400', !active);
+            btn.classList.toggle('border-white/10', !active);
+            btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        }
+        // خيارات المنطقة بتتبني من بيانات الشيت الفعلية (مش قايمة ثابتة)
+        function renderLocationChips() {
+            const box = $id('locationSubFilter');
+            if (!box) return;
+            const counts = Object.create(null);
+            propertiesData.forEach(p => {
+                const n = normalizeLocationCategory(p.locationCategory);
+                if (n) counts[n] = (counts[n] || 0) + 1;
+            });
+            const names = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+            box.innerHTML = '';
+            if (!names.length) return;
+            [''].concat(names).forEach(name => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'loc-btn px-4 py-2.5 rounded-full text-xs font-bold border transition-all duration-300';
+                b.setAttribute('data-loc', name);
+                b.textContent = name ? decodeEntities(name) : 'كل المناطق';
+                styleLocChip(b, name === currentLocationFilter);
+                box.appendChild(b);
+            });
+        }
+
+        function clearFilterState() {
+            priceMinFilter = null; priceMaxFilter = null;
+            areaMinFilter = null; areaMaxFilter = null;
+            currentLocationFilter = '';
+            ['priceMinInput', 'priceMaxInput', 'areaMinInput', 'areaMaxInput', 'propertySearch'].forEach(id => {
+                const el = $id(id);
+                if (el) el.value = '';
+            });
+            renderLocationChips();
+        }
+        function resetAllFilters() {
+            clearFilterState();
+            triggerDynamicRender();
+        }
+
+        // ---- أقسام الصفحة الرئيسية: بيانات حقيقية بس ----
+        function buildHomeCardHTML(prop) {
+            const photos = photoGallery[prop.id] || [];
+            const src = photos.length ? photos[0] : (prop.image ? resolveAssetPath(prop.image) : '');
+            const media = src
+                ? `<img class="ch-slide-bg" src="${src}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="home-card-img" src="${src}" alt="${prop.title}" loading="lazy" decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
+                : `<span aria-hidden="true">${CATEGORY_EMOJI[prop.category] || '🏠'}</span>`;
+            const chipBase = 'text-[11px] font-bold px-2 py-1 rounded-lg border ';
+            const chips = [];
+            if (getAvailability(prop) === 'negotiating') {
+                chips.push(`<span class="${chipBase}bg-amber-500/15 text-amber-300 border-amber-500/30">🤝 تحت التفاوض</span>`);
+            }
+            const area = getAreaValue(prop);
+            if (area !== null) chips.push(`<span class="${chipBase}bg-white/5 text-zinc-300 border-white/5">📐 ${formatAreaNumber(area)}م</span>`);
+            const loc = normalizeLocationCategory(prop.locationCategory);
+            if (loc) chips.push(`<span class="${chipBase}bg-white/5 text-zinc-300 border-white/5">📍 ${loc}</span>`);
+            const priceLabel = prop.priceText || (prop.price > 0 ? Number(prop.price).toLocaleString('en-US') + ' جنيه' : 'تواصل لمعرفة السعر');
+            return `<a role="listitem" class="home-card" href="${buildPropertyPath(prop.id)}" data-home-id="${prop.id}">
+                <div class="home-card-media">${media}</div>
+                <div class="p-3.5 flex flex-col gap-2 flex-1">
+                    <h3 class="text-sm font-bold text-white leading-snug line-clamp-2">${prop.title}</h3>
+                    <div class="text-base font-extrabold text-priceBlue">${priceLabel}</div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">${chips.join('')}</div>
+                </div>
+            </a>`;
+        }
+
+        // "عروض مميزة" = العقارات المعلّمة "عرض خاص" في الشيت (غير المباعة).
+        // "أحدث الإضافات" = آخر الصفوف المضافة في الشيت (غير مباعة وغير مكررة مع المميزة).
+        function renderHomeSections() {
+            const hs = $id('homeSections');
+            if (!hs) return;
+            const open = propertiesData.filter(p => getAvailability(p) !== 'sold');
+            const featured = open.filter(p => p.isSpecialOffer).slice(0, 8);
+            const featuredIds = new Set(featured.map(p => p.id));
+            const latest = open.filter(p => !featuredIds.has(p.id))
+                .sort((a, b) => (b.order || 0) - (a.order || 0)).slice(0, 6);
+            [['featured', featured], ['latest', latest]].forEach(([key, list]) => {
+                const section = $id(key + 'Section');
+                const track = $id(key + 'Track');
+                if (!section || !track) return;
+                track.innerHTML = list.map(buildHomeCardHTML).join('');
+                section.classList.toggle('hidden', list.length === 0);
+            });
+            homeSectionsHaveContent = featured.length > 0 || latest.length > 0;
+            updateBrowseChrome();
+        }
+
+        // الضغط على كارت في الأقسام بيفتح العقار نفسه في قائمته (من غير ما نفقد الرابط المباشر)
+        function openPropertyFromHome(id) {
+            const prop = propertiesData.find(p => p.id === id);
+            if (!prop) return;
+            clearTimeout(renderTimeout);
+            clearFilterState();
+            const si = $id('propertySearch');
+            if (si) si.value = '';
+            switchCategoryUI(prop.category);
+            initialPropertyToOpen = id;
+            renderProperties();
+            updateBrowseChrome();
+        }
+
         let isEventsBound = false;    
         let renderTimeout; 
 
@@ -1301,10 +1638,10 @@
             }
         }
 
-        function buildPhotoGalleryHTML(urls, altText) {
+        function buildPhotoGalleryHTML(urls, altText, eagerFirst) {
             const n = urls.length;
             const slides = urls.map((u, i) =>
-                `<div class="ch-slide"><img class="ch-slide-bg" src="${u}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="ch-photo" src="${u}" alt="${altText}${n > 1 ? ' - صورة ' + (i + 1) : ''}" loading="lazy" decoding="async" width="400" height="300"></div>`
+                `<div class="ch-slide"><img class="ch-slide-bg" src="${u}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="ch-photo" src="${u}" alt="${altText}${n > 1 ? ' - صورة ' + (i + 1) : ''}" ${eagerFirst && i === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="400" height="300"></div>`
             ).join('');
             const nav = n > 1
                 ? `<button type="button" class="ch-gallery-nav ch-gallery-prev" data-dir="-1" aria-label="الصورة السابقة">›</button><button type="button" class="ch-gallery-nav ch-gallery-next" data-dir="1" aria-label="الصورة التالية">‹</button>`
@@ -1344,34 +1681,11 @@
             if (!wrapper) return;
             wrapper.innerHTML = '';    
             
-            const searchInput = document.getElementById('propertySearch');
-            const keyword = searchInput ? normalizeArabic(searchInput.value) : '';    
-            const isFavoritesView = currentCategory === "المفضلة";
-            const favIds = isFavoritesView ? getFavorites() : null;
-            
-            let filtered = propertiesData.filter(item => {    
-                if (isFavoritesView) {
-                    if (!favIds.includes(item.id)) return false;
-                } else if (item.category !== currentCategory) {
-                    return false;
-                }
-                if (currentCategory === "شقة" && currentLocationFilter) {
-                    if (normalizeLocationCategory(item.locationCategory) !== currentLocationFilter) return false;
-                }
-                if (priceMinFilter !== null && item.price < priceMinFilter) return false;
-                if (priceMaxFilter !== null && item.price > priceMaxFilter) return false;
-                if (keyword) {    
-                    const matchTitle = normalizeArabic(item.title).includes(keyword);    
-                    const matchPriceText = normalizeArabic(item.priceText).includes(keyword);    
-                    const matchLocation = normalizeArabic(item.locationCategory).includes(keyword);    
-                    const matchFinishing = item.finishing ? normalizeArabic(item.finishing).includes(keyword) : false;
-                    const matchBullets = item.bullets ? item.bullets.some(b => normalizeArabic(b).includes(keyword)) : false;    
-                    const matchMeta = item.meta ? item.meta.some(m => normalizeArabic(m).includes(keyword)) : false;    
-                        
-                    if (!matchTitle && !matchPriceText && !matchLocation && !matchFinishing && !matchBullets && !matchMeta) return false;    
-                }    
-                return true;    
-            });    
+            const filterResult = filterProperties();
+            const isFavoritesView = filterResult.isFavoritesView;
+            const favIds = filterResult.favIds;
+            const excludedNoArea = filterResult.excludedNoArea;
+            let filtered = filterResult.items;
 
             // الترتيب: المباع ينزل أسفل القائمة دايمًا، وبعدين حسب السعر والاتجاه المختار
             filtered.sort((a, b) => {
@@ -1385,17 +1699,24 @@
                 return sortDirection === 'desc' ? -diff : diff;
             });
             
-            const noResults = document.getElementById('noResults');    
-            if (filtered.length === 0) {     
+            const noResults = document.getElementById('noResults');
+            // عقار محفوظ في المفضلة ومبقاش موجود في الشيت: نعرض له كارت توضيحي بدل ما يختفي بصمت
+            // (بس لو البيانات اتحمّلت فعلاً ومفيش فلاتر شغالة، عشان منحكمش غلط على بيانات ناقصة)
+            const staleFavIds = (isFavoritesView && propertiesData.length > 0 && !dataLoadError && !hasActiveFilters())
+                ? favIds.filter(fid => !propertiesData.some(p => p.id === fid)) : [];
+            updateResultsBar(filtered.length, excludedNoArea);
+            if (filtered.length === 0 && staleFavIds.length === 0) {
                 if (noResults) {
                     noResults.classList.remove('hidden');
                     noResults.textContent = isFavoritesView
                         ? 'لسه معندكش عقارات في المفضلة. اضغط على ❤️ داخل أي عقار عشان تحفظه هنا.'
-                        : 'لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!';
+                        : (hasActiveFilters()
+                            ? 'مفيش عقارات مطابقة للفلاتر دي. وسّع نطاق السعر أو المساحة، أو اضغط "إعادة ضبط الفلاتر".'
+                            : 'لم نجد عقارات تطابق بحثك في هذا القسم. جرب كلمات أخرى أو تصفح الأقسام الأخرى!');
                 }
-                return;     
-            }    
-            if (noResults) noResults.classList.add('hidden');    
+                return;
+            }
+            if (noResults) noResults.classList.add('hidden');
             
             filtered.forEach((prop, index) => {    
                 const cardEl = document.createElement('article');     
@@ -1435,13 +1756,17 @@
                     return `<span class="${styleClasses} py-1.5 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center">${m}</span>`;    
                 }).join('') : '';    
                 
-                const badgeHTML = isSold ? `<div class="absolute top-4 right-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>` : '';
+                const badgeHTML = isSold
+                    ? `<div class="absolute top-4 right-4 bg-[#e74c3c] text-white px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg border border-[#c0392b] tracking-wider">تم البيع</div>`
+                    : (getAvailability(prop) === 'negotiating'
+                        ? `<div class="absolute top-4 right-4 bg-amber-500 text-black px-3 py-1.5 rounded-lg text-sm font-extrabold z-20 shadow-lg">تحت التفاوض</div>`
+                        : '');
 
                 // زر المفضلة (❤️) — يظهر أعلى يسار الكارت (بعيداً عن بداية عنوان العقار في وضع RTL، وبعيداً عن شارة "تم البيع" اللي بقت أعلى اليمين)
                 const favActive = isFavorite(prop.id);
                 const favBtnHTML = `
                     <button type="button"
-                        class="fav-btn absolute top-4 left-4 z-20 w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all duration-300 shadow-lg ${favActive ? 'bg-favRed text-white' : 'bg-black/50 text-white/70 hover:text-favRed'}"
+                        class="fav-btn absolute top-4 left-4 z-20 w-11 h-11 rounded-full flex items-center justify-center text-lg transition-all duration-300 shadow-lg ${favActive ? 'bg-favRed text-white' : 'bg-black/50 text-white/70 hover:text-favRed'}"
                         data-id="${prop.id}"
                         aria-pressed="${favActive}"
                         aria-label="${favActive ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'}">
@@ -1451,8 +1776,8 @@
                 const fallbackImage = '/images/placeholder.webp';
                 const currentImage = prop.image ? resolveAssetPath(prop.image) : fallbackImage;
                 const galleryUrls = photoGallery[prop.id] || [];
-                const legacyImageHTML = `<img src="${currentImage}" onerror="if(this.dataset.fallbackTried){this.remove();}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
-                const imageHTML = galleryUrls.length ? buildPhotoGalleryHTML(galleryUrls, prop.title) : legacyImageHTML;
+                const legacyImageHTML = !prop.image ? '' : `<img src="${currentImage}" onerror="this.remove()" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
+                const imageHTML = galleryUrls.length ? buildPhotoGalleryHTML(galleryUrls, prop.title, index === 0) : legacyImageHTML;
 
                 const summaryHTML = `
                     <div class="p-6 pb-5 cursor-pointer card-summary flex flex-col h-full z-10 relative group">
@@ -1486,19 +1811,35 @@
                 let bulletItems = prop.bullets ? prop.bullets.map(b => `<div class="text-sm text-zinc-300 font-medium flex items-start gap-2 before:content-['✓'] before:text-goldCustom before:text-base before:font-bold before:mt-[-2px]">${b}</div>`).join('') : '';    
                 let galleryHTML = `<div class="bg-goldCustom/5 border border-dashed border-goldCustom/30 p-4 rounded-xl text-center text-goldCustom text-xs font-semibold mb-6 flex items-center justify-center gap-2">🛡️ المعاينة الميدانية تتم بالتنسيق المسبق مع المالك عبر المكتب</div>`;    
             
-                let paymentPlanHTML = '';    
-                if (prop.paymentPlan) {    
-                    paymentPlanHTML = `
+                const areaInfo = getAreaValue(prop);
+                const floorInfo = extractFloor(prop);
+                const locName = normalizeLocationCategory(prop.locationCategory);
+                const availKey = getAvailability(prop);
+                const specItems = [
+                    ['🏷️', 'النوع', prop.category, ''],
+                    [AVAILABILITY_ICONS[availKey], 'الحالة', AVAILABILITY_LABELS[availKey], AVAILABILITY_TEXT_CLASS[availKey]],
+                    areaInfo !== null ? ['📐', 'المساحة', formatAreaNumber(areaInfo) + ' م²', ''] : null,
+                    floorInfo ? ['🏢', 'الدور', floorInfo.text, ''] : null,
+                    prop.finishing ? ['🎨', 'التشطيب', prop.finishing, ''] : null,
+                    locName ? ['📍', 'المنطقة', locName, ''] : null
+                ].filter(it => it && it[2]);
+                const specsHTML = `<div class="grid grid-cols-2 gap-2 mb-6">${specItems.map(it => `<div class="bg-white/[0.03] border border-white/5 rounded-xl px-3 py-2.5"><span class="text-[11px] text-zinc-500 block mb-0.5">${it[0]} ${it[1]}</span><strong class="text-sm font-bold ${it[3] || 'text-white'}">${it[2]}</strong></div>`).join('')}</div>`;
+
+                const planTiles = prop.paymentPlan ? [
+                    ['💰 الأوفر المطلوب:', prop.paymentPlan.offer, 'text-white'],
+                    ['💳 إجمالي المدفوع:', prop.paymentPlan.paid, 'text-white'],
+                    ['📅 الأقساط المتبقية:', prop.paymentPlan.remaining, 'text-white'],
+                    ['💵 قيمة القسط:', prop.paymentPlan.value, 'text-priceBlue']
+                ].filter(t => t[1]) : [];
+                const paymentPlanHTML = planTiles.length ? `
                     <div class="mb-6 bg-gradient-to-l from-goldCustom/10 to-transparent border border-goldCustom/20 p-5 rounded-xl">
                         <h4 class="text-sm font-bold text-goldCustom mb-3 flex items-center gap-1.5">💳 خطة السداد المالية</h4>
                         <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💰 الأوفر المطلوب:</span><strong class="text-white text-sm block">${prop.paymentPlan.offer}</strong></div>
-                            <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💳 إجمالي المدفوع:</span><strong class="text-white text-sm block">${prop.paymentPlan.paid}</strong></div>
-                            <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">📅 الأقساط المتبقية:</span><strong class="text-white text-sm block">${prop.paymentPlan.remaining}</strong></div>
-                            <div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">💵 قيمة القسط:</span><strong class="text-priceBlue text-sm block">${prop.paymentPlan.value}</strong></div>
+                            ${planTiles.map(t => `<div class="bg-black/50 p-3 rounded-lg border border-white/5"><span class="text-zinc-400 block mb-1">${t[0]}</span><strong class="${t[2]} text-sm block">${t[1]}</strong></div>`).join('')}
                         </div>
-                    </div>`;    
-                }    
+                    </div>` : '';
+                const bulletsBoxHTML = (prop.bullets && prop.bullets.length)
+                    ? `<div class="flex flex-col gap-3 bg-white/[0.02] p-5 rounded-xl border border-white/5 mb-6">${bulletItems}</div>` : '';
             
                 const contactBtnText = isSold ? "العقار مُباع" : (prop.customContactText ? prop.customContactText : "احجز معاينة مجانية");    
                 const waMessageInfo = encodeURIComponent('مرحباً كابيتال هوم، أريد الاستفسار بخصوص: ' + decodeEntities(prop.title));
@@ -1514,11 +1855,7 @@
                 const detailHTML = `
                     <div class="details-box px-6 bg-black/20 border-t border-white/5">
                         <div class="details-inner pb-6 pt-2">
-                        ${galleryHTML} 
-                        ${paymentPlanHTML}
-                        <div class="flex flex-col gap-3 bg-white/[0.02] p-5 rounded-xl border border-white/5 mb-6">
-                            ${bulletItems}
-                        </div>
+                        ${specsHTML}${paymentPlanHTML}${bulletsBoxHTML}${galleryHTML}
                         <div class="grid grid-cols-1 gap-2">
                             <a class="${btnPrimaryClass}" href="${waLink}" ${waTarget}>💬 ${contactBtnText}</a>
                             <div class="flex gap-2">
@@ -1534,6 +1871,16 @@
                 cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + jsonLdHTML + bgDecorative + summaryHTML + detailHTML;
                 wrapper.appendChild(cardEl);     
             });    
+
+            staleFavIds.forEach(fid => {
+                const el = document.createElement('article');
+                el.className = 'stale-fav-card relative bg-bgCard/60 rounded-3xl border border-dashed border-white/15 p-6 flex flex-col items-center gap-3 text-center';
+                el.innerHTML = `<div class="text-3xl" aria-hidden="true">🕊️</div>
+                    <h3 class="text-base font-bold text-zinc-200">العقار ده لم يعد متاحًا على الموقع</h3>
+                    <p class="text-xs text-zinc-500 leading-relaxed">اتشال من القائمة أو اتغيّر كوده. تقدر تشيله من المفضلة.</p>
+                    <button type="button" class="fav-stale-remove bg-white/5 border border-white/10 text-white rounded-xl px-5 py-3 text-xs font-bold hover:bg-white/10 transition-colors" data-id="${escapeHtmlText(fid)}">إزالة من المفضلة</button>`;
+                wrapper.appendChild(el);
+            });
 
             initPriceCountUp();
 
@@ -1859,6 +2206,7 @@
         // التاب المختار حالياً. الكمباوندات بيتحمّلوا كسولاً (Lazy) أول
         // مرة بس المستخدم يدخل التاب، عشان الأداء العادي للموقع ميتأثرش.
         function renderCurrentView() {
+            updateBrowseChrome();
             if (currentCategory !== "الكمباوندات") {
                 renderProperties();
                 return;
@@ -1963,6 +2311,14 @@
                 if (cmpBtn && wrapper.contains(cmpBtn)) {
                     e.stopPropagation();
                     toggleCompare(cmpBtn.getAttribute('data-id'));
+                    return;
+                }
+
+                const staleBtn = e.target.closest('.fav-stale-remove');
+                if (staleBtn && wrapper.contains(staleBtn)) {
+                    e.stopPropagation();
+                    removeFavoriteId(staleBtn.getAttribute('data-id'));
+                    renderProperties();
                     return;
                 }
 
@@ -2107,26 +2463,6 @@
                 
             currentCategory = categoryName;     
 
-            // شريط فلتر المنطقة يظهر بس في تاب الشقق، ويترجع لـ"الكل" كل مرة نخش على تاب تاني
-            const locBar = document.getElementById('locationSubFilter');
-            if (locBar) {
-                if (categoryName === "شقة") {
-                    locBar.classList.remove('hidden');
-                } else {
-                    locBar.classList.add('hidden');
-                }
-            }
-            currentLocationFilter = "";
-            document.querySelectorAll('.loc-btn').forEach(b => {
-                const isAll = b.getAttribute('data-loc') === "";
-                b.classList.toggle('active-loc-btn', isAll);
-                b.classList.toggle('bg-goldCustom/10', isAll);
-                b.classList.toggle('text-goldCustom', isAll);
-                b.classList.toggle('border-goldCustom/40', isAll);
-                b.classList.toggle('text-zinc-400', !isAll);
-                b.classList.toggle('border-white/10', !isAll);
-                b.setAttribute('aria-pressed', isAll ? 'true' : 'false');
-            });
         }    
             
         document.querySelectorAll('.nav-btn').forEach(button => {    
@@ -2146,23 +2482,6 @@
             });    
         });    
 
-        document.querySelectorAll('.loc-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                currentLocationFilter = this.getAttribute('data-loc') || "";
-                document.querySelectorAll('.loc-btn').forEach(b => {
-                    const isActive = b === this;
-                    b.classList.toggle('active-loc-btn', isActive);
-                    b.classList.toggle('bg-goldCustom/10', isActive);
-                    b.classList.toggle('text-goldCustom', isActive);
-                    b.classList.toggle('border-goldCustom/40', isActive);
-                    b.classList.toggle('text-zinc-400', !isActive);
-                    b.classList.toggle('border-white/10', !isActive);
-                    b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                });
-                triggerDynamicRender();
-                scrollToPropertiesTop();
-            });
-        });
             
         // بتشغّل أنيميشن "عدّاد متصاعد" لأي عنصر سعر ظاهر في الشاشة (من 0 لحد الرقم
         // الحقيقي)، وفي آخر خطوة بترجّع النص الأصلي بالظبط (data-final) عشان أي صياغة
@@ -2618,39 +2937,48 @@
             });
         })();
 
-        (function initPriceAndSortFilters() {
-            const minInput = document.getElementById('priceMinInput');
-            const maxInput = document.getElementById('priceMaxInput');
-            const clearBtn = document.getElementById('priceFilterClear');
-            const sortBtn = document.getElementById('sortDirectionBtn');
-            const sortIcon = document.getElementById('sortDirectionIcon');
-            const sortLabel = document.getElementById('sortDirectionLabel');
+        (function initFiltersAndHome() {
+            const minInput = $id('priceMinInput');
+            const maxInput = $id('priceMaxInput');
+            const aMinInput = $id('areaMinInput');
+            const aMaxInput = $id('areaMaxInput');
+            const toggleBtn = $id('filtersToggleBtn');
+            const panel = $id('filtersPanel');
+            const resetBtn = $id('resultsResetBtn');
+            const sortBtn = $id('sortDirectionBtn');
+            const sortIcon = $id('sortDirectionIcon');
+            const sortLabel = $id('sortDirectionLabel');
+            const locBox = $id('locationSubFilter');
             if (!minInput || !maxInput || !sortBtn) return;
 
-            function updateClearVisibility() {
-                const hasValue = priceMinFilter !== null || priceMaxFilter !== null;
-                if (clearBtn) clearBtn.classList.toggle('hidden', !hasValue);
+            function toNum(v) {
+                const n = parseFloat(String(v).trim());
+                return (isFinite(n) && n >= 0) ? n : null;
             }
-
-            function applyPriceInputs() {
-                const minVal = minInput.value.trim();
-                const maxVal = maxInput.value.trim();
-                priceMinFilter = minVal ? Math.max(0, parseFloat(minVal)) : null;
-                priceMaxFilter = maxVal ? Math.max(0, parseFloat(maxVal)) : null;
-                updateClearVisibility();
+            function applyInputs() {
+                priceMinFilter = toNum(minInput.value);
+                priceMaxFilter = toNum(maxInput.value);
+                areaMinFilter = aMinInput ? toNum(aMinInput.value) : null;
+                areaMaxFilter = aMaxInput ? toNum(aMaxInput.value) : null;
+                updateFiltersBadge();
                 triggerDebouncedRender();
             }
+            [minInput, maxInput, aMinInput, aMaxInput].forEach(el => { if (el) el.addEventListener('input', applyInputs); });
 
-            minInput.addEventListener('input', applyPriceInputs);
-            maxInput.addEventListener('input', applyPriceInputs);
+            if (toggleBtn && panel) {
+                toggleBtn.addEventListener('click', () => {
+                    const open = panel.classList.toggle('hidden') === false;
+                    toggleBtn.setAttribute('aria-expanded', String(open));
+                });
+            }
+            if (resetBtn) resetBtn.addEventListener('click', resetAllFilters);
 
-            if (clearBtn) {
-                clearBtn.addEventListener('click', () => {
-                    minInput.value = '';
-                    maxInput.value = '';
-                    priceMinFilter = null;
-                    priceMaxFilter = null;
-                    updateClearVisibility();
+            if (locBox) {
+                locBox.addEventListener('click', (e) => {
+                    const chip = e.target.closest('.loc-btn');
+                    if (!chip || !locBox.contains(chip)) return;
+                    currentLocationFilter = chip.getAttribute('data-loc') || '';
+                    locBox.querySelectorAll('.loc-btn').forEach(b => styleLocChip(b, b === chip));
                     triggerDynamicRender();
                 });
             }
@@ -2660,6 +2988,44 @@
                 if (sortIcon) sortIcon.textContent = sortDirection === 'asc' ? '⬆️' : '⬇️';
                 if (sortLabel) sortLabel.textContent = sortDirection === 'asc' ? 'الأرخص أولاً' : 'الأغلى أولاً';
                 triggerDynamicRender();
+            });
+
+            // أقسام الصفحة الرئيسية
+            const hs = $id('homeSections');
+            if (hs) {
+                hs.addEventListener('click', (e) => {
+                    const card = e.target.closest('.home-card');
+                    if (!card || !hs.contains(card)) return;
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button > 0) return; // فتح في تبويب جديد يفضل شغال
+                    e.preventDefault();
+                    openPropertyFromHome(card.getAttribute('data-home-id'));
+                });
+            }
+
+            // شريط علوي: بحث سريع + المفضلة
+            const topSearch = $id('topSearchBtn');
+            if (topSearch) {
+                topSearch.addEventListener('click', () => {
+                    const si = $id('propertySearch');
+                    if (!si) return;
+                    si.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => si.focus({ preventScroll: true }), 350);
+                });
+            }
+            const topFav = $id('topFavBtn');
+            if (topFav) {
+                topFav.addEventListener('click', () => {
+                    const favTab = $id('btnCat-المفضلة');
+                    if (favTab) favTab.click();
+                });
+            }
+
+            // مزامنة المفضلة بين تبويبات المتصفح
+            window.addEventListener('storage', (e) => {
+                if (e.key !== FAV_STORAGE_KEY) return;
+                updateFavCountBadge();
+                if (currentCategory === 'المفضلة') renderProperties();
+                else syncFavButtons();
             });
         })();
 
@@ -2735,6 +3101,8 @@
                     }    
                 }
 
+                renderLocationChips();
+                renderHomeSections();
                 renderProperties();
             }).finally(() => {
                 hideAppSplash();

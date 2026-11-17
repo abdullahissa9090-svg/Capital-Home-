@@ -395,6 +395,32 @@
             background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
+
+        /* ===== آراء العملاء (لقطات محادثات واتساب) ===== */
+        .tm-head { display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:22px; }
+        .tm-rule { width:56px; height:2px; border-radius:2px; background:linear-gradient(to right, transparent, #d4af37, transparent); margin-bottom:6px; }
+        .tm-track { list-style:none; margin:0; padding:4px 2px 14px; display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; outline:none; }
+        .tm-track::-webkit-scrollbar { display:none; }
+        .tm-track:focus-visible { outline:2px solid #d4af37; outline-offset:4px; border-radius:16px; }
+        .tm-slide { flex:0 0 min(78vw, 270px); scroll-snap-align:start; }
+        .tm-card { position:relative; display:block; width:100%; aspect-ratio:4/5; padding:0; overflow:hidden; border-radius:20px; background:#141417; border:1px solid rgba(212,175,55,.16); cursor:pointer; transition:border-color .25s ease, transform .25s ease; }
+        .tm-card:hover { border-color:rgba(212,175,55,.45); }
+        .tm-card:active { transform:scale(.985); }
+        .tm-card img { display:block; width:100%; height:100%; object-fit:cover; object-position:top center; }
+        .tm-card::after { content:""; position:absolute; left:0; right:0; bottom:0; height:42%; background:linear-gradient(to top, #0b1022 6%, rgba(11,16,34,0)); pointer-events:none; }
+        .tm-card-cta { position:absolute; z-index:2; left:50%; bottom:14px; transform:translateX(-50%); padding:7px 16px; border-radius:999px; border:1px solid rgba(212,175,55,.45); background:rgba(12,12,14,.78); color:#d4af37; font-size:12px; font-weight:700; white-space:nowrap; }
+        .tm-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-top:6px; }
+        .tm-count { min-width:56px; text-align:center; font-size:13px; font-weight:700; color:#a1a1aa; direction:ltr; }
+        .tm-nav-btn { width:44px; height:44px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-size:24px; line-height:1; color:#fff; background:#141417; border:1px solid rgba(212,175,55,.28); cursor:pointer; transition:border-color .2s ease, color .2s ease, opacity .2s ease; }
+        .tm-nav-btn:hover:not(:disabled) { border-color:#d4af37; color:#d4af37; }
+        .tm-nav-btn:disabled { opacity:.35; cursor:default; }
+        .tm-lb { position:fixed; inset:0; z-index:95; display:none; background:rgba(5,6,12,.985); overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+        .tm-lb.is-open { display:block; }
+        .tm-lb-bar { position:fixed; top:0; left:0; right:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:calc(10px + env(safe-area-inset-top, 0px)) 12px 14px; background:linear-gradient(to bottom, rgba(5,6,12,.96) 60%, rgba(5,6,12,0)); }
+        .tm-lb-arrows { display:inline-flex; gap:10px; }
+        .tm-lb-inner { min-height:100%; display:flex; flex-direction:column; align-items:center; padding:calc(72px + env(safe-area-inset-top, 0px)) 12px calc(28px + env(safe-area-inset-bottom, 0px)); }
+        .tm-lb-img { display:block; width:min(100%, 720px); height:auto; border-radius:14px; border:1px solid rgba(212,175,55,.22); background:#0c0c0e; }
+        @media (prefers-reduced-motion: reduce) { .tm-card { transition:none; } }
     </style>  
 </head>    
 
@@ -652,6 +678,92 @@
             </section>    
         </main>
     </div>    
+
+    <!-- ===== آراء عملائنا: لقطات حقيقية من محادثات واتساب (الأسماء الشخصية للعملاء مخفية) ===== -->
+    <section id="testimonials" class="tm-section w-[92%] max-w-[1100px] mx-auto mt-6" aria-labelledby="tmTitle">
+        <div class="tm-head">
+            <span class="tm-rule" aria-hidden="true"></span>
+            <h2 id="tmTitle" class="text-2xl md:text-3xl font-extrabold text-white">آراء عملائنا</h2>
+            <p class="text-sm md:text-base text-zinc-400">ثقة عملائنا هي أكبر شهادة نعتز بها</p>
+        </div>
+        <div class="tm-carousel" role="region" aria-roledescription="carousel" aria-label="آراء عملائنا">
+            <ul class="tm-track" id="tmTrack" tabindex="0" aria-label="لقطات محادثات العملاء، مرّر لرؤية المزيد">
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t01.webp" aria-label="عرض محادثة العميل رقم 1 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t01-thumb.webp" width="520" height="650" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (1 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t02.webp" aria-label="عرض محادثة العميل رقم 2 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t02-thumb.webp" width="520" height="455" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (2 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t03.webp" aria-label="عرض محادثة العميل رقم 3 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t03-thumb.webp" width="520" height="415" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (3 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t04.webp" aria-label="عرض محادثة العميل رقم 4 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t04-thumb.webp" width="520" height="560" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (4 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t05.webp" aria-label="عرض محادثة العميل رقم 5 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t05-thumb.webp" width="520" height="650" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (5 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t06.webp" aria-label="عرض محادثة العميل رقم 6 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t06-thumb.webp" width="520" height="397" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (6 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t07.webp" aria-label="عرض محادثة العميل رقم 7 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t07-thumb.webp" width="520" height="335" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (7 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t08.webp" aria-label="عرض محادثة العميل رقم 8 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t08-thumb.webp" width="520" height="650" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (8 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+                <li class="tm-slide" role="listitem">
+                    <button type="button" class="tm-card" data-full="/testimonials/t09.webp" aria-label="عرض محادثة العميل رقم 9 من 9 بحجم أكبر">
+                        <img data-src="/testimonials/t09-thumb.webp" width="520" height="650" loading="lazy" decoding="async" alt="لقطة شاشة من محادثة واتساب مع أحد عملائنا (9 من 9)">
+                        <span class="tm-card-cta" aria-hidden="true">عرض المحادثة</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="tm-nav">
+                <button type="button" class="tm-nav-btn" id="tmPrev" aria-label="الرأي السابق">&rsaquo;</button>
+                <span class="tm-count" id="tmCount" aria-live="polite">1 / 9</span>
+                <button type="button" class="tm-nav-btn" id="tmNext" aria-label="الرأي التالي">&lsaquo;</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="tm-lb" id="tmLightbox" role="dialog" aria-modal="true" aria-label="محادثة عميل بحجم أكبر" aria-hidden="true">
+        <div class="tm-lb-bar">
+            <button type="button" class="tm-nav-btn" id="tmLbClose" aria-label="إغلاق">&times;</button>
+            <span class="tm-count" id="tmLbCount" aria-live="polite"></span>
+            <span class="tm-lb-arrows">
+                <button type="button" class="tm-nav-btn" id="tmLbPrev" aria-label="المحادثة السابقة">&rsaquo;</button>
+                <button type="button" class="tm-nav-btn" id="tmLbNext" aria-label="المحادثة التالية">&lsaquo;</button>
+            </span>
+        </div>
+        <div class="tm-lb-inner" id="tmLbInner">
+            <img class="tm-lb-img" id="tmLbImg" alt="" decoding="async">
+        </div>
+    </div>
 
     <footer class="relative mt-20 overflow-hidden border-t border-goldCustom/20 bg-gradient-to-b from-[#08080a] via-[#0a0b14] to-[#0b1022] text-zinc-400 text-center px-4 pt-14 pb-28 md:pt-16 md:pb-14">
         <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-goldCustom/60 to-transparent"></div>
@@ -3036,6 +3148,134 @@
                 if (currentCategory === 'المفضلة') renderProperties();
                 else syncFavButtons();
             });
+        })();
+
+        // ===== آراء العملاء: سلايدر + عرض المحادثة بحجم أكبر (مستقل تمامًا عن باقي الموقع) =====
+        (function initTestimonials() {
+            const sec = document.getElementById('testimonials');
+            if (!sec) return;
+            const track = document.getElementById('tmTrack');
+            const cards = track ? Array.from(track.querySelectorAll('.tm-card')) : [];
+            if (!cards.length) return;
+            // الصور المصغرة بتتحمّل بس لما القسم يقرّب من الشاشة (عشان ماتأثرش على سرعة أول تحميل للصفحة)
+            const thumbs = Array.from(track.querySelectorAll('img[data-src]'));
+            const loadThumbs = () => thumbs.forEach(img => { img.src = img.getAttribute('data-src'); img.removeAttribute('data-src'); });
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    if (entries.some(en => en.isIntersecting)) { loadThumbs(); io.disconnect(); }
+                }, { rootMargin: '700px 0px' });
+                io.observe(sec);
+            } else {
+                loadThumbs();
+            }
+            const prevBtn = document.getElementById('tmPrev'), nextBtn = document.getElementById('tmNext');
+            const countEl = document.getElementById('tmCount');
+            const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            const isRtl = () => getComputedStyle(track).direction === 'rtl';
+
+            // --- السلايدر ---
+            function slideStep() {
+                const w = cards[0].parentElement.getBoundingClientRect().width + 14;
+                return w * Math.max(1, Math.floor(track.clientWidth / w));
+            }
+            function go(dir) { // dir = 1 للتالي، -1 للسابق (الاتجاه الفعلي بيتظبط حسب RTL)
+                track.scrollBy({ left: (isRtl() ? -1 : 1) * dir * slideStep(), behavior: reduce ? 'auto' : 'smooth' });
+            }
+            function currentIndex() {
+                const tr = track.getBoundingClientRect();
+                const rtl = isRtl();
+                const edge = rtl ? tr.right : tr.left;
+                let best = 0, bestD = Infinity;
+                cards.forEach((c, i) => {
+                    const r = c.parentElement.getBoundingClientRect();
+                    const d = Math.abs((rtl ? r.right : r.left) - edge);
+                    if (d < bestD) { bestD = d; best = i; }
+                });
+                return best;
+            }
+            let ticking = false;
+            function updateNav() {
+                ticking = false;
+                const max = track.scrollWidth - track.clientWidth;
+                const pos = Math.abs(track.scrollLeft);
+                const atEnd = pos >= max - 2;
+                if (countEl) countEl.textContent = ((atEnd ? cards.length - 1 : currentIndex()) + 1) + ' / ' + cards.length;
+                if (prevBtn) prevBtn.disabled = pos <= 2;
+                if (nextBtn) nextBtn.disabled = atEnd;
+            }
+            function queueUpdate() { if (!ticking) { ticking = true; requestAnimationFrame(updateNav); } }
+            track.addEventListener('scroll', queueUpdate, { passive: true });
+            window.addEventListener('resize', queueUpdate);
+            if (prevBtn) prevBtn.addEventListener('click', () => go(-1));
+            if (nextBtn) nextBtn.addEventListener('click', () => go(1));
+            updateNav();
+
+            // --- عرض المحادثة الأصلية بحجم أكبر ---
+            const lb = document.getElementById('tmLightbox');
+            const lbImg = document.getElementById('tmLbImg');
+            const lbCount = document.getElementById('tmLbCount');
+            const lbClose = document.getElementById('tmLbClose');
+            const lbPrev = document.getElementById('tmLbPrev'), lbNext = document.getElementById('tmLbNext');
+            const lbInner = document.getElementById('tmLbInner');
+            if (!lb || !lbImg) return;
+            let lbIndex = 0, opener = null;
+
+            function show(i) {
+                lbIndex = (i + cards.length) % cards.length;
+                const c = cards[lbIndex];
+                lbImg.src = c.getAttribute('data-full');
+                lbImg.alt = 'محادثة واتساب مع أحد عملائنا (' + (lbIndex + 1) + ' من ' + cards.length + ')';
+                if (lbCount) lbCount.textContent = (lbIndex + 1) + ' / ' + cards.length;
+                lb.scrollTop = 0;
+            }
+            function openLb(i, from) {
+                opener = from || null;
+                show(i);
+                lb.classList.add('is-open');
+                lb.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                if (lbClose) lbClose.focus({ preventScroll: true });
+            }
+            function closeLb() {
+                lb.classList.remove('is-open');
+                lb.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                lbImg.removeAttribute('src');
+                if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+                // نخلّي السلايدر عند آخر محادثة اتشافت
+                const slide = cards[lbIndex] && cards[lbIndex].parentElement;
+                if (slide) slide.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' });
+                opener = null;
+            }
+            cards.forEach((c, i) => c.addEventListener('click', () => openLb(i, c)));
+            if (lbClose) lbClose.addEventListener('click', closeLb);
+            if (lbPrev) lbPrev.addEventListener('click', () => show(lbIndex - 1));
+            if (lbNext) lbNext.addEventListener('click', () => show(lbIndex + 1));
+            // الضغط على الخلفية (خارج الصورة) بيقفل
+            lbInner.addEventListener('click', (e) => { if (e.target === lbInner) closeLb(); });
+            document.addEventListener('keydown', (e) => {
+                if (!lb.classList.contains('is-open')) return;
+                if (e.key === 'Escape') { e.preventDefault(); closeLb(); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); show(lbIndex + (isRtl() ? 1 : -1)); }
+                else if (e.key === 'ArrowRight') { e.preventDefault(); show(lbIndex + (isRtl() ? -1 : 1)); }
+                else if (e.key === 'Tab') {
+                    const f = [lbClose, lbPrev, lbNext].filter(Boolean);
+                    const idx = f.indexOf(document.activeElement);
+                    e.preventDefault();
+                    f[(idx + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+                }
+            });
+            // سحب أفقي باللمس للتنقل بين المحادثات (السحب الرأسي بيفضل تمرير عادي للصورة الطويلة)
+            let tx = 0, ty = 0;
+            lb.addEventListener('touchstart', (e) => { const t = e.touches[0]; tx = t.clientX; ty = t.clientY; }, { passive: true });
+            lb.addEventListener('touchend', (e) => {
+                const t = e.changedTouches[0];
+                const dx = t.clientX - tx, dy = t.clientY - ty;
+                if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+                    // في RTL التالي بيبقى ناحية الشمال، فبنسحب المحتوى لليمين (والعكس في LTR)
+                    show(lbIndex + (((dx < 0) !== isRtl()) ? 1 : -1));
+                }
+            }, { passive: true });
         })();
 
         (function initInstallPrompt() {

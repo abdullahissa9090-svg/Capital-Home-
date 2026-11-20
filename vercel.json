@@ -1,5 +1,16 @@
 {
   "rewrites": [
+    {
+      "source": "/property/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|WhatsApp|Twitterbot|TelegramBot|LinkedInBot|Slackbot|Discordbot|SkypeUriPreview|Viber|Pinterest).*"
+        }
+      ],
+      "destination": "/api/property-page?id=:id"
+    },
     { "source": "/property/:id", "destination": "/index.html" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/admin", "destination": "/admin-photos.html" }

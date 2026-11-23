@@ -80,28 +80,39 @@
       gtag('config', 'G-W7G6EYXPE9');
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>    
-    <script>    
-        tailwind.config = {    
-            theme: {    
-                extend: {    
-                    colors: {    
-                        bgMain: '#0c0c0e',    
-                        bgCard: '#141417',    
-                        bgCardHover: '#1b1b1f',    
-                        goldCustom: '#d4af37',    
-                        priceBlue: '#38bdf8',    
-                        whatsappGreen: '#22c55e',    
-                        phoneBlue: '#2563eb',
-                        favRed: '#ef4444'
-                    },    
-                    fontFamily: {    
-                        cairo: ['IBM Plex Sans Arabic', 'sans-serif'],    
-                    }    
-                }    
-            }    
-        }    
-    </script>    
+    <!-- Tailwind: ملف CSS جاهز (أسرع من تشغيل CDN في المتصفح). لو الملف مش متاح لأي سبب،
+         بنرجع تلقائيًا للـ CDN بنفس الإعدادات القديمة عشان الموقع مايتكسرش. -->
+    <script>
+        window.__loadTailwindCdn = function () {
+            if (window.__tailwindCdnRequested) return;
+            window.__tailwindCdnRequested = true;
+            var s = document.createElement('script');
+            s.src = 'https://cdn.tailwindcss.com';
+            s.onload = function () {
+                window.tailwind.config = {
+                    theme: {
+                        extend: {
+                            colors: {
+                                bgMain: '#0c0c0e',
+                                bgCard: '#141417',
+                                bgCardHover: '#1b1b1f',
+                                goldCustom: '#d4af37',
+                                priceBlue: '#38bdf8',
+                                whatsappGreen: '#22c55e',
+                                phoneBlue: '#2563eb',
+                                favRed: '#ef4444'
+                            },
+                            fontFamily: {
+                                cairo: ['IBM Plex Sans Arabic', 'sans-serif']
+                            }
+                        }
+                    }
+                };
+            };
+            document.head.appendChild(s);
+        };
+    </script>
+    <link rel="stylesheet" href="/tailwind.css?v=1" onerror="window.__loadTailwindCdn()">    
     <style>    
         body { font-family: 'IBM Plex Sans Arabic', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
         .sticky-nav { position: sticky; top: 64px; z-index: 30; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    

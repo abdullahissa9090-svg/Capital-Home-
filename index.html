@@ -2,6 +2,7 @@
 <html lang="ar-EG" dir="rtl">    
 <head>    
     <meta charset="UTF-8">
+    <script>document.documentElement.classList.add('ch-booting');</script>
     <!-- تلميح تحميل مبكر: لو الزائر شاف الموقع قبل كده، بنبدأ نحمّل صورة أول "عرض مميز" من أول الـ HTML
          (قبل ما الجافاسكريبت يشتغل). المسار بيتحدّث لوحده، وبيتقبل بس لو شكله مسار صورة محلي سليم. -->
     <script>
@@ -54,10 +55,11 @@
     <meta name="geo.placename" content="Minya">
     <meta name="ICBM" content="28.1099,30.7503">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://docs.google.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link rel="preload" href="/fonts/ibm-plex-sans-arabic-700-arabic-v15.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-sans-arabic-400-arabic-v15.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-sans-arabic-500-arabic-v15.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-sans-arabic-600-arabic-v15.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/fonts/fonts.css">    
 
     <script type="application/ld+json">
     {
@@ -129,6 +131,7 @@
     </script>
     <link rel="stylesheet" href="/tailwind.css?v=1" onerror="window.__loadTailwindCdn()">    
     <style>    
+        html.ch-booting body > :not(#appSplash):not(script) { opacity: 0 !important; }
         body { font-family: 'IBM Plex Sans Arabic', sans-serif; background-color: #0c0c0e; -webkit-tap-highlight-color: transparent; }    
         .sticky-nav { position: sticky; top: 64px; z-index: 30; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }    
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
@@ -256,6 +259,8 @@
         .home-track { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x proximity; padding:2px 2px 12px; scrollbar-width:none; -ms-overflow-style:none; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
         .home-track::-webkit-scrollbar { display:none; }
         .home-card { flex:0 0 min(74vw, 270px); scroll-snap-align:start; display:flex; flex-direction:column; background:rgba(20,20,23,.78); border:1px solid rgba(212,175,55,.14); border-radius:20px; overflow:hidden; text-decoration:none; color:inherit; transition:border-color .25s ease; }
+
+
         .home-card:hover { border-color:rgba(212,175,55,.45); }
         .home-card-media { position:relative; aspect-ratio:4/3; background:linear-gradient(135deg,#1a1a1f,#0c0c0e); display:flex; align-items:center; justify-content:center; font-size:34px; overflow:hidden; }
         .home-card-img { position:relative; display:block; width:100%; height:100%; object-fit:contain; }
@@ -1572,12 +1577,19 @@
         // ---- أقسام الصفحة الرئيسية: بيانات حقيقية بس ----
         // isLcpCandidate = أول كارت في "عروض مميزة": صورته هي أكبر عنصر ظاهر في أول الصفحة (LCP)،
         // فلازم تتحمّل فورًا وبأولوية عالية (مش lazy). باقي الكروت بتفضل lazy زي ما هي.
+        const CARD_IMAGE_VARIANTS = {"/property-photos/A36/mw0lhmv3-1.webp":[{"url":"/optimized/property-photos/A36/mw0lhmv3-1-320.webp","width":320},{"url":"/optimized/property-photos/A36/mw0lhmv3-1-640.webp","width":640}],"/property-photos/A37/mw0m8ubp-1.webp":[{"url":"/optimized/property-photos/A37/mw0m8ubp-1-320.webp","width":320}],"/property-photos/A38/mw0l6eey-1.webp":[{"url":"/optimized/property-photos/A38/mw0l6eey-1-320.webp","width":320}],"/property-photos/A40/mwdqtx61-1.webp":[{"url":"/optimized/property-photos/A40/mwdqtx61-1-320.webp","width":320},{"url":"/optimized/property-photos/A40/mwdqtx61-1-640.webp","width":640},{"url":"/optimized/property-photos/A40/mwdqtx61-1-960.webp","width":960}],"/property-photos/A41/mvzgfnqf-1.webp":[{"url":"/optimized/property-photos/A41/mvzgfnqf-1-320.webp","width":320},{"url":"/optimized/property-photos/A41/mvzgfnqf-1-640.webp","width":640}],"/property-photos/A42/mvzhz6r4-1.webp":[{"url":"/optimized/property-photos/A42/mvzhz6r4-1-320.webp","width":320},{"url":"/optimized/property-photos/A42/mvzhz6r4-1-640.webp","width":640}],"/property-photos/A44/mw0kx8u3-1.webp":[{"url":"/optimized/property-photos/A44/mw0kx8u3-1-320.webp","width":320},{"url":"/optimized/property-photos/A44/mw0kx8u3-1-640.webp","width":640},{"url":"/optimized/property-photos/A44/mw0kx8u3-1-960.webp","width":960}],"/property-photos/A45/mw0kyhvv-1.webp":[{"url":"/optimized/property-photos/A45/mw0kyhvv-1-320.webp","width":320},{"url":"/optimized/property-photos/A45/mw0kyhvv-1-640.webp","width":640}],"/property-photos/A49/mw0midkf-1.webp":[{"url":"/optimized/property-photos/A49/mw0midkf-1-320.webp","width":320}],"/property-photos/A50/mvz3f4wz-1.webp":[{"url":"/optimized/property-photos/A50/mvz3f4wz-1-320.webp","width":320},{"url":"/optimized/property-photos/A50/mvz3f4wz-1-640.webp","width":640},{"url":"/optimized/property-photos/A50/mvz3f4wz-1-960.webp","width":960}],"/property-photos/A52/mvz2pk61-1.webp":[{"url":"/optimized/property-photos/A52/mvz2pk61-1-320.webp","width":320},{"url":"/optimized/property-photos/A52/mvz2pk61-1-640.webp","width":640}],"/property-photos/A53/mwdqx2n7-1.webp":[{"url":"/optimized/property-photos/A53/mwdqx2n7-1-320.webp","width":320},{"url":"/optimized/property-photos/A53/mwdqx2n7-1-640.webp","width":640},{"url":"/optimized/property-photos/A53/mwdqx2n7-1-960.webp","width":960}],"/property-photos/A54/mw0mv5v8-1.webp":[{"url":"/optimized/property-photos/A54/mw0mv5v8-1-320.webp","width":320}],"/property-photos/A55/mw0mpkal-1.webp":[{"url":"/optimized/property-photos/A55/mw0mpkal-1-320.webp","width":320}],"/property-photos/S7/mwdr241a-1.webp":[{"url":"/optimized/property-photos/S7/mwdr241a-1-320.webp","width":320}],"/property-photos/S8/mwqtiszw-1.webp":[{"url":"/optimized/property-photos/S8/mwqtiszw-1-320.webp","width":320},{"url":"/optimized/property-photos/S8/mwqtiszw-1-640.webp","width":640},{"url":"/optimized/property-photos/S8/mwqtiszw-1-960.webp","width":960}],"/property-photos/a15_midan_palace/mw0l0e4r-1.webp":[{"url":"/optimized/property-photos/a15_midan_palace/mw0l0e4r-1-320.webp","width":320},{"url":"/optimized/property-photos/a15_midan_palace/mw0l0e4r-1-640.webp","width":640}],"/property-photos/a19_abeer_paradise_170/mw0lax66-1.webp":[{"url":"/optimized/property-photos/a19_abeer_paradise_170/mw0lax66-1-320.webp","width":320}],"/property-photos/a22_adnan_malaky_125/mw0mesww-1.webp":[{"url":"/optimized/property-photos/a22_adnan_malaky_125/mw0mesww-1-320.webp","width":320},{"url":"/optimized/property-photos/a22_adnan_malaky_125/mw0mesww-1-640.webp","width":640}],"/property-photos/a8/mw0l2vme-1.webp":[{"url":"/optimized/property-photos/a8/mw0l2vme-1-320.webp","width":320},{"url":"/optimized/property-photos/a8/mw0l2vme-1-640.webp","width":640}],"/club-town-minya-1.jpg":[{"url":"/optimized/club-town-minya-1-320.webp","width":320},{"url":"/optimized/club-town-minya-1-640.webp","width":640},{"url":"/optimized/club-town-minya-1-960.webp","width":960}],"/club-town-minya-10.jpg":[{"url":"/optimized/club-town-minya-10-320.webp","width":320},{"url":"/optimized/club-town-minya-10-640.webp","width":640},{"url":"/optimized/club-town-minya-10-960.webp","width":960}],"/club-town-minya-11.jpg":[{"url":"/optimized/club-town-minya-11-320.webp","width":320},{"url":"/optimized/club-town-minya-11-640.webp","width":640},{"url":"/optimized/club-town-minya-11-960.webp","width":960}],"/club-town-minya-2.jpg":[{"url":"/optimized/club-town-minya-2-320.webp","width":320},{"url":"/optimized/club-town-minya-2-640.webp","width":640},{"url":"/optimized/club-town-minya-2-960.webp","width":960}],"/club-town-minya-3.jpg":[{"url":"/optimized/club-town-minya-3-320.webp","width":320},{"url":"/optimized/club-town-minya-3-640.webp","width":640},{"url":"/optimized/club-town-minya-3-960.webp","width":960}],"/club-town-minya-4.jpg":[{"url":"/optimized/club-town-minya-4-320.webp","width":320},{"url":"/optimized/club-town-minya-4-640.webp","width":640},{"url":"/optimized/club-town-minya-4-960.webp","width":960}],"/club-town-minya-5.jpg":[{"url":"/optimized/club-town-minya-5-320.webp","width":320},{"url":"/optimized/club-town-minya-5-640.webp","width":640}],"/club-town-minya-6.jpg":[{"url":"/optimized/club-town-minya-6-320.webp","width":320},{"url":"/optimized/club-town-minya-6-640.webp","width":640},{"url":"/optimized/club-town-minya-6-960.webp","width":960}],"/club-town-minya-7.jpg":[{"url":"/optimized/club-town-minya-7-320.webp","width":320},{"url":"/optimized/club-town-minya-7-640.webp","width":640}],"/club-town-minya-8.jpg":[{"url":"/optimized/club-town-minya-8-320.webp","width":320},{"url":"/optimized/club-town-minya-8-640.webp","width":640},{"url":"/optimized/club-town-minya-8-960.webp","width":960}],"/club-town-minya-9.jpg":[{"url":"/optimized/club-town-minya-9-320.webp","width":320},{"url":"/optimized/club-town-minya-9-640.webp","width":640},{"url":"/optimized/club-town-minya-9-960.webp","width":960}],"/club-town-minya-cover.jpg":[{"url":"/optimized/club-town-minya-cover-320.webp","width":320},{"url":"/optimized/club-town-minya-cover-640.webp","width":640},{"url":"/optimized/club-town-minya-cover-960.webp","width":960}],"/telal-cover.jpg":[{"url":"/optimized/telal-cover-320.webp","width":320},{"url":"/optimized/telal-cover-640.webp","width":640},{"url":"/optimized/telal-cover-960.webp","width":960}]};
+        function cardImageAttrs(src, sizes) {
+            const variants = CARD_IMAGE_VARIANTS[src];
+            if (!variants) return '';
+            return ' srcset="' + variants.map(v => v.url + ' ' + v.width + 'w').join(', ') + '" sizes="' + sizes + '"';
+        }
+
         function buildHomeCardHTML(prop, isLcpCandidate) {
             const photos = photoGallery[prop.id] || [];
             const src = photos.length ? photos[0] : (prop.image ? resolveAssetPath(prop.image) : '');
             const loadAttrs = isLcpCandidate ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
             const media = src
-                ? `<img class="ch-slide-bg" src="${src}" alt="" aria-hidden="true" ${loadAttrs} decoding="async"><img class="home-card-img" src="${src}" alt="${prop.title}" ${loadAttrs} decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
+                ? `<img class="ch-slide-bg" src="${src}"${cardImageAttrs(src, '270px')} alt="" aria-hidden="true" ${loadAttrs} decoding="async"><img class="home-card-img" src="${src}"${cardImageAttrs(src, '270px')} alt="${prop.title}" ${loadAttrs} decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
                 : `<span aria-hidden="true">${CATEGORY_EMOJI[prop.category] || '🏠'}</span>`;
             const chipBase = 'text-[11px] font-bold px-2 py-1 rounded-lg border ';
             const chips = [];
@@ -1622,7 +1634,12 @@
                         const first = list[0];
                         const ph = first ? (photoGallery[first.id] || []) : [];
                         const hintSrc = first ? (ph.length ? ph[0] : (first.image ? resolveAssetPath(first.image) : '')) : '';
-                        if (hintSrc) localStorage.setItem('ch_lcp_hint', hintSrc);
+                        if (hintSrc) {
+                            const variants = CARD_IMAGE_VARIANTS[hintSrc];
+                            const wantedWidth = 270 * (window.devicePixelRatio || 1);
+                            const best = variants && (variants.find(v => v.width >= wantedWidth) || variants[variants.length - 1]);
+                            localStorage.setItem('ch_lcp_hint', best ? best.url : hintSrc);
+                        }
                         else localStorage.removeItem('ch_lcp_hint');
                     } catch (e) { /* التخزين مش متاح: عادي */ }
                 }
@@ -1918,6 +1935,11 @@
             updatePhotoCounter(track);
         }
 
+        function ensureCardDetails(card) {
+            const template = card && card.querySelector('template.ch-deferred-detail');
+            if (template) template.replaceWith(template.content.cloneNode(true));
+        }
+
         function renderProperties() {    
             const wrapper = document.getElementById('propertiesWrapper');     
             if (!wrapper) return;
@@ -2110,7 +2132,7 @@
                     </div>
                 `;    
                 
-                cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + jsonLdHTML + bgDecorative + summaryHTML + detailHTML;
+                cardEl.innerHTML = hiddenSEOUrl + seoCategory + seoDescription + jsonLdHTML + bgDecorative + summaryHTML + '<template class="ch-deferred-detail">' + detailHTML + '</template>';
                 wrapper.appendChild(cardEl);     
             });    
 
@@ -2129,6 +2151,7 @@
             if (initialPropertyToOpen) {
                 const card = wrapper.querySelector(`.card[data-id="${initialPropertyToOpen}"]`);
                 if (card) {
+                    ensureCardDetails(card);
                     const detailsBox = card.querySelector('.details-box');
                     if (detailsBox) {
                         detailsBox.classList.add('details-open');
@@ -2613,6 +2636,7 @@
                 const summary = e.target.closest('.card-summary');    
                 if (summary && wrapper.contains(summary)) {    
                     const card = summary.closest('.card');
+                    ensureCardDetails(card);
                     const detailsBox = card.querySelector('.details-box');
                     const isHidden = !detailsBox.classList.contains('details-open');
                     
@@ -3574,7 +3598,14 @@
 
             // الكمباوندات بتتحمّل في الخلفية بالتوازي (من غير ما تأخر عرض العقارات)
             // عشان الإحصائيات فوق تحسب كل حاجة: العقارات + وحدات الكمباوندات.
-            Promise.all([propertiesDone, ensureCompoundsLoaded()]).then(() => {
+            const statsReady = propertiesDone.then(() => new Promise(resolve => {
+                const firstImage = document.querySelector('.home-card-img');
+                if (!firstImage || firstImage.complete) { resolve(); return; }
+                firstImage.addEventListener('load', resolve, {once:true});
+                firstImage.addEventListener('error', resolve, {once:true});
+                setTimeout(resolve, 1500);
+            })).then(() => ensureCompoundsLoaded());
+            Promise.all([propertiesDone, statsReady]).then(() => {
                 if (!dataLoadError) updateHeroStats();
             });
         }
@@ -3629,7 +3660,10 @@
         function hideAppSplash() {
             const splash = document.getElementById('appSplash');
             if (!splash) return;
-            splash.classList.add('splash-hidden');
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                document.documentElement.classList.remove('ch-booting');
+                splash.classList.add('splash-hidden');
+            }));
             setTimeout(() => splash.remove(), 550);
         }
 

@@ -1,0 +1,68 @@
+name: Build Tailwind CSS
+
+# بيتشغّل يدويًا بس (من تاب Actions > Run workflow). بيبني ملف tailwind.css
+# بنسخة Tailwind 3.4.17 ويحطه في الفولدر الرئيسي، وبيحدّث رقم النسخة في index.html.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write Tailwind config
+        run: |
+          mkdir -p tools/tailwind
+          cat > tools/tailwind/tailwind.config.js <<'EOF'
+          module.exports = {
+            content: ['./index.html'],
+            theme: {
+              extend: {
+                colors: {
+                  bgMain: '#0c0c0e',
+                  bgCard: '#141417',
+                  bgCardHover: '#1b1b1f',
+                  goldCustom: '#d4af37',
+                  priceBlue: '#38bdf8',
+                  whatsappGreen: '#22c55e',
+                  phoneBlue: '#2563eb',
+                  favRed: '#ef4444'
+                },
+                fontFamily: {
+                  cairo: ['IBM Plex Sans Arabic', 'sans-serif']
+                }
+              }
+            }
+          };
+          EOF
+          printf '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n' > tools/tailwind/input.css
+
+      - name: Build CSS
+        run: npx -y tailwindcss@3.4.17 -c tools/tailwind/tailwind.config.js -i tools/tailwind/input.css -o tailwind.css --minify
+
+      - name: Sanity check
+        run: |
+          test -s tailwind.css
+          test "$(wc -c < tailwind.css)" -gt 15000
+          grep -q "goldCustom" tailwind.css
+          grep -q "bgMain" tailwind.css
+          grep -q "sticky" tailwind.css
+
+      - name: Update cache version in index.html
+        run: |
+          grep -q '/tailwind.css?v=' index.html
+          sed -i -E "s#/tailwind\.css\?v=[0-9A-Za-z_-]+#/tailwind.css?v=${GITHUB_RUN_NUMBER}#" index.html
+          grep -c "/tailwind.css?v=${GITHUB_RUN_NUMBER}" index.html
+
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tailwind.css index.html tools/tailwind
+          git diff --cached --quiet || git commit -m "Build tailwind.css (run ${GITHUB_RUN_NUMBER})"
+          git push

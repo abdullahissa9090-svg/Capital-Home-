@@ -1,7 +1,22 @@
 <!DOCTYPE html>  
 <html lang="ar-EG" dir="rtl">    
 <head>    
-    <meta charset="UTF-8">    
+    <meta charset="UTF-8">
+    <!-- تلميح تحميل مبكر: لو الزائر شاف الموقع قبل كده، بنبدأ نحمّل صورة أول "عرض مميز" من أول الـ HTML
+         (قبل ما الجافاسكريبت يشتغل). المسار بيتحدّث لوحده، وبيتقبل بس لو شكله مسار صورة محلي سليم. -->
+    <script>
+        (function () {
+            try {
+                var h = localStorage.getItem('ch_lcp_hint');
+                if (h && /^\/[\w\-.\/%]+\.(webp|jpe?g|png)$/i.test(h) && h.indexOf('//') !== 0) {
+                    var l = document.createElement('link');
+                    l.rel = 'preload'; l.as = 'image'; l.href = h;
+                    l.setAttribute('fetchpriority', 'high');
+                    document.head.appendChild(l);
+                }
+            } catch (e) { /* مفيش مشكلة: بنكمل عادي */ }
+        })();
+    </script>    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     
     <title>عقارات المنيا | شقق للبيع بالمنيا والمنيا الجديدة | كابيتال هوم</title>    
@@ -1555,11 +1570,14 @@
         }
 
         // ---- أقسام الصفحة الرئيسية: بيانات حقيقية بس ----
-        function buildHomeCardHTML(prop) {
+        // isLcpCandidate = أول كارت في "عروض مميزة": صورته هي أكبر عنصر ظاهر في أول الصفحة (LCP)،
+        // فلازم تتحمّل فورًا وبأولوية عالية (مش lazy). باقي الكروت بتفضل lazy زي ما هي.
+        function buildHomeCardHTML(prop, isLcpCandidate) {
             const photos = photoGallery[prop.id] || [];
             const src = photos.length ? photos[0] : (prop.image ? resolveAssetPath(prop.image) : '');
+            const loadAttrs = isLcpCandidate ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
             const media = src
-                ? `<img class="ch-slide-bg" src="${src}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="home-card-img" src="${src}" alt="${prop.title}" loading="lazy" decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
+                ? `<img class="ch-slide-bg" src="${src}" alt="" aria-hidden="true" ${loadAttrs} decoding="async"><img class="home-card-img" src="${src}" alt="${prop.title}" ${loadAttrs} decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
                 : `<span aria-hidden="true">${CATEGORY_EMOJI[prop.category] || '🏠'}</span>`;
             const chipBase = 'text-[11px] font-bold px-2 py-1 rounded-lg border ';
             const chips = [];
@@ -1595,8 +1613,19 @@
                 const section = $id(key + 'Section');
                 const track = $id(key + 'Track');
                 if (!section || !track) return;
-                track.innerHTML = list.map(buildHomeCardHTML).join('');
+                track.innerHTML = list.map((p, i) => buildHomeCardHTML(p, key === 'featured' && i === 0)).join('');
                 section.classList.toggle('hidden', list.length === 0);
+                if (key === 'featured') {
+                    // بنحفظ مسار صورة أول عرض مميز، عشان في الزيارة الجاية الصفحة تبدأ تحمّلها من أول HTML
+                    // (انظر سكريبت ch_lcp_hint في الـ head). لو مفيش عروض مميزة بنمسح التلميح.
+                    try {
+                        const first = list[0];
+                        const ph = first ? (photoGallery[first.id] || []) : [];
+                        const hintSrc = first ? (ph.length ? ph[0] : (first.image ? resolveAssetPath(first.image) : '')) : '';
+                        if (hintSrc) localStorage.setItem('ch_lcp_hint', hintSrc);
+                        else localStorage.removeItem('ch_lcp_hint');
+                    } catch (e) { /* التخزين مش متاح: عادي */ }
+                }
             });
             homeSectionsHaveContent = featured.length > 0 || latest.length > 0;
             updateBrowseChrome();

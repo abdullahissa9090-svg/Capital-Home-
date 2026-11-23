@@ -42,7 +42,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://docs.google.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">    
 
     <script type="application/ld+json">
     {
@@ -50,6 +50,7 @@
       "@type": "RealEstateAgent",
       "name": "كابيتال هوم - Capital Home",
       "image": "https://capital-home.vercel.app/brand-og-image.jpg",
+      "logo": "https://capital-home.vercel.app/icons/icon-512.png",
       "description": "مكتب تسويق وإشراف عقاري يعمل في محافظة المنيا ومدينة المنيا الجديدة. نضمن لك فحصاً قانونياً وتفاوضاً آمناً.",
       "telephone": "+201555086599",
       "url": "https://capital-home.vercel.app/",
@@ -63,10 +64,10 @@
         "addressRegion": "محافظة المنيا",
         "addressCountry": "EG"
       },
-      "areaServed": {
-        "@type": "City",
-        "name": "المنيا"
-      },
+      "areaServed": [
+        { "@type": "City", "name": "المنيا" },
+        { "@type": "City", "name": "المنيا الجديدة" }
+      ],
       "priceRange": "$$"
     }
     </script>
@@ -1050,29 +1051,104 @@
             throw lastError;
         }
 
+        // تحميل العقارات من الشيت مع تخزين محلي (Stale-While-Revalidate):
+        // - لو الزائر زار الموقع قبل كده: بنعرض آخر نسخة محفوظة فورًا (من غير ما يستنى جوجل شيتس)،
+        //   وبنجيب النسخة الجديدة في الخلفية. لو اتغيّرت بنحدّث الصفحة بهدوء (بس لو الزائر لسه
+        //   فوق ومفيش حاجة مفتوحة)، وفي كل الأحوال بنحفظها للزيارة الجاية.
+        // - أول زيارة أو لو التخزين مش متاح: نفس الطريقة القديمة بالظبط.
+        // بنخزّن نص الرد الخام (مش النتيجة المترجمة) عشان أي تعديل في منطق القراءة يتطبّق على المحفوظ كمان.
+        const SHEET_CACHE_KEY = 'ch_sheet_cache_v1';
+        const SHEET_CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // أسبوع، وبعده نعتبره قديم ونرجع للطريقة العادية
+
+        function readSheetCache() {
+            try {
+                const raw = localStorage.getItem(SHEET_CACHE_KEY);
+                if (!raw) return null;
+                const obj = JSON.parse(raw);
+                if (!obj || typeof obj.text !== 'string' || typeof obj.t !== 'number') return null;
+                if (Date.now() - obj.t > SHEET_CACHE_MAX_AGE_MS) return null;
+                return obj;
+            } catch (e) { return null; }
+        }
+
+        function writeSheetCache(text) {
+            try { localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify({ t: Date.now(), text: text })); } catch (e) { /* التخزين مش متاح: عادي */ }
+        }
+
+        // بيحوّل نص رد الشيت لقايمة عقارات. بيرمي خطأ لو الأعمدة الأساسية ناقصة.
+        function parseSheetText(text) {
+            const data = parseGvizResponse(text);
+            const cols = (data && data.table && data.table.cols) || [];
+            const rows = (data && data.table && data.table.rows) || [];
+            const colIndexMap = buildColumnIndexMap(cols);
+            const hasRequiredColumns = REQUIRED_KEYS.every(key => key in colIndexMap);
+            if (!hasRequiredColumns) {
+                throw new Error('أعمدة أساسية مفقودة في الشيت (id / category / title)');
+            }
+            return rows
+                .map((r, i) => {
+                    const prop = rowToProperty(r && r.c, colIndexMap);
+                    if (prop) prop.order = i; // ترتيب الصف في الشيت (الأحدث إضافةً = الأخير)
+                    return prop;
+                })
+                .filter(Boolean);
+        }
+
+        // تحديث هادي بعد ما اتعرضت النسخة المحفوظة: بنطبّقه بس لو ماحدش بيتفاعل مع الصفحة دلوقتي
+        function applyFreshPropertiesWhenSafe(freshList) {
+            let tries = 0;
+            const attempt = () => {
+                tries++;
+                const busy = cardSettling
+                    || window.pageYOffset > 400
+                    || document.querySelector('.details-box.details-open')
+                    || document.querySelector('.tm-lb.is-open');
+                if (!busy) {
+                    propertiesData = freshList;
+                    dataLoadError = false;
+                    try {
+                        renderLocationChips();
+                        renderHomeSections();
+                        renderProperties();
+                        updateHeroStats();
+                    } catch (e) { console.warn('تعذر تحديث العرض بالبيانات الجديدة:', e); }
+                    return;
+                }
+                if (tries < 8) setTimeout(attempt, 1000);
+                // لو لسه مشغول بعد ~8 ثواني: النسخة الجديدة محفوظة وهتظهر في الزيارة الجاية
+            };
+            attempt();
+        }
+
+        function refreshPropertiesInBackground(shownList) {
+            fetchSheetWithRetry(SHEET_GVIZ_URL).then(text => {
+                const fresh = parseSheetText(text);
+                if (!fresh.length) return; // رد فاضي: منلمسش المحفوظ
+                writeSheetCache(text);
+                if (JSON.stringify(fresh) !== JSON.stringify(shownList)) applyFreshPropertiesWhenSafe(fresh);
+            }).catch(err => {
+                console.warn('تعذر تحديث بيانات الشيت في الخلفية، بنكمل بالنسخة المحفوظة:', err);
+            });
+        }
+
         async function loadPropertiesFromSheet() {
+            const cached = readSheetCache();
+            if (cached) {
+                try {
+                    const cachedList = parseSheetText(cached.text);
+                    if (cachedList.length) {
+                        propertiesData = cachedList;
+                        dataLoadError = false;
+                        refreshPropertiesInBackground(cachedList);
+                        return;
+                    }
+                } catch (e) { /* المحفوظ تالف: نكمل بالتحميل العادي */ }
+            }
             try {
                 const text = await fetchSheetWithRetry(SHEET_GVIZ_URL);
-                const data = parseGvizResponse(text);
-
-                const cols = (data && data.table && data.table.cols) || [];
-                const rows = (data && data.table && data.table.rows) || [];
-                const colIndexMap = buildColumnIndexMap(cols);
-
-                const hasRequiredColumns = REQUIRED_KEYS.every(key => key in colIndexMap);
-                if (!hasRequiredColumns) {
-                    throw new Error('أعمدة أساسية مفقودة في الشيت (id / category / title)');
-                }
-
-                propertiesData = rows
-                    .map((r, i) => {
-                        const prop = rowToProperty(r && r.c, colIndexMap);
-                        if (prop) prop.order = i; // ترتيب الصف في الشيت (الأحدث إضافةً = الأخير)
-                        return prop;
-                    })
-                    .filter(Boolean);
-
+                propertiesData = parseSheetText(text);
                 dataLoadError = propertiesData.length === 0;
+                if (!dataLoadError) writeSheetCache(text);
             } catch (err) {
                 console.error('تعذر تحميل بيانات الشيت بعد كل المحاولات:', err);
                 dataLoadError = true;
@@ -3319,6 +3395,7 @@
         // وكمان نعيد ضبط المكان كل إطار لحد ما الصفحة تستقر (ترانزشن الفتح + أنيميشن الدخول + الصور)،
         // ونوقف فورًا لو المستخدم لمس الشاشة. ولو القائمة اتعمل لها إعادة رسم، بنلاقي نفس الكارت بالـ id.
         let cardSettleToken = 0;
+        let cardSettling = false;
         function getStickyOffset() {
             const bar = document.getElementById('stickyTopBar');
             const nav = document.querySelector('.sticky-nav');
@@ -3340,6 +3417,7 @@
                 return again;
             };
             const token = ++cardSettleToken;
+            cardSettling = true;
             // الكارت المطلوب مايستناش أنيميشن الدخول المتأخر عشان مكانه يبقى ثابت من اللحظة الأولى
             card.style.animation = 'none';
             card.style.opacity = '1';
@@ -3359,6 +3437,7 @@
             const finish = () => {
                 if (finished) return;
                 finished = true;
+                if (token === cardSettleToken) cardSettling = false;
                 cancelEvents.forEach(ev => window.removeEventListener(ev, finish));
                 if (resizeObserver) resizeObserver.disconnect();
                 clearTimeout(watchTimer);

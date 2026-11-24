@@ -809,6 +809,10 @@
             <div class="mb-4 h-px w-16 bg-gradient-to-r from-transparent via-goldCustom to-transparent"></div>
             <p class="text-sm md:text-base max-w-sm leading-relaxed mb-6">نختار لك خياراتك السكنية والاستثمارية بمسؤولية وأمان.</p>
             <div class="mb-8 inline-block rounded-full border border-goldCustom/30 bg-white/5 px-6 py-2 text-sm font-semibold text-white shadow-inner">إدارة فريق <strong class="text-goldCustom">Capital Home</strong></div>
+            <nav aria-label="تصفح العقارات حسب المنطقة" class="mb-8 flex flex-wrap items-center justify-center gap-3 text-sm font-bold">
+                <a href="/area/minya" class="rounded-full border border-goldCustom/30 bg-white/5 px-5 py-2.5 text-zinc-200 transition-colors duration-300 hover:border-goldCustom/60 hover:text-goldCustom">عقارات للبيع في المنيا</a>
+                <a href="/area/new-minya" class="rounded-full border border-goldCustom/30 bg-white/5 px-5 py-2.5 text-zinc-200 transition-colors duration-300 hover:border-goldCustom/60 hover:text-goldCustom">عقارات للبيع في المنيا الجديدة</a>
+            </nav>
             <div class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
                 <a href="tel:+201555086599" dir="ltr" aria-label="اتصال برقم 01555086599" class="phone inline-block text-3xl sm:text-4xl font-extrabold tracking-wide text-white transition-colors duration-300 hover:text-goldCustom">015 5508 6599</a>
                 <a href="https://wa.me/201555086599?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%83%D8%A7%D8%A8%D9%8A%D8%AA%D8%A7%D9%84%20%D9%87%D9%88%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%82%D8%A7%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9" target="_blank" rel="noopener noreferrer" aria-label="تواصل معنا عبر واتساب" class="inline-flex min-h-[48px] w-full max-w-xs items-center justify-center gap-2 rounded-xl bg-whatsappGreen px-7 py-3 text-base font-bold text-white shadow-[0_6px_18px_rgba(34,197,94,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_8px_22px_rgba(34,197,94,0.4)] sm:w-auto">
@@ -3587,6 +3591,13 @@
                     if (targetProperty) {    
                         switchCategoryUI(targetProperty.category);    
                     }    
+                }
+
+                // صفحات المناطق (/area/:slug): السيرفر بيحقن window.__AREA_PAGE__
+                // عشان الزائر يشوف عقارات المنطقة مفلترة على طول في قسم "الكل".
+                if (!initialPropertyToOpen && window.__AREA_PAGE__ && window.__AREA_PAGE__.location) {
+                    currentLocationFilter = window.__AREA_PAGE__.location;
+                    switchCategoryUI(ALL_CATEGORY);
                 }
 
                 renderLocationChips();

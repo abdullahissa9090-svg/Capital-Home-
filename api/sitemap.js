@@ -93,6 +93,15 @@ function buildSitemapXml(ids) {
     <priority>1.0</priority>
   </url>`;
 
+  // صفحات المناطق المستقلة (نفس slugs اللي في api/area-page.js)
+  const AREA_SLUGS = ['minya', 'new-minya'];
+  const areaEntries = AREA_SLUGS.map((slug) => `  <url>
+    <loc>${BASE_URL}/area/${slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>`).join('\n');
+
   const propertyEntries = ids.map((id) => `  <url>
     <loc>${BASE_URL}/property/${escapeXml(encodeURIComponent(id))}</loc>
     <lastmod>${today}</lastmod>
@@ -103,6 +112,7 @@ function buildSitemapXml(ids) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticEntry}
+${areaEntries}
 ${propertyEntries}
 </urlset>`;
 }

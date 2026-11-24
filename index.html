@@ -1590,11 +1590,9 @@
 
         function buildHomeCardHTML(prop, isLcpCandidate) {
             const photos = photoGallery[prop.id] || [];
-            const src = photos.length ? photos[0] : (prop.image ? resolveAssetPath(prop.image) : '');
+            const src = photos.length ? photos[0] : (prop.image ? resolveAssetPath(prop.image) : '/images/placeholder.webp');
             const loadAttrs = isLcpCandidate ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
-            const media = src
-                ? `<img class="ch-slide-bg" src="${src}"${cardImageAttrs(src, '270px')} alt="" aria-hidden="true" ${loadAttrs} decoding="async"><img class="home-card-img" src="${src}"${cardImageAttrs(src, '270px')} alt="${prop.title}" ${loadAttrs} decoding="async" width="270" height="203" onerror="this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})">`
-                : `<span aria-hidden="true">${CATEGORY_EMOJI[prop.category] || '🏠'}</span>`;
+            const media = `<img class="ch-slide-bg" src="${src}"${cardImageAttrs(src, '270px')} alt="" aria-hidden="true" ${loadAttrs} decoding="async"><img class="home-card-img" src="${src}"${cardImageAttrs(src, '270px')} alt="${prop.title}" ${loadAttrs} decoding="async" width="270" height="203" onerror="if(this.dataset.fb){this.parentNode.querySelectorAll('img').forEach(function(i){i.remove()})}else{this.dataset.fb='1';this.parentNode.querySelectorAll('img').forEach(function(i){i.src='/images/placeholder.webp'})}">`;
             const chipBase = 'text-[11px] font-bold px-2 py-1 rounded-lg border ';
             const chips = [];
             if (getAvailability(prop) === 'negotiating') {
@@ -2044,7 +2042,7 @@
                 const fallbackImage = '/images/placeholder.webp';
                 const currentImage = prop.image ? resolveAssetPath(prop.image) : fallbackImage;
                 const galleryUrls = photoGallery[prop.id] || [];
-                const legacyImageHTML = !prop.image ? '' : `<img src="${currentImage}" onerror="this.remove()" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
+                const legacyImageHTML = `<img src="${currentImage}" onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb='1';this.src='${fallbackImage}'}" loading="lazy" decoding="async" alt="${prop.title}" width="400" height="300" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4 bg-zinc-800" />`;
                 const imageHTML = galleryUrls.length ? buildPhotoGalleryHTML(galleryUrls, prop.title, index === 0) : legacyImageHTML;
 
                 const summaryHTML = `

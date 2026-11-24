@@ -706,6 +706,7 @@
                             <input type="text" id="clientRequest" class="form-control w-full p-4 bg-black/50 border border-white/10 rounded-xl text-white text-sm font-semibold outline-none focus:border-goldCustom focus:bg-black/80 transition-colors" placeholder="المواصفات والميزانية" required>    
                         </div>
                     </div>    
+                    <input type="text" id="clientCompany" name="company" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
                     <button type="submit" class="submit-form-btn w-full md:w-auto md:self-end bg-goldCustom text-bgMain px-10 py-4 rounded-xl font-bold text-sm shadow-[0_5px_15px_rgba(212,175,55,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(212,175,55,0.4)]">ارسل طلبي للمكتب فوراً</button>    
                 </form>    
             </section>    
@@ -2703,8 +2704,26 @@
                     console.warn("Storage not available");
                 }
 
-                const waText = 'مرحباً كابيتال هوم، أريد الاستفسار بخصوص طلب عقار جديد:\n👤 الاسم: ' + clientName.value + '\n📞 الهاتف: ' + clientPhone.value + '\n🎯 الطلب والميزانية: ' + clientRequest.value;    
-                
+                const waText = 'مرحباً كابيتال هوم، أريد الاستفسار بخصوص طلب عقار جديد:\n👤 الاسم: ' + clientName.value + '\n📞 الهاتف: ' + clientPhone.value + '\n🎯 الطلب والميزانية: ' + clientRequest.value;
+
+                // تسجيل الطلب في شيت المكتب (لو النظام متظبط) بالتوازي مع فتح واتساب.
+                // فتح واتساب بيفضل متزامن عشان مانضربش في حاجب النوافذ المنبثقة،
+                // وأي فشل في التسجيل مبيعطّلش المسار القديم خالص.
+                try {
+                    fetch('/api/leads', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'ch-site' },
+                        keepalive: true,
+                        body: JSON.stringify({
+                            name: clientName.value,
+                            phone: clientPhone.value,
+                            request: clientRequest.value,
+                            company: (document.getElementById('clientCompany') || {}).value || '',
+                            page: window.location.pathname
+                        })
+                    }).catch(function() {});
+                } catch (err) { /* التسجيل محاولة إضافية، مش شرط لإرسال الطلب */ }
+
                 window.open('https://wa.me/201555086599?text=' + encodeURIComponent(waText), '_blank', 'noopener,noreferrer');    
                 alert('تم تسجيل طلبك وسنتواصل معك قريباً');
                 leadForm.reset(); 

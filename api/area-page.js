@@ -169,7 +169,7 @@ function applyAreaPage(html, area, slug, props) {
 
   html = html.replace(/<title>[^<]*<\/title>/, () => '<title>' + escapeAttr(area.title) + '</title>');
   // H1 واحد بس في الصفحة: بنبدّل عنوان الهيدر الرئيسي بعنوان المنطقة.
-  html = html.replace(/<h1([^>]*)>[^<]*<\/h1>/, () => '<h1$1>' + escapeAttr(area.h1) + '</h1>');
+  html = html.replace(/<h1([^>]*)>[^<]*<\/h1>/, (m, attrs) => '<h1' + attrs + '>' + escapeAttr(area.h1) + '</h1>');
   set('name', 'description', description);
   set('property', 'og:title', area.title);
   set('property', 'og:description', description);

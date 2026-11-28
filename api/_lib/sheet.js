@@ -22,7 +22,7 @@ function cellText(cell) {
   return cell.f !== null && cell.f !== undefined ? String(cell.f) : '';
 }
 
-async function findPropertyById(id) {
+async function findInMainSheet(id) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000);
   try {
@@ -58,6 +58,53 @@ async function findPropertyById(id) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+// المولات: شيت منفصل (تاب Malls). لوحة الصور بتقبل كود المول (id) زي كود العقار،
+// عشان صور المول تتدار من نفس المكان. لو التاب مش موجود أو فيه مشكلة، بنعتبر
+// الكود مش موجود بس (من غير ما نبوّظ البحث في العقارات).
+const DEFAULT_MALLS_SHEET_ID = '1XrIuB5KGnmM8e-q5FkrsSUhpq75soZpu6Qq_p9uRvk8';
+
+function mallsGvizUrl() {
+  const id = process.env.MALLS_SHEET_ID || DEFAULT_MALLS_SHEET_ID;
+  return `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=Malls&headers=1`;
+}
+
+async function findMallById(id) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(mallsGvizUrl(), { signal: controller.signal });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const start = text.indexOf('{'), end = text.lastIndexOf('}');
+    const data = JSON.parse(text.substring(start, end + 1));
+    const cols = (data.table && data.table.cols) || [];
+    const rows = (data.table && data.table.rows) || [];
+    const map = {};
+    cols.forEach((c, i) => {
+      const m = String((c && c.label) || '').match(/\(([a-zA-Z]+)\)/);
+      if (m && !(m[1].toLowerCase() in map)) map[m[1].toLowerCase()] = i;
+    });
+    if (map.id === undefined || map.name === undefined) return null;
+    const get = (r, k) => cellText(r.c && r.c[map[k]]);
+    for (const r of rows) {
+      if (sanitizeId(get(r, 'id')) === id && get(r, 'name').trim()) {
+        return { id, title: get(r, 'name'), category: 'مول', priceText: '', status: get(r, 'status') === 'sold' ? 'sold' : '' };
+      }
+    }
+    return null;
+  } catch (e) {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function findPropertyById(id) {
+  const property = await findInMainSheet(id);
+  if (property) return property;
+  return findMallById(id);
 }
 
 module.exports = { findPropertyById, isValidId, sanitizeId };

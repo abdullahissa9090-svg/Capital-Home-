@@ -625,6 +625,7 @@
             <button type="button" id="btnCat-فيلا" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="فيلا" aria-pressed="false">🏡 الفيلل</button>    
             <button type="button" id="btnCat-محل" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="محل" aria-pressed="false">🏪 المحلات</button>    
             <button type="button" id="btnCat-أرض" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="أرض" aria-pressed="false">🌍 الأراضي</button>
+            <button type="button" id="btnCat-مول" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="مول" aria-pressed="false">🏬 المولات</button>
             <button type="button" id="btnCat-الكمباوندات" class="nav-btn flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="الكمباوندات" aria-pressed="false">🏘️ الكمباوندات</button>
             <button type="button" id="btnCat-المفضلة" class="nav-btn relative flex-1 py-3 px-2 bg-transparent border border-transparent text-zinc-400 rounded-xl font-bold text-sm transition-all duration-300 hover:bg-white/5" data-cat="المفضلة" aria-pressed="false">
                 ❤️ المفضلة
@@ -927,7 +928,7 @@
             return String(v).replace(/[^\w\-. \u0600-\u06FF]/g, '');
         }
         const SHEET_URL_KEYS = new Set(['image', 'mapurl']);
-        const SHEET_ID_KEYS = new Set(['id', 'compoundid']);
+        const SHEET_ID_KEYS = new Set(['id', 'compoundid', 'mallid']);
 
         function getCell(cells, colIndexMap, key) {
             const idx = colIndexMap[key];
@@ -1328,6 +1329,91 @@
             }
         }
 
+        // ==========================================================
+        // قسم المولات — نفس فكرة الكمباوندات: شيتين (Malls و MallUnits)
+        // بيتحمّلوا كسولاً أول ما المستخدم يدخل تاب "المولات". افتراضياً
+        // بيتقرأوا من نفس ملف Google Sheets بتاع الكمباوندات (تابين جداد
+        // جنب Compounds و CompoundUnits). لو عايز ملف مستقل، غيّر
+        // MALLS_SHEET_ID بس. لو التابين لسه مش موجودين أو فاضيين، بتظهر
+        // رسالة "مفيش مولات متاحة حاليا" بدل صفحة فاضية.
+        // ==========================================================
+        const MALLS_SHEET_ID = '1XrIuB5KGnmM8e-q5FkrsSUhpq75soZpu6Qq_p9uRvk8';
+        const MALLS_SHEET_NAME = 'Malls';
+        const MALL_UNITS_SHEET_NAME = 'MallUnits';
+
+        function buildMallsGvizUrl(sheetName) {
+            return `https://docs.google.com/spreadsheets/d/${MALLS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&headers=1`;
+        }
+        const MALLS_GVIZ_URL = buildMallsGvizUrl(MALLS_SHEET_NAME);
+        const MALL_UNITS_GVIZ_URL = buildMallsGvizUrl(MALL_UNITS_SHEET_NAME);
+
+        let mallsData = [];
+        let mallUnitsData = [];
+        let mallsLoaded = false;
+        let mallsLoadError = false;
+        let currentMallId = null;
+
+        // أعمدة شيت Malls هي نفس أعمدة Compounds بالظبط، فبنستخدم نفس القارئ.
+        function rowToMall(cells, colIndexMap) {
+            return rowToCompound(cells, colIndexMap);
+        }
+
+        // أعمدة MallUnits هي نفس أعمدة CompoundUnits، بس العمود الرابط اسمه
+        // mallId بدل compoundId.
+        function rowToMallUnit(cells, colIndexMap) {
+            if (colIndexMap.mallid === undefined) return null;
+            const mapped = Object.assign({}, colIndexMap, { compoundid: colIndexMap.mallid });
+            const unit = rowToCompoundUnit(cells, mapped);
+            if (!unit) return null;
+            unit.mallId = unit.compoundId;
+            unit.compoundId = '';
+            return unit;
+        }
+
+        let mallsLoadPromise = null;
+        function ensureMallsLoaded() {
+            if (mallsLoaded) return Promise.resolve();
+            if (!mallsLoadPromise) mallsLoadPromise = loadMallsFromSheet();
+            return mallsLoadPromise;
+        }
+
+        async function loadMallsFromSheet() {
+            try {
+                const [mallsText, unitsText] = await Promise.all([
+                    fetchSheetWithRetry(MALLS_GVIZ_URL),
+                    fetchSheetWithRetry(MALL_UNITS_GVIZ_URL)
+                ]);
+
+                const mallsJson = parseGvizResponse(mallsText);
+                const unitsJson = parseGvizResponse(unitsText);
+
+                const mallsCols = (mallsJson && mallsJson.table && mallsJson.table.cols) || [];
+                const mallsRows = (mallsJson && mallsJson.table && mallsJson.table.rows) || [];
+                const mallsColMap = buildColumnIndexMap(mallsCols);
+
+                const unitsCols = (unitsJson && unitsJson.table && unitsJson.table.cols) || [];
+                const unitsRows = (unitsJson && unitsJson.table && unitsJson.table.rows) || [];
+                const unitsColMap = buildColumnIndexMap(unitsCols);
+
+                // حماية: لو تاب MallUnits مش موجود، جوجل ممكن يرجّع أول تاب في الملف
+                // بدله. وجود عمود mallId هو الدليل إننا قدام التاب الصح.
+                if (unitsColMap.mallid === undefined) {
+                    throw new Error('تاب MallUnits غير موجود أو ناقص عمود mallId');
+                }
+
+                mallsData = mallsRows.map(r => rowToMall(r && r.c, mallsColMap)).filter(Boolean);
+                mallUnitsData = unitsRows.map(r => rowToMallUnit(r && r.c, unitsColMap)).filter(Boolean);
+                mallsLoadError = false;
+            } catch (err) {
+                console.warn('تعذر تحميل بيانات المولات (ده طبيعي لو لسه مفيش بيانات مضافة):', err);
+                mallsData = [];
+                mallUnitsData = [];
+                mallsLoadError = true;
+            } finally {
+                mallsLoaded = true;
+            }
+        }
+
         // ---------- المفضلة (Favorites) ----------
         const FAV_STORAGE_KEY = 'capitalHomeFavorites';
         function getFavorites() {
@@ -1415,7 +1501,7 @@
         }
 
         // ===== المرحلة 2: الفلاتر المتقدمة وأقسام الصفحة الرئيسية =====
-        const CATEGORY_EMOJI = { 'شقة': '🏢', 'فيلا': '🏡', 'محل': '🏪', 'أرض': '🌍' };
+        const CATEGORY_EMOJI = { 'شقة': '🏢', 'فيلا': '🏡', 'محل': '🏪', 'مول': '🏬', 'أرض': '🌍' };
         const AVAILABILITY_LABELS = { available: 'متاحة', negotiating: 'تحت التفاوض', sold: 'مباعة' };
         const AVAILABILITY_ICONS = { available: '🟢', negotiating: '🟠', sold: '🔴' };
         const AVAILABILITY_TEXT_CLASS = { available: 'text-green-400', negotiating: 'text-amber-400', sold: 'text-red-400' };
@@ -1519,7 +1605,7 @@
 
         // بيظبط إيه اللي يظهر حوالين القائمة حسب القسم الحالي
         function updateBrowseChrome() {
-            const isCompounds = currentCategory === 'الكمباوندات';
+            const isCompounds = currentCategory === 'الكمباوندات' || currentCategory === 'مول';
             const isFav = currentCategory === 'المفضلة';
             const fb = $id('filtersBar');
             if (fb) fb.classList.toggle('hidden', isCompounds);
@@ -1658,7 +1744,7 @@
             clearFilterState();
             const si = $id('propertySearch');
             if (si) si.value = '';
-            switchCategoryUI(prop.category);
+            switchCategoryUI(tabForCategory(prop.category));
             initialPropertyToOpen = id;
             renderProperties();
             updateBrowseChrome();
@@ -2468,11 +2554,207 @@
             bindEvents();
         }
 
+        // ---------- عرض قسم المولات ----------
+
+        // صور المول: أولاً اللي اترفعت من لوحة إدارة الصور (بنفس كود المول id)،
+        // وبعدها عمود gallery في الشيت، وبعدها عمود image.
+        function getMallImages(mall) {
+            const adminPhotos = photoGallery[mall.id];
+            if (adminPhotos && adminPhotos.length > 0) return adminPhotos;
+            if (mall.gallery && mall.gallery.length > 0) return mall.gallery;
+            return mall.image ? [mall.image] : [];
+        }
+
+        const MALLS_WA_LINK = 'https://wa.me/201555086599';
+        const MALLS_WA_ANCHOR = `<a href="${MALLS_WA_LINK}" target="_blank" rel="noopener noreferrer" style="color:#22c55e;text-decoration:underline;font-weight:700">واتساب</a>`;
+
+        function showEmptyMallsMessage() {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.classList.add('hidden');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+            const msgEl = document.createElement('div');
+            msgEl.className = 'col-span-full text-center py-16 text-zinc-400 font-semibold text-base bg-bgCard/30 rounded-3xl border border-white/5';
+            msgEl.setAttribute('aria-live', 'polite');
+            msgEl.innerHTML = 'مفيش مولات متاحة حاليا، تواصل معنا على ' + MALLS_WA_ANCHOR;
+            wrapper.appendChild(msgEl);
+        }
+
+        function renderMallsList() {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            const searchInput = document.getElementById('propertySearch');
+            const keyword = searchInput ? normalizeArabic(searchInput.value) : '';
+
+            const filtered = mallsData.filter(m => {
+                if (!keyword) return true;
+                return normalizeArabic(m.name).includes(keyword) ||
+                       normalizeArabic(m.location).includes(keyword) ||
+                       normalizeArabic(m.developer).includes(keyword);
+            });
+
+            if (filtered.length === 0) {
+                if (noResults) {
+                    noResults.classList.remove('hidden');
+                    noResults.textContent = 'لم نجد مولات تطابق بحثك.';
+                }
+                return;
+            }
+            if (noResults) noResults.classList.add('hidden');
+
+            filtered.forEach((mall, index) => {
+                const cardEl = document.createElement('article');
+                cardEl.className = 'mall-card-summary animate-enter relative bg-bgCard/75 backdrop-blur-md rounded-3xl border border-goldCustom/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-goldCustom/30 hover:shadow-[0_15px_40px_rgba(212,175,55,0.1)] flex flex-col h-full cursor-pointer';
+                cardEl.style.animationDelay = `${index * 50}ms`;
+                cardEl.setAttribute('data-mall-id', mall.id);
+                cardEl.tabIndex = 0;
+                cardEl.setAttribute('role', 'button');
+                cardEl.setAttribute('aria-label', 'عرض وحدات ' + decodeEntities(mall.name));
+
+                const fallbackImage = '/images/placeholder.webp';
+                const coverImage = getMallImages(mall)[0];
+                const imageSrc = coverImage ? resolveAssetPath(coverImage) : fallbackImage;
+                const cardImageHTML = buildContainedImageHTML(
+                    imageSrc,
+                    mall.name,
+                    'rounded-2xl',
+                    'w-full aspect-[4/3] rounded-2xl mb-4',
+                    `if(this.dataset.fallbackTried){this.dataset.fallbackTried='1';}else{this.dataset.fallbackTried='1';this.src='${fallbackImage}';}`
+                );
+
+                const availableCount = mallUnitsData.filter(u => u.mallId === mall.id && !u.isSold).length;
+                const countHTML = availableCount > 0
+                    ? `<div class="text-sm font-bold text-goldCustom mb-2">🏪 ${availableCount} وحدة متاحة</div>`
+                    : `<div class="text-sm text-zinc-500 mb-2">🏪 لا توجد وحدات متاحة حالياً</div>`;
+
+                cardEl.innerHTML = `
+                    <div class="p-6 pb-5 flex flex-col h-full group">
+                        ${cardImageHTML}
+                        <h3 class="text-xl font-bold text-white leading-tight mb-2 group-hover:text-goldCustom transition-colors">${mall.name}</h3>
+                        ${mall.location ? `<div class="text-sm text-zinc-400 mb-2">📍 ${mall.location}</div>` : ''}
+                        ${countHTML}
+                        ${mall.priceFromText ? `<div class="text-lg font-extrabold text-priceBlue mb-4">يبدأ سعر المتر من ${mall.priceFromText}</div>` : ''}
+                        <div class="w-full flex items-center justify-center gap-2 mt-auto pt-4 border-t border-white/5 text-xs text-zinc-500 font-bold uppercase tracking-wider group-hover:text-goldCustom transition-colors">
+                            عرض الوحدات المتاحة
+                            <svg class="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                `;
+                wrapper.appendChild(cardEl);
+            });
+
+            bindEvents();
+        }
+
+        function renderMallDetail(mallId) {
+            const wrapper = document.getElementById('propertiesWrapper');
+            const noResults = document.getElementById('noResults');
+            if (noResults) noResults.classList.add('hidden');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            const mall = mallsData.find(m => m.id === mallId);
+            if (!mall) {
+                currentMallId = null;
+                renderMallsList();
+                return;
+            }
+
+            // المتاح الأول والمباع في الآخر
+            const units = mallUnitsData.filter(u => u.mallId === mallId)
+                .sort((a, b) => (a.isSold ? 1 : 0) - (b.isSold ? 1 : 0));
+            const availableCount = units.filter(u => !u.isSold).length;
+
+            const detailWrap = document.createElement('div');
+            detailWrap.className = 'col-span-full';
+
+            const fallbackImage = '/images/placeholder.webp';
+            const galleryImages = getMallImages(mall);
+            const galleryHTML = buildCompoundGalleryHTML(galleryImages, mall.name, fallbackImage);
+
+            const unitsHTML = units.length > 0
+                ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>`
+                : `<div class="text-center py-10 text-zinc-500 font-semibold bg-bgCard/30 rounded-2xl border border-white/5">مفيش وحدات متاحة في المول ده حاليا، تواصل معنا على ${MALLS_WA_ANCHOR}</div>`;
+
+            const mapButtonHTML = mall.mapUrl
+                ? `<a href="${mall.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 mt-2 text-sm font-bold text-priceBlue hover:underline">🗺️ عرض الموقع على الخريطة</a>`
+                : '';
+
+            const statusBadgeHTML = mall.status
+                ? `<span class="inline-block bg-goldCustom/15 text-goldCustom border border-goldCustom/30 py-1 px-3 rounded-lg text-xs font-bold mb-3">${mall.status}</span>`
+                : '';
+
+            detailWrap.innerHTML = `
+                <button type="button" class="mall-back-btn mb-6 inline-flex items-center gap-2 text-zinc-400 hover:text-goldCustom font-bold text-sm transition-colors">
+                    <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    رجوع لكل المولات
+                </button>
+                <div class="bg-bgCard rounded-3xl border border-white/5 overflow-hidden mb-8">
+                    ${galleryHTML}
+                    <div class="p-6 md:p-8">
+                        ${statusBadgeHTML}
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">${mall.name}</h2>
+                        ${mall.location ? `<div class="text-zinc-400 mb-1">📍 ${mall.location}</div>` : ''}
+                        ${mall.developer ? `<div class="text-zinc-400 mb-1">🏢 المطور: ${mall.developer}</div>` : ''}
+                        ${mapButtonHTML}
+                        ${mall.priceFromText ? `<div class="text-xl font-extrabold text-priceBlue mt-4 mb-4">يبدأ سعر المتر من ${mall.priceFromText}</div>` : ''}
+                        ${mall.description ? `<p class="text-sm text-zinc-300 leading-relaxed mb-4">${mall.description}</p>` : ''}
+                        ${mall.services.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🛎️ المميزات والخدمات</h4>${renderCompoundBadges(mall.services)}` : ''}
+                        ${mall.unitTypes.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">🏪 أنواع الوحدات</h4>${renderCompoundBadges(mall.unitTypes)}` : ''}
+                        ${mall.spaces.length ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">📐 المساحات المتاحة</h4>${renderCompoundBadges(mall.spaces)}` : ''}
+                        ${mall.paymentSystems ? `<h4 class="text-sm font-bold text-goldCustom mt-4 mb-1">💳 أنظمة السداد</h4><p class="text-sm text-zinc-300 leading-relaxed">${mall.paymentSystems}</p>` : ''}
+                    </div>
+                </div>
+                <h3 class="text-xl font-extrabold text-white mb-4">الوحدات المتاحة${availableCount ? ' (' + availableCount + ')' : ''}</h3>
+                ${unitsHTML}
+            `;
+
+            wrapper.appendChild(detailWrap);
+
+            const galleryRoot = detailWrap.querySelector('[data-gallery-root]');
+            if (galleryRoot) initCompoundGallery(galleryRoot);
+
+            if (units.length > 0) {
+                const unitsGrid = detailWrap.querySelector('.grid');
+                units.forEach((unit, index) => {
+                    unitsGrid.appendChild(buildCompoundUnitCard(unit, index));
+                });
+            }
+
+            bindEvents();
+        }
+
+        function renderMallsView() {
+            if (!mallsLoaded) {
+                ensureMallsLoaded().then(() => {
+                    if (currentCategory === 'مول') renderCurrentView();
+                });
+                return;
+            }
+            if (mallsData.length === 0) {
+                showEmptyMallsMessage();
+                return;
+            }
+            if (currentMallId) {
+                renderMallDetail(currentMallId);
+            } else {
+                renderMallsList();
+            }
+        }
+
         // النقطة المشتركة اللي بتقرر تعرض العقارات ولا الكمباوندات، حسب
         // التاب المختار حالياً. الكمباوندات بيتحمّلوا كسولاً (Lazy) أول
         // مرة بس المستخدم يدخل التاب، عشان الأداء العادي للموقع ميتأثرش.
         function renderCurrentView() {
             updateBrowseChrome();
+            if (currentCategory === 'مول') {
+                renderMallsView();
+                return;
+            }
             if (currentCategory !== "الكمباوندات") {
                 renderProperties();
                 return;
@@ -2531,7 +2813,7 @@
             
             wrapper.addEventListener('keydown', function(e) {
                 if (e.key !== 'Enter' && e.key !== ' ') return;
-                if (e.target.classList && e.target.classList.contains('compound-card-summary')) {
+                if (e.target.classList && (e.target.classList.contains('compound-card-summary') || e.target.classList.contains('mall-card-summary'))) {
                     e.preventDefault();
                     e.target.click();
                     return;
@@ -2543,6 +2825,24 @@
             });
                 
             wrapper.addEventListener('click', function(e) {    
+                const mallBackBtn = e.target.closest('.mall-back-btn');
+                if (mallBackBtn && wrapper.contains(mallBackBtn)) {
+                    e.stopPropagation();
+                    currentMallId = null;
+                    renderMallsList();
+                    scrollToPropertiesTop();
+                    return;
+                }
+
+                const mallCard = e.target.closest('.mall-card-summary');
+                if (mallCard && wrapper.contains(mallCard)) {
+                    e.stopPropagation();
+                    currentMallId = mallCard.getAttribute('data-mall-id');
+                    renderMallDetail(currentMallId);
+                    scrollToPropertiesTop();
+                    return;
+                }
+
                 const compoundBackBtn = e.target.closest('.compound-back-btn');
                 if (compoundBackBtn && wrapper.contains(compoundBackBtn)) {
                     e.stopPropagation();
@@ -2630,7 +2930,9 @@
                     e.stopPropagation();
                     const unitId = shareUnitBtn.getAttribute('data-unit-id');
                     const unit = compoundUnitsData.find(u => u.id === unitId);
-                    const text = unit ? buildShareMessageForCompoundUnit(unit) : 'تفضل تواصل معنا لمزيد من التفاصيل.';
+                    const mallUnit = unit ? null : mallUnitsData.find(u => u.id === unitId);
+                    const text = unit ? buildShareMessageForCompoundUnit(unit)
+                        : (mallUnit ? buildShareMessageForMallUnit(mallUnit) : 'تفضل تواصل معنا لمزيد من التفاصيل.');
                     shareTextViaSystemOrClipboard(text, window.location.href);
                     return;
                 }
@@ -2714,6 +3016,12 @@
             propSearch.addEventListener('input', triggerDebouncedRender);    
         }
             
+        // تاب "مول" بقى بيعرض شيت المولات المنفصل، فأي عقار في شيت العقارات الرئيسي
+        // قيمة التصنيف بتاعه "مول" بنفتحه من تاب "الكل" عشان ميختفيش.
+        function tabForCategory(cat) {
+            return cat === 'مول' ? ALL_CATEGORY : cat;
+        }
+
         function switchCategoryUI(categoryName) {    
             document.querySelectorAll('.nav-btn').forEach(b => {    
                 b.classList.remove('active-btn', 'bg-bgCard', 'border-white/5', 'text-goldCustom');    
@@ -2741,6 +3049,9 @@
 
                 if (cat === "الكمباوندات") {
                     currentCompoundId = null; // الدخول من التاب دايماً يبدأ بقائمة الكمباوندات
+                }
+                if (cat === "مول") {
+                    currentMallId = null; // الدخول من التاب دايماً يبدأ بقائمة المولات
                 }
 
                 switchCategoryUI(cat);    
@@ -2855,7 +3166,7 @@
         function findComparable(id) {
             const prop = propertiesData.find(p => p.id === id);
             if (prop) return normalizeProperty(prop);
-            const unit = compoundUnitsData.find(u => u.id === id);
+            const unit = compoundUnitsData.find(u => u.id === id) || mallUnitsData.find(u => u.id === id);
             if (unit) return normalizeUnit(unit);
             return null;
         }
@@ -2896,7 +3207,9 @@
         }
 
         function normalizeUnit(unit) {
-            const compound = compoundsData.find(c => c.id === unit.compoundId);
+            const compound = unit.mallId
+                ? mallsData.find(m => m.id === unit.mallId)
+                : compoundsData.find(c => c.id === unit.compoundId);
             const ppmNum = parseFloat(String(unit.pricePerMeter || '').replace(/[^\d.]/g, ''));
             const areaNum = parseFloat(String(unit.space || '').replace(/[^\d.]/g, ''));
             const payment = [];
@@ -3178,6 +3491,28 @@
             lines.push('لو حابب تفاصيل أكتر أو معاينة، أنا تحت أمرك 🏡');
             lines.push('كابيتال هوم - وسيطك الموثوق');
             return decodeEntities(lines.filter(l => l !== undefined && l !== null).join('\n'));
+        }
+
+
+        // رسالة واتساب جاهزة لوحدة في مول (نفس شكل رسالة وحدة الكمباوند)
+        function buildShareMessageForMallUnit(unit) {
+            const mall = mallsData.find(m => m.id === unit.mallId);
+            const lines = ['مرحباً بيك 🌿', unit.title];
+            if (mall) {
+                lines.push(`في مول *${mall.name}*` + (mall.developer ? ' - ' + mall.developer : ''));
+                if (mall.location) lines.push('📍 ' + mall.location);
+            }
+            lines.push('');
+            if (unit.space) lines.push('📐 المساحة: ' + unit.space + 'م');
+            if (unit.floor) lines.push('🏢 الدور: ' + unit.floor);
+            if (unit.pricePerMeter) lines.push('💰 سعر المتر: ' + formatMoney(unit.pricePerMeter, 'جنيه'));
+            if (unit.totalPriceText) lines.push('💵 الإجمالي: ' + formatMoney(unit.totalPriceText, 'جنيه'));
+            if (unit.downPayment) lines.push('📊 مقدم الحجز: ' + formatMoney(unit.downPayment, 'جنيه') + (unit.downPaymentPercent ? ' (' + unit.downPaymentPercent + ')' : ''));
+            if (unit.installmentPeriod) lines.push('📅 التقسيط: ' + unit.installmentPeriod + (unit.paymentSystem ? ' (' + unit.paymentSystem + ')' : ''));
+            lines.push('');
+            lines.push('لو حابب تفاصيل أكتر أو معاينة، أنا تحت أمرك 🏬');
+            lines.push('كابيتال هوم - وسيطك الموثوق');
+            return decodeEntities(lines.join('\n'));
         }
 
 
@@ -3587,7 +3922,7 @@
                 if (initialPropertyToOpen) {    
                     const targetProperty = propertiesData.find(item => item.id === initialPropertyToOpen);    
                     if (targetProperty) {    
-                        switchCategoryUI(targetProperty.category);    
+                        switchCategoryUI(tabForCategory(targetProperty.category));    
                     }    
                 }
 
@@ -3616,6 +3951,10 @@
             })).then(() => ensureCompoundsLoaded());
             Promise.all([propertiesDone, statsReady]).then(() => {
                 if (!dataLoadError) updateHeroStats();
+                // وحدات المولات بتتحمّل بعد كده في الخلفية من غير ما تأخر الأرقام الأساسية
+                ensureMallsLoaded().then(() => {
+                    if (!dataLoadError && mallUnitsData.some(u => !u.isSold)) updateHeroStats();
+                });
             });
         }
 
@@ -3632,7 +3971,7 @@
             if (!countEl || !valueEl) return;
 
             const availableProps = propertiesData.filter(p => p.status !== 'sold');
-            const availableUnits = compoundUnitsData.filter(u => !u.isSold);
+            const availableUnits = compoundUnitsData.filter(u => !u.isSold).concat(mallUnitsData.filter(u => !u.isSold));
             const all = availableProps.concat(availableUnits);
             const totalValue = all.reduce((sum, p) => sum + (p.price > 0 ? p.price : 0), 0) + EXCLUSIVE_UNITS_VALUE;
             const totalCount = all.length + EXCLUSIVE_UNITS_COUNT;
